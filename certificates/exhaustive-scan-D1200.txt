@@ -1,3 +1,28 @@
+completed M-rows: 50/1201
+completed M-rows: 100/1201
+completed M-rows: 150/1201
+completed M-rows: 200/1201
+completed M-rows: 250/1201
+completed M-rows: 300/1201
+completed M-rows: 350/1201
+completed M-rows: 400/1201
+completed M-rows: 450/1201
+completed M-rows: 500/1201
+completed M-rows: 550/1201
+completed M-rows: 600/1201
+completed M-rows: 650/1201
+completed M-rows: 700/1201
+completed M-rows: 750/1201
+completed M-rows: 800/1201
+completed M-rows: 850/1201
+completed M-rows: 900/1201
+completed M-rows: 950/1201
+completed M-rows: 1000/1201
+completed M-rows: 1050/1201
+completed M-rows: 1100/1201
+completed M-rows: 1150/1201
+completed M-rows: 1200/1201
+completed M-rows: 1201/1201
 structural checks: 576719000 exact divisions; 849 convolution coefficients
 Turan scan D <= 1200: 289261901 cells (expected 289261901), negatives 0
 ALL NONNEGATIVE: Turan-step positivity verified for all D <= 1200

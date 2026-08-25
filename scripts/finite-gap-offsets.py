@@ -36,17 +36,21 @@ the V2 reduced pair (lam2', mu2') is itself checked nondegenerate on
 the sector -- both pinnings' reduced pairs get the full resultant
 treatment, so the identity used is never 0 = 0.
 
-SECTOR.  Gap cells with u >= 4 and Q >= 3 satisfy the estimate
-  M >= 221  and  Q <= M/24 ,
-so it suffices to certify G > 0 on {M >= max(221, M0), 3 <= Q <=
-M/24} via factorization + per-factor top-form/domination:
+SECTOR.  Gap cells with u >= 4 and Q >= 3 satisfy
+  Q < M/(u+1)^2 <= M/25.
+An exact census shows that none has D < 442, so
+  M > (25/26)D >= (25/26)442 = 425;
+since M is integral, M >= 426, while the later estimates require only
+M >= 425.  It therefore suffices to certify G > 0 on
+{M >= max(425, M0), 3 <= Q < M/(u+1)^2} via factorization and
+per-factor top-form/domination:
   - linear factors: sign by corner checks;
   - core factors f: L(t) = top form of f at (1, t) positive on
-    [0, 1/24] (exact 512-grid + derivative bound), then
+    [0, 1/(u+1)^2] (exact 512-grid + derivative bound), then
     M-domination with t-weighted lower-degree sums S_j:
     f > 0 for M > M0 := min { M : sum_j S_j M^-j < L_lower }.
-Cells with M <= M0 have D <= M0 (1 + 1/24) + 3 <= 1200 for
-M0 <= 1145 and are covered by the exhaustive scan through D <= 1200.
+The generated onsets satisfy M0 <= 153, so cells with M <= M0 have
+D < 163 and are covered by the exhaustive scan through D <= 1200.
 Q <= 2 gap cells are covered by the per-Q certificates.
 
 [S] SECTOR ESTIMATE.  Two ingredients, both certified in-script:
@@ -195,8 +199,11 @@ def cert_factor(f, tmax, Mmax=1145):
 
 
 def cert_positive(G, tmax):
-    """G >= 0 on {M >= max(221, M0), 3 <= Q <= tmax*M} with all
-    odd-multiplicity factors > 0: returns (ok, M0, note)."""
+    """G >= 0 on the enlarged auxiliary sector
+    {M >= max(221, M0), 3 <= Q <= tmax*M}, with every odd-multiplicity
+    factor positive; return (ok, M0, note).  The manuscript only invokes
+    this stronger certificate after its separately checked bound M >= 425.
+    """
     const, facs = sp.factor_list(G)
     if const == 0:
         return False, None, "zero"
@@ -247,8 +254,11 @@ def int_roots(poly_expr, var):
 
 
 def no_common_sector_zeros(f1, f2):
-    """certify {f1 = f2 = 0} has no integer point with M > 1145,
-    3 <= Q <= M/24.  Resultant in Q, integer M-candidates, exact check."""
+    """Certify that {f1 = f2 = 0} has no integer point with M > 1145
+    in the deliberately enlarged sector 3 <= Q <= M/24.  This contains
+    the manuscript sector Q < M/(u+1)^2 <= M/25.  Use a resultant in Q,
+    integer M-candidates, and exact specialized gcd checks.
+    """
     R = sp.resultant(f1, f2, Q_)
     if R == 0:
         return False, "resultant zero (common factor)"
@@ -435,12 +445,14 @@ def main():
     # hence on the sector M > D*25/26 >= 442*25/26 = 425 >= 221:
     check("442*25/26 >= 425 >= 221", F(442*25, 26) >= 425 >= 221)
 
-    print(f"== [G] gap offsets u = 4..{UMAX} ==")
+    print(f"== [G] gap offsets u = 4..{UMAX} ==", flush=True)
     allM0 = 0
     for u in range(4, UMAX+1):
         row = []
         rowM0 = 0
         for eps in (1, -1):
+            print(f"  [progress] offset {u}/{UMAX}, parity {eps:+d}, "
+                  "primary pinning", flush=True)
             # V1 reduced: covers all cells with g1 != 0
             G1, id1, lam1, mu1 = build_G(u, eps, 1)
             n1, ncells1 = numeric_spot(u, eps, G1, 1)
@@ -462,6 +474,8 @@ def main():
                       "no alternate pinning needed")
                 row.append(True); continue
             # g1 nonconstant: cover {g1 = 0} cells by V2 reduced
+            print(f"  [progress] offset {u}/{UMAX}, parity {eps:+d}, "
+                  "alternate pinning", flush=True)
             G2, id2, lam2, mu2 = build_G(u, eps, 2)
             n2, ncells2 = numeric_spot(u, eps, G2, 2)
             G2r, lam2r, mu2r, g2 = reduce_version(G2, lam2, mu2)

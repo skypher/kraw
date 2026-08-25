@@ -25,8 +25,8 @@ the endpoint-polynomial term counts and least coefficients, and any Sturm
 fallbacks.
 
 `CERTIFICATE_MAP.md` gives the theorem-by-theorem trust boundary and replay
-map. `PAYLOAD.sha256` hashes the proof generators, dependency pin, map,
-referee checklist, and exact logs without including the manuscript; its
+map. `PAYLOAD.sha256` hashes the proof generators, dependency locks, license,
+map, referee checklist, and exact logs without including the manuscript; its
 digest can therefore serve as a noncircular proof-payload identifier printed
 in the paper.
 `REVIEW_CHECKLIST.md` gives a function-by-function inspection path and states
@@ -42,13 +42,13 @@ make verify
 from the repository root to check the hashes of the proof payload and then
 the complete source/output snapshot. These are integrity checks, not proof
 replays. Use `make replay-short` for the five short exact programs and
-`make replay-all` for the complete replay, including the multi-hour symbolic
-jobs and the exhaustive GMP scan.
+`make replay-all` for the complete replay, including the longer symbolic
+certificates and the exhaustive GMP scan.
 
 Use `make toolchain-info` to record dependency versions and `make audit-fast`
 for a short manifest/toolchain/integration audit before starting the complete
 replay. `make replay-profile` runs the complete replay under
-`/usr/bin/time -v`; its machine-specific output belongs in the immutable
+`/usr/bin/time -v`; its machine-specific output belongs in the versioned
 release record, not in the deterministic proof logs.
 
 The proof-generating programs rely on the exact-arithmetic implementations

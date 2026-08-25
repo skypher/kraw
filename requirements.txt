@@ -1,1 +1,4 @@
-sympy==1.12
+mpmath==1.2.1 \
+    --hash=sha256:604bc21bd22d2322a177c73bdb573994ef76e62edd595d17e00aff24b0667e5c
+sympy==1.12 \
+    --hash=sha256:c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5

@@ -231,6 +231,7 @@ make replay-all
 ```
 
 The first two commands verify identity of the reviewed snapshot. Only
-`replay-all` executes every proof program. An accepted version should cite an
-immutable release of this exact payload and include an independently recorded
-wall-time and peak-memory report for the complete replay.
+`replay-all` executes every proof program. An accepted version should cite a
+persistent, DOI-bearing archive of this exact payload and include an
+independently recorded wall-time and peak-memory report for the complete
+replay.

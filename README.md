@@ -19,7 +19,7 @@ The stable proof payload is listed separately in
 machine-assisted theorem to its exact generator and replay log, and
 `certificates/REVIEW_CHECKLIST.md` gives a function-by-function referee
 inspection path. `certificates/REPLAY_PROFILE.md` records the measured
-complete replay shipped with release `v1.0.2`.
+complete replay for the submission snapshot.
 
 ## Layout
 
@@ -27,6 +27,14 @@ complete replay shipped with release `v1.0.2`.
 - `scripts/` — SymPy exact-arithmetic verification programs.
 - `cpp/` — GMP exhaustive scanner.
 - `certificates/` — committed verification outputs and their hash manifest.
+
+## Licensing
+
+The executable proof code (`scripts/`, `cpp/`, the Makefile, the locked
+environment, and CI workflow) is licensed under the BSD 3-Clause License.
+The manuscript and explanatory documentation are licensed under the Creative
+Commons Attribution 4.0 International License. See `LICENSE` for the precise
+component boundaries and terms.
 
 ## Reproduction
 
@@ -51,10 +59,10 @@ make verify
 
 These targets check snapshot integrity; they do not execute the proof
 programs. Run the short exact replays with `make replay-short`, or all proof
-programs, including the multi-hour symbolic jobs and exhaustive GMP scan,
+programs, including the longer symbolic certificates and exhaustive GMP scan,
 with `make replay-all`. Use `make replay-profile` to run that complete replay
 under `/usr/bin/time -v` and capture a machine-specific resource report for
-an archival release. The `v1.0.2` reference run is summarized in
+an archival release. The reference run is summarized in
 `certificates/REPLAY_PROFILE.md`; its path-sanitized transcript is a release
 asset.
 
@@ -70,6 +78,10 @@ scans through `D <= 120`. It does not replace `make replay-all`.
 
 The paper needs standard AMS LaTeX packages and TikZ/PGF.  The exact
 verification commands and requirements are documented in `paper/README.md`;
-the Python dependency is pinned in `requirements.txt`.
+the Python dependencies and wheel hashes are pinned in `requirements.txt`.
+`environment/Dockerfile` pins the reference Ubuntu image by digest and uses a
+dated Ubuntu package snapshot. Build it from the repository root with
+`docker build -f environment/Dockerfile -t kraw-audit .`; its default command
+runs `make audit-fast`.
 
 The manuscript is the current mathematical statement.

@@ -85,6 +85,12 @@ def check(name, cond):
     OK = OK and cond
 
 
+def require(cond, msg):
+    """Hard certificate gate that remains active under ``python3 -O``."""
+    if not cond:
+        raise RuntimeError(f"certificate identity failed: {msg}")
+
+
 D, x, u, v, w, X, g1 = sp.symbols('D x u v w X g1', positive=True)
 E = (D+3)**2
 
@@ -93,7 +99,7 @@ def to_X(e):
     pe = sp.Poly(e, x)
     out = 0
     for (k,), c in pe.terms():
-        assert k % 2 == 0
+        require(k % 2 == 0, f"to_X received odd power x^{k}")
         out += c*X**(k//2)
     return sp.expand(out)
 

@@ -11,7 +11,7 @@
   hmarginratio=1:1,headsep=21pt]{geometry}
 \usepackage[small,labelfont=bf,labelsep=period]{caption}
 \usepackage{xcolor}
-\usepackage[breaklinks=false,linktocpage=true]{hyperref}
+\usepackage[breaklinks=true,linktocpage=true]{hyperref}
 
 \numberwithin{equation}{section}
 
@@ -51,7 +51,8 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperdate}{August 3, 2026}
+\newcommand{\paperversion}{Version 1.0.3}
+\newcommand{\paperdate}{August 25, 2026}
 
 \medmuskip=4mu
 \thickmuskip=8mu
@@ -139,7 +140,7 @@ Tur\'an determinants for binary Krawtchouk polynomials}
 
 \author{Leslie P. Polzer}
 
-\date{\paperdate}
+\date{\paperversion\\\paperdate}
 
 \maketitle
 
@@ -156,11 +157,10 @@ Thus the Tur\'an determinants are symmetric and weakly unimodal in the coefficie
 index, and they are at least $1$ at every index.  Equivalently, these
 determinants are the rectangular Schur values
 $s_{(2^s)}(1^M,(-1)^Q)$, so the theorem gives positivity and unimodality
-for a family of $\mathrm{GL}_D$-character values at involutions.  This is
-a computer-assisted proof.  Recurrence and comparison arguments cover three
-infinite parameter regions; exact symbolic certificates cover the remaining
-finite polynomial families; and an exhaustive integer computation discharges
-the finite remainders required by the symbolic bounds.  The
+for a family of $\mathrm{GL}_D$-character values at involutions.  The proof
+combines recurrence comparisons in infinite regions, exact symbolic
+certificates for finitely many parameter families, and an exhaustive
+exact-integer computation for the remaining finite cases.  The
 certificate-generating programs and exact replay logs accompany the
 manuscript.
 \vskip5pt
@@ -229,10 +229,11 @@ weakly increase from either endpoint toward the center.
 \end{corollary}
 
 \begin{proof}
-The absolute determinant of the matrix with columns $v_s,v_{s+1}$ is
-$|p_{s-1}p_{s+1}-p_s^2|=\Tur(s)$ by
-Corollary~\ref{cor:positivity}.  The asserted ordering is the Main Theorem
-and reflection.
+The determinant of the ordered column matrix is
+$p_{s-1}p_{s+1}-p_s^2=-\Tur(s)$.  Hence its absolute determinant, and
+therefore the lattice index, equals $\Tur(s)$ by
+Corollary~\ref{cor:positivity}.  The asserted ordering is the Main Theorem and
+reflection.
 \end{proof}
 
 Classical Tur\'an inequalities concern the sign of
@@ -432,9 +433,10 @@ For $0\le j\le D$, the two consecutive values $p_j,p_{j+1}$ cannot both
 vanish.
 \end{lemma}
 \begin{proof}
-If $p_j=p_{j+1}=0$, then \eqref{eq:recurrence} at index $j$ gives
-$p_{j-1}=0$ because $j-1-D\ne0$ for $0\le j\le D$.  Iteration would give
-$p_0=0$, contrary to $p_0=1$.
+If $j=0$, the assumption contradicts $p_0=1$.  If $1\le j\le D$ and
+$p_j=p_{j+1}=0$, then \eqref{eq:recurrence} at index $j$ gives
+$p_{j-1}=0$ because $j-1-D\ne0$.  Iteration gives $p_0=0$, again a
+contradiction.
 \end{proof}
 We write $\eps=(-1)^Q$ and $\binom{n}{k}$ for binomial coefficients.  In the
 gap sections (Sections~\ref{sec:collapse}--\ref{sec:oddmin}), we relabel
@@ -539,7 +541,11 @@ $p_{D/2-1}=-p_{D/2+1}$, which makes the four terms in $T_{D/2}$ cancel.
 If $Q$ is even, reflection gives $p_{s-1}=p_{s+1}$ at $s=D/2$.
 Substitution in \eqref{eq:recurrence} yields
 $(D+2)p_{s+1}=xp_s$; inserting this relation into \eqref{eq:Tdef} and using
-the recurrence once more for $p_{s+2}$ gives \eqref{eq:center}.
+the recurrence once more for $p_{s+2}$ gives \eqref{eq:center}.  Its remaining
+factor is strictly positive because
+\[
+ (D+2)^2-x^2\ge (D+2)^2-D^2=4D+4>0.
+\]
 \end{proof}
 
 The rank-one central relation $(D+2)p_{c+1}=xp_c$ supplies the initial
@@ -901,8 +907,9 @@ computer-assisted certificate for each $(u,\eps)$:
   census already quoted in Section~\ref{sec:regimes} (and repeated by
   this verifier) shows that no gap cell with $u\ge4$ and $Q\ge3$ has
   $D<442$, so $Q<M/25$ gives
-  $M>\tfrac{25}{26}D\ge\tfrac{25}{26}\cdot442=425$ (hence $M\ge426$;
-  only $M\ge425$ is used below).
+  $M>\tfrac{25}{26}D\ge\tfrac{25}{26}\cdot442=425$.
+  Since $M$ is integral, this gives $M\ge426$; all subsequent bounds require
+  only $M\ge425$.
 \item \emph{(two reduced constraints)}  For the primary pinning let
   $g_1=\gcd(\lambda_1,\mu_1)$ and strip
   $(\lambda_1,\mu_1)=g_1(\lambda'_1,\mu'_1)$, so
@@ -1171,8 +1178,9 @@ $1<(u+1)^2<U_-$.  Thus, for each index $j$ used,
 \[
  (2j-D)^2<(2j-D+1)^2<(D+1)^2-x^2,
 \]
-so all pointwise oscillatory-zone estimates used below hold along the
-entire induction path.
+Call the region $(2j-D)^2<(D+1)^2-x^2$ the \emph{oscillatory zone}.  The
+display shows that all pointwise estimates for this zone used below hold
+along the entire induction path.
 We use five steps.
 \begin{enumerate}
 \item \emph{(Tur\'an-step identity)}
@@ -1435,8 +1443,8 @@ To include zeros without division, define the projective state
  \cup\left\{(0,b):b\ne0\right\}.
 \]
 The second set is the single state $y=\infty$, and simultaneous zeros are excluded by
-Lemma~\ref{lem:no-consecutive-zeros}.  On finite states the recurrence is
-  M\"obius map
+Lemma~\ref{lem:no-consecutive-zeros}.  On finite states the recurrence induces
+  the M\"obius map
   \[
     y_{j+1} \;=\; (1+\kappa_j)\,x - \kappa_j\,\frac{(D+2)^2}{y_j},
     \qquad \kappa_j=\frac{D-j}{j+2},
@@ -1705,34 +1713,40 @@ not hard-coded, by the odd-minimum verifier.
 \subsection{Availability and trust boundary}\label{subsec:availability}
 
 Development source is maintained at \url{https://github.com/skypher/kraw}.
-The exact reviewed source is the submission artifact carrying
+The exact submission snapshot is designated \texttt{v1.0.3} and distributed
+from \url{https://github.com/skypher/kraw/releases/tag/v1.0.3}.  The release
+page records the corresponding Git commit.  The snapshot carries
 \texttt{certificates/\allowbreak MANIFEST.sha256}, which binds the manuscript,
 programs,
 and deterministic outputs byte-for-byte; no claim is made that an untagged
-development branch reproduces that snapshot.  The tagged submission snapshot
-is the immutable release \texttt{v1.0.2} at
-\url{https://github.com/skypher/kraw/releases/tag/v1.0.2}; its assets include
-the source archive, manuscript PDF, hash records, and path-sanitized profiled
-replay transcript.  Before publication, the exact
-accepted snapshot must be deposited as an immutable tagged release and its
-archival DOI added to the final bibliographic record.  Because the source
+development branch reproduces that snapshot or that GitHub releases are
+immutable.  GitHub serves as a distribution mirror.  Its release assets
+include the source archive, manuscript PDF, hash records, and path-sanitized
+profiled replay transcript.  Before publication, the exact accepted snapshot
+must also be deposited in a persistent archival repository and its DOI added
+to the final bibliographic record.  Because the source
 programs are part of the proof, this deposit is an acceptance condition, not
 an optional post-publication convenience; an accepted version should not
 refer only to a moving development branch.
 
 To avoid a circular identifier (the full manifest includes the manuscript),
 \texttt{certificates/\allowbreak PAYLOAD.sha256} separately hashes only the proof
-generators, exact logs, dependency pin, certificate map, and referee
-checklist.  Its own SHA-256 digest is
+generators, exact logs, dependency locks, license, certificate map, and
+referee checklist.  Its own SHA-256 digest is
 \begin{center}
-\small\nolinkurl{240ac277f430249bb08982d643c2c779d9cc08095ad21316436232fde45ce8ac}
+\small\nolinkurl{cef4ab11ed2905f7d71a8140290808f215771bd32f6b8d29fb89b4e086a94c0b}
 \end{center}
 This digest identifies the proof payload printed with this submission; the full
 manifest additionally binds the article and the PDF built in the reference
 toolchain.  The
 repository contains \texttt{CITATION.cff} and release metadata ready for an
-archival deposit.  The DOI cannot be created by the proof and must be added
-to the final version after the external deposit.
+archival deposit.  The archival DOI will be inserted after deposit of the
+accepted snapshot.
+
+The verification code is available under the BSD 3-Clause License.  The
+manuscript and explanatory documentation are available under the Creative
+Commons Attribution 4.0 International License; the repository's
+\texttt{LICENSE} file states the component boundaries.
 
 The trusted base is Python~3, SymPy~1.12, a C++17 compiler, and GMP; the
 programs themselves remain subject to inspection.  Specifically, exact
@@ -1746,7 +1760,7 @@ GMP, pdf\TeX, and platform versions of a replay environment.
 \texttt{make audit-fast} combines the manifest checks, all five short exact
 replays, and a compiled GMP scan through $D=120$.  These commands do not
 replace the complete replay, but they expose environment drift and exercise
-every short proof mechanism before the multi-hour jobs are attempted.
+every short proof mechanism before the longer symbolic stages are attempted.
 The command \texttt{make replay-profile} runs the complete replay under
 \texttt{/usr/bin/time -v}; the archival release should include the resulting
 wall time and peak resident memory together with the toolchain report.
@@ -1756,7 +1770,7 @@ embedded in the deterministic proof logs.
 The Make targets \texttt{payload-check} and \texttt{verify} check stored
 hashes only; they do not execute a proof program.  The target
 \texttt{replay-short} runs the five short exact verifiers, while
-\texttt{replay-all} additionally runs the two multi-hour symbolic jobs and
+\texttt{replay-all} additionally runs the two longer symbolic certificates and
 the exhaustive GMP scan.  Reference software versions and the individual
 commands are recorded in \texttt{paper/README.md}.
 
@@ -1823,9 +1837,12 @@ for broad classes of orthogonal polynomials (for general background see
 \emph{Recurrence-based positivity criteria.}  Szwarc \cite{szwarc98} gave
 general criteria (monotonicity conditions on the three-term recurrence
 coefficients) under which orthogonal polynomials satisfy the Tur\'an
-inequality; Berg and Szwarc \cite{bergszwarc09} proved two-sided bounds on
-normalized Tur\'an determinants, and Szwarc \cite{szwarc20} extended the
-positivity criteria further.  Krasikov \cite{krasikov-recurrence} developed
+inequality.  Bustoz and Ismail \cite[Section~2, especially (2.4)]{bustozismail97}
+gave weighted sum-of-squares representations for Tur\'an determinants arising
+from symmetric three-term recurrences.  Berg and Szwarc
+\cite{bergszwarc09} proved two-sided
+bounds on normalized Tur\'an determinants, and Szwarc \cite{szwarc20} extended
+the positivity criteria further.  Krasikov \cite{krasikov-recurrence} developed
 Tur\'an inequalities adapted to three-term recurrences with monotone
 coefficients.  Recent general criteria and nonnegative representations are
 developed in \cite{kahler26}; that work also propagates positivity between
@@ -1912,8 +1929,9 @@ $(M,Q)$, equivalently the ordered rectangular character values in
   the paired cone would treat the entire gap uniformly and give a second,
   asymptotics-free proof of the Main Theorem.
 \item \textbf{Beyond the symmetric weight.}  Does Tur\'an-step monotonicity
-  persist for $\coeff{w^s}(1+aw)^M(1-bw)^Q$ (general
-  $(p,q)$-Krawtchouk values, $a\ne b$), or for other products of two
+  persist for the nonsymmetric two-root coefficient family
+  $p_s(a,b)=\coeff{w^s}(1+aw)^M(1-bw)^Q$, with $a,b>0$ and $a\ne b$, or for
+  other products of two
   real-rooted polynomials whose roots interlace across $0$?  The reflection
   symmetry used for the central initial values and the finite recurrence
   identities is special to $a=b$; which parts of the argument survive its

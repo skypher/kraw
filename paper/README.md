@@ -8,7 +8,7 @@ by hashing the manuscript, verifier sources, and deterministic outputs.
 generators and exact logs, and `certificates/REVIEW_CHECKLIST.md` gives a
 function-by-function inspection path and the acceptance predicate of each
 verifier. `certificates/REPLAY_PROFILE.md` records the toolchain, wall time,
-peak memory, and exit status of the complete `v1.0.2` replay.
+peak memory, and exit status of the complete submission replay.
 
 Build the manuscript deterministically in the reference toolchain from the
 repository root with:
@@ -27,7 +27,9 @@ Run these commands from the repository root. Python checks require Python 3
 and SymPy; the exhaustive scan requires a C++17 compiler and GMP/GMPXX.
 The reference environment used Python 3.12.3, SymPy 1.12, g++ 13.3,
 and GMP 6.3.0.  Each verifier exits nonzero on a failed obligation.
-The Python dependency is pinned in `requirements.txt`.
+The Python dependencies and wheel hashes are pinned in `requirements.txt`.
+The machine-readable reference environment is in `environment/`; its Ubuntu
+base image, package snapshot, and Python wheels are fixed independently.
 
 Print the corresponding versions in the active environment with:
 
@@ -41,18 +43,18 @@ GMP scan through `D <= 120` with:
 This is a fast environment and integration audit, not a substitute for the
 complete replay below.
 
-    python3 scripts/recurrence-and-small-scan.py
-    python3 scripts/regime-decomposition.py
-    python3 scripts/finite-gap-offsets.py 14
-    python3 scripts/small-argument-cases.py
-    python3 scripts/fixed-argument-strips.py 12 14
-    python3 scripts/even-minimum-gap.py
-    python3 scripts/odd-minimum-gap.py
+    python3 -u scripts/recurrence-and-small-scan.py
+    python3 -u scripts/regime-decomposition.py
+    python3 -u scripts/finite-gap-offsets.py 14
+    python3 -u scripts/small-argument-cases.py
+    python3 -u scripts/fixed-argument-strips.py 12 14
+    python3 -u scripts/even-minimum-gap.py
+    python3 -u scripts/odd-minimum-gap.py
     g++ -O2 -fopenmp -o /tmp/exhaustive-turan-scan cpp/exhaustive-turan-scan.cpp -lgmpxx -lgmp
     /tmp/exhaustive-turan-scan 1200
 
-The full finite-gap-offset and fixed-argument-strip runs can take several
-hours. Deterministic committed replay logs are in `certificates/`; elapsed
+The finite-gap-offset and fixed-argument-strip runs are the longer symbolic
+stages. Deterministic committed replay logs are in `certificates/`; elapsed
 times are intentionally omitted so that successful reruns are byte-for-byte
 comparable. Their hashes, together with hashes of the verifier sources, are
 recorded in `certificates/MANIFEST.sha256`.
@@ -77,12 +79,12 @@ For the archival resource report, run:
     make replay-profile
 
 Record the toolchain output, elapsed time, peak resident memory, and exit
-status with the immutable release. The reference run is summarized in
+status with the versioned release. The reference run is summarized in
 `certificates/REPLAY_PROFILE.md`, and its path-sanitized transcript is attached
 to the release rather than mixed into the deterministic logs.
 
 The repository also retains two supplementary asymptotic checks, which are
 not used in the proof:
 
-    python3 scripts/finite-offset-limit.py
-    python3 scripts/uniform-limit-formula.py
+    python3 -u scripts/finite-offset-limit.py
+    python3 -u scripts/uniform-limit-formula.py

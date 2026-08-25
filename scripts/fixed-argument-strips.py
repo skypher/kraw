@@ -60,6 +60,11 @@ def check(name, cond):
     OK = OK and cond
 
 
+def progress(Q, phase):
+    """Deterministic algorithmic progress for the long exact certificates."""
+    print(f"  [progress] Q={Q}: {phase}", flush=True)
+
+
 Dv, uv = sp.symbols('D u')
 Mv, sv = sp.symbols('M s')
 
@@ -68,6 +73,7 @@ def strip_form(Q):
     def prat(j):
         tot = 0
         for b_ in range(Q+1):
+            progress(Q, f"ratio shift {j:+d}, term {b_+1}/{Q+1}")
             d = j - b_
             r = sp.Integer(1)
             if d >= 0:
@@ -77,15 +83,31 @@ def strip_form(Q):
                 for i in range(-d):
                     r *= (sv - i)/(Mv - sv + i + 1)
             tot += (-1)**b_*sp.binomial(Q, b_)*r
-        return sp.together(tot)
-    T = sp.together(prat(0)**2 + prat(0)*prat(2) - prat(1)**2
-                    - prat(-1)*prat(1))
-    num, den = sp.fraction(sp.cancel(T))
+        progress(Q, f"ratio shift {j:+d}, normalize exact sum")
+        together = sp.together(tot)
+        progress(Q, f"ratio shift {j:+d}, cancel exact sum")
+        return sp.cancel(together)
+    progress(Q, "construct four shifted coefficient ratios")
+    r0 = prat(0)
+    r2 = prat(2)
+    r1 = prat(1)
+    rm1 = prat(-1)
+    progress(Q, "combine and cancel the left determinant pair")
+    left = sp.cancel(r0**2 + r0*r2)
+    progress(Q, "combine and cancel the right determinant pair")
+    right = sp.cancel(r1**2 + rm1*r1)
+    progress(Q, "combine and cancel the determinant difference")
+    T = sp.cancel(left - right)
+    num, den = sp.fraction(T)
+    progress(Q, "substitute the fixed-Q strip coordinates in the numerator")
     num = sp.expand(num.subs({sv: (Dv+uv)/2, Mv: Dv-Q}))
+    progress(Q, "substitute the fixed-Q strip coordinates in the denominator")
     den = sp.together(den.subs({sv: (Dv+uv)/2, Mv: Dv-Q}))
     if den.subs({uv: 5, Dv: 10**6}) > 0:
         num, den = -num, -den
-    # den < 0 oriented; S := -num so that T >= 0 <=> S >= 0
+    # The raw pair (num, den) is simultaneously negated when needed so that
+    # den < 0. Returning S := -num then writes T = S/(-den), which matches
+    # the positive-denominator convention of Lemma 4.4.
     return sp.expand(-num), den
 
 
@@ -184,15 +206,19 @@ def first_open_gap(qmin, umax, dstart, dstop):
 
 
 def certify_Q(Q):
+    progress(Q, "begin exact strip-form construction")
     S, den = strip_form(Q)
+    progress(Q, "certify denominator orientation and nonvanishing")
     if not den_negative(den, Q):
         return False, f"Q={Q}: den orientation fails"
+    progress(Q, "extract the oriented numerator as a polynomial in u")
     P = sp.Poly(sp.nsimplify(S), uv)
     degu = P.degree()
     if degu != 2*Q+1:
         return False, f"Q={Q}: unexpected deg_u {degu}"
     # strip common positive content in D: gcd of coefficients
     coeffs = [sp.expand(P.nth(j)) for j in range(degu+1)]
+    progress(Q, f"compute common D-content of {degu+1} coefficients")
     g = sp.gcd([c for c in coeffs if c != 0])
     # g must be positive for D >= some small D0g:
     D0g = 2*Q + 4
@@ -206,7 +232,8 @@ def certify_Q(Q):
     cc = [sp.cancel(c/g) for c in coeffs]
     # classify signs at large D
     sgn = []
-    for c in cc:
+    for j, c in enumerate(cc):
+        progress(Q, f"classify leading sign of coefficient {j}/{degu}")
         if c == 0:
             sgn.append(0); continue
         pe = sp.Poly(sp.expand(c), Dv)
@@ -236,6 +263,7 @@ def certify_Q(Q):
     for j in range(degu+1):
         if sgn[j] >= 0:
             continue
+        progress(Q, f"pair negative coefficient c_{j} with c_{j-2}")
         if j < 2 or sgn[j-2] != 1 or (j-2) in used:
             return False, f"Q={Q}: negative c_{j} unpairable"
         used.add(j-2)
@@ -245,9 +273,13 @@ def certify_Q(Q):
         # -- all on [D0, oo); (iii) makes the u = 0 value nonneg
         # too (belt-and-braces: it is implied by (i)+(ii) but we
         # certify it directly per M2):
-        if not (positive_for_D(exprn, D0)
-                and neg_on_ray(cc[j], D0)
-                and positive_for_D(cc[j-2], D0)):
+        progress(Q, f"pair ({j-2},{j}): endpoint Sturm certificate")
+        endpoint_ok = positive_for_D(exprn, D0)
+        progress(Q, f"pair ({j-2},{j}): negative-slope Sturm certificate")
+        negative_ok = neg_on_ray(cc[j], D0)
+        progress(Q, f"pair ({j-2},{j}): positive-partner Sturm certificate")
+        partner_ok = positive_for_D(cc[j-2], D0)
+        if not (endpoint_ok and negative_ok and partner_ok):
             return False, (f"Q={Q}: pair ({j-2},{j}) sign facts "
                            f"fail at the common onset D0={D0}")
         pairing_rows.append(f"{j-2}->{j}@{D0}")
@@ -267,6 +299,7 @@ def certify_Q(Q):
     for j in range(degu+1):
         if sgn[j] != 1:
             continue
+        progress(Q, f"coefficient c_{j}: nonnegative-ray Sturm certificate")
         if not positive_for_D(cc[j], D0):
             return False, (f"Q={Q}: coefficient c_{j} not >= 0 at the "
                            f"common onset D0={D0}")
@@ -276,6 +309,7 @@ def certify_Q(Q):
     okn = True
     nspot = 0
     for M0 in (2*Q+40, 2*Q+61):
+        progress(Q, f"numeric identity row M={M0}")
         D = M0 + Q
         p = pcoef(M0, Q)
         for s in ((D+1)//2 + 1, (D+1)//2 + 3):
@@ -321,6 +355,7 @@ def main():
 
     print(f"== per-Q strip certificates, Q = 3..{Q0} ==")
     for Q in range(3, Q0+1):
+        print(f"  [progress] fixed argument Q={Q}/{Q0}", flush=True)
         ok, msg = certify_Q(Q)
         # top edge v = D-u < 2Q+6: flow-covered once
         # (D-2Q-5)^2 >= U0 = (2Q+1)(2D-2Q+1), from D_edge(Q) <= 1200 on:

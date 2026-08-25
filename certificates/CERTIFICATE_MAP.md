@@ -74,18 +74,18 @@ integrity.
 The short exact replays are:
 
 ```sh
-python3 scripts/recurrence-and-small-scan.py
-python3 scripts/regime-decomposition.py
-python3 scripts/small-argument-cases.py
-python3 scripts/even-minimum-gap.py
-python3 scripts/odd-minimum-gap.py
+python3 -u scripts/recurrence-and-small-scan.py
+python3 -u scripts/regime-decomposition.py
+python3 -u scripts/small-argument-cases.py
+python3 -u scripts/even-minimum-gap.py
+python3 -u scripts/odd-minimum-gap.py
 ```
 
-The finite-family replays, which can take several hours, are:
+The longer finite-family replays are:
 
 ```sh
-python3 scripts/finite-gap-offsets.py 14
-python3 scripts/fixed-argument-strips.py 12 14
+python3 -u scripts/finite-gap-offsets.py 14
+python3 -u scripts/fixed-argument-strips.py 12 14
 ```
 
 The exhaustive scan is:
@@ -102,4 +102,4 @@ short exact replays and `make replay-all` for the complete proof replay.
 Use `make toolchain-info` to print the active dependency versions and
 `make audit-fast` for a short manifest/toolchain/integration audit.
 Use `make replay-profile` when producing the machine-specific time and memory
-report for an immutable release.
+report for a versioned release and persistent archival deposit.

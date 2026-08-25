@@ -1,23 +1,23 @@
-# Complete replay profile for v1.0.2
+# Complete replay profile for v1.0.3
 
-This is the resource report for the complete proof replay shipped with release
-`v1.0.2`. It supplements the deterministic logs in this directory; it is not
+This is the resource report for the complete proof replay prepared for release
+`v1.0.3`. It supplements the deterministic logs in this directory; it is not
 itself a proof certificate.
 
 ## Result
 
 | Field | Value |
 |---|---|
-| Command | `make replay-profile` |
-| Started | 2026-08-03 05:44:28 UTC |
-| Finished | 2026-08-03 07:45:40 UTC |
+| Command | instrumented `make replay-all` stage sequence (exact command in the sanitized transcript) |
+| Started | 2026-08-25 13:25:31 UTC |
+| Finished | 2026-08-25 14:40:50 UTC |
 | Exit status | `0` |
-| Elapsed wall time | `2:01:11` |
-| User CPU time | `7961.98 s` |
-| System CPU time | `22.96 s` |
-| Reported CPU utilization | `109%` |
-| Maximum resident set | `924592 KiB` (about `903 MiB`) |
-| Major page faults | `0` |
+| Elapsed wall time | `1:15:18` |
+| User CPU time | `5186.90 s` |
+| System CPU time | `6.81 s` |
+| Reported CPU utilization | `114%` |
+| Maximum resident set | `338764 KiB` (about `331 MiB`) |
+| Major page faults | `7` |
 | Swaps | `0` |
 
 Every replay stage passed:
@@ -39,19 +39,25 @@ Every replay stage passed:
 - g++ `13.3.0`, GMP `6.3.0`;
 - pdfTeX `1.40.25` (TeX Live 2023/Debian).
 
+The recorded replay ran directly on the reference host with those versions,
+`PYTHONHASHSEED=0`, `OMP_NUM_THREADS=24`, locale `C.UTF-8`, and time zone
+`Etc/UTC`.  The machine-readable clean-room recipe in
+`environment/Dockerfile` pins its Ubuntu base-image digest, dated Ubuntu
+snapshot, system-package versions, and Python wheel hashes.
+
 The wall time is a reproducibility datum rather than a benchmark. Machine
 identity, account names, local paths, detailed host configuration, and shared
 host activity are intentionally omitted from the public profile.
 
 ## Sanitized record and integrity boundary
 
-The immutable release attaches the complete combined stdout/stderr and
-`/usr/bin/time -v` output with its working-directory path replaced by
-`<repository-root>`, as
-`kraw-v1.0.2-replay-profile.sanitized.txt`. Its SHA-256 digest is
+The complete combined stdout/stderr and `/usr/bin/time -v` output prepared for
+attachment to the versioned release has its working-directory path replaced
+by `<repository-root>`.  The resulting file is named
+`kraw-v1.0.3-replay-profile.sanitized.txt`; its SHA-256 digest is
 
 ```text
-4535537ec2e08666ffc795bb7ec76ce886fc3a23a5aa1306f98b66079592b2fc
+adf42bc7787846a2aad5217c6b1724eda5b4c86355840b67420a510f8213a8a8
 ```
 
 This profile is included in `MANIFEST.sha256` but excluded from
