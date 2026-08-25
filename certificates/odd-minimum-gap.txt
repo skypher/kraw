@@ -1,0 +1,40 @@
+== [Y] the y-map ==
+  [PASS] y_{j+1} == (1+k)x - k(D+2)^2/y_j
+  [PASS] map derivative == k(D+2)^2/y^2 (positive for 0 <= j < D, y > 0)
+== [W] window ==
+  [PASS] G(y) p^2 == (D+2)^2 (T-condition), y = (D+2)p'/p
+  [PASS] disc(G) == (D+2)^2 [x^2(u+1)^2 - u(u+2)((D+3)^2-(u+1)^2)]
+  [PASS] 4(s+2)(D+1-s) == (D+3)^2 - (u+1)^2
+== [A] anchors ==
+  [PASS] D even: y_{c+1} == 2(D+2)x/(D+4)
+  [PASS] D odd: y_{c+1} == (D+2)(2x+D+1)/(D+3)
+== [B] base cases ==
+  [PASS] D even base: B^2 - disc == 8D(D+6)((D+4)^2 - x^2)/(D+4)^2
+  [PASS] D even base reduction: (yb - yp2)*2(D+6)/(D+2) == B - g
+  [PASS] D odd base reduction: (ybo - yp1)*(D+5)/(D+2) == Bo - g
+  [PASS] D odd base: x^2-coeff == -4(D+1)(D+5) < 0
+  [PASS] D odd base: nonneg at both x-endpoints (D >= 14827)
+== [C1] ==
+  [PASS] K > 0 and K x(u+1) increasing in X: N has positive coefficients
+  [PASS] C1 == 4(D+3)(u+2)(D+u+4)
+== [S1] step obligations ==
+  [PASS] map(y_+(u)) - y_+(u+2) has the sign of K W1 - B0 C0 - g2 W1
+  [PASS] P == 4(u+2) P1 and R == 4x(u+2) R1 exactly
+  [PASS] P1 X^2-coeff == 2(u+1)^2(u-D)(D+u+6)  [concave]
+  [PASS] R1 X-coeff == 2(u+1)(u-D)(D+u+6)  [decreasing]
+  [PASS] D > u on the remaining region
+  [PASS] O3 X-coeff == 4(u-D)(D+u+6)  [decreasing]
+  [PASS] O1' R1(Xmax): u>=25 all-coeffs>=0 (24 terms, min=2); strip u=1..24 (Sturm fallbacks=[])
+  [PASS] O2a P1(Xmax): u>=25 all-coeffs>=0 (48 terms, min=58); strip u=1..24 (Sturm fallbacks=[])
+  [PASS] O2b P1(Xmin2)(u+3)^4: u>=25 all-coeffs>=0 (77 terms, min=1); strip u=1..24 (Sturm fallbacks=[])
+  [PASS] O3' O3(Xmax): u>=25 all-coeffs>=0 (30 terms, min=1); strip u=1..24 (Sturm fallbacks=[])
+== [R] region facts ==
+  [PASS] (u+1)^2 <= (7/6)(D+3)/29 => 24u^2 <= D+3  (168 <= 174)
+  [PASS] U >= 256 => 1 - 1/U >= 255/256 >= 8/9
+  [PASS] (8/9)(E - (D+3)/24) == E(24(D+3)-1)/(27(D+3))  (identity)
+  [PASS] 289(24(D+3)-1) - 6912(D+3) == 24(D+3)-289  (identity)
+  [PASS] 24(D+3)-289 > 0 for all D >= 14827 (ray certificate)
+== [E] E2E: exact recurrence walk ==
+  [PASS] E2E: 33 odd-min gap cells at D ~ 14828: T >= 0 and orbit above window
+== ODD-MINIMUM GAP: ALL CHECKS PASS ==
+  => every odd-minimum gap cell is verified.

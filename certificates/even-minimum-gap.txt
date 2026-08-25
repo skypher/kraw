@@ -1,0 +1,28 @@
+== [A] identities ==
+  [PASS] (I1) Turan-step identity
+  [PASS] (I2a) (D+1-j) Tur == quadratic form
+  [PASS] (I2b) 4(j+1)(D+1-j) == (D+2)^2 - (2j-D)^2
+  [PASS] (I3) h_{j+1} == (D-j)/((j+2)(D+2)) (x h_j - Lam p_j)
+  [PASS] (I3b) Lam == 4(Q+1)(M+1) [x = M-Q, D = M+Q]
+  [PASS] (I4a) zeta_{j+1} == kappa (Lam + x zeta)/(x - zeta)
+  [PASS] (I4b) dF/dzeta == (Lam + x^2)/(x - zeta)^2 > 0
+  [PASS] (I4c) kappa=1 map == tan addition law
+  [PASS] (I4d) tan(th*/2) = sinth/(1+costh) == sqrt(Lam)/(D+2+x)
+  [PASS] (I4e) kappa_j <= 1 for j >= (D-2)/2: (D-j)-(j+2) = D-2-2j <= 0
+== [B] anchors ==
+  [PASS] D even: recurrence at center forces h_c == 0
+  [PASS] D odd: zeta_c == -(D+2-x)
+  [PASS] D odd: zeta_{c+1} == kappa_c (D+2-x) <= (D+2-x)
+  [PASS] D odd: (D+2-x) == sqrt(Lam) tan(th*/2)
+== [C] budget ==
+  [PASS] 2/(3+sqrt5) <= 7/18
+  [PASS] (Q+1)/(2Q+3) <= 1/2:  (2Q+3) - 2(Q+1) == 1 > 0
+  [PASS] (M+1)(M+Q+3) <= (M+Q+2)^2 - 1  [M <= D]
+  [PASS] (u+1)^2 sin^2 th* < 7/3  (exact gap budget)
+  [PASS] (u+2)/2 <= (9/16)(u+1) for u >= 15: 9(u+1)-8(u+2) >= 0
+  [PASS] manuscript constant: (9/16)^2 * 7/3 == 567/768 < 1
+  [PASS] (u+2)/(2(u+1)) <= 17/32 for u >= 15: 34(u+1)-32(u+2) >= 0
+  [PASS] ((u+2)/(2(u+1)))^2 * 7/3 < 1 for u >= 15  (exact)
+== [D] E2E on even-Q gap cells ==
+  [PASS] E2E: 11 even-Q gap cells, decomposition termwise nonneg and exact tan-bound invariant zeta <= t*Lam < x (all exact rationals)
+== EVEN-MINIMUM GAP: ALL CHECKS PASS ==

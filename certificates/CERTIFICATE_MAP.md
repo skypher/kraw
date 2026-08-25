@@ -1,0 +1,105 @@
+# Certificate map
+
+This file maps every computer-assisted statement in the manuscript to its
+exact generator, committed replay log, and logical obligations. The `.txt`
+files are deterministic execution records; the corresponding source is the
+generative certificate and must be inspected or replayed.
+
+For a function-by-function inspection route and the acceptance predicate of
+each verifier, see `certificates/REVIEW_CHECKLIST.md`.
+
+No floating-point diagnostic discharges a proof obligation. All accepted
+symbolic identities, coefficient signs, Sturm counts, resultants, recurrence
+values, and coverage censuses use exact integer or rational arithmetic.
+This exactness does not remove the software trust boundary: the generators
+trust the declared SymPy implementations of polynomial factorization, gcd,
+resultant, and Sturm root counting.
+
+## Core identities and finite scan
+
+| Manuscript result | Generator | Exact log | Obligations |
+|---|---|---|---|
+| Recurrence and Lemma 2.1 | `scripts/recurrence-and-small-scan.py` | `certificates/recurrence-and-small-scan.txt` | Coefficient recurrence against the binomial definition; direct exact scan for `M,Q <= 90`. |
+| Proposition 2.2 | `cpp/exhaustive-turan-scan.cpp` | `certificates/exhaustive-scan-D1200.txt` | GMP recurrence evaluation for all `D <= 1200`; divisibility before every exact division; endpoint anchor; complete binomial cross-check for `D <= 12`; deterministic larger-row audits through `D = 1200`; all 289,261,901 top-half cells, with the count asserted in-program against the closed-form sum (a mismatch is a distinct failing exit code). |
+| Theorems 3.1–3.3, Corollary 3.4, Proposition 4.1 | `scripts/regime-decomposition.py` | `certificates/regime-decomposition.txt` | Quadratic-form and discriminant identities; reflection identity on a grid; central identities; Riccati comparison algebra including the I1/I2 link identities; exact flow conjugacy `r_s = k/y_s` and the phi-comparison invariant on a grid; coverage margin; reflection-collapse formulas; exact small-grid coverage and gap census. |
+
+## Finite-offset and fixed-argument certificates
+
+| Manuscript result | Generator | Exact log | Obligations |
+|---|---|---|---|
+| Theorem 4.2 | `scripts/finite-gap-offsets.py` | `certificates/finite-gap-offsets.txt` | Fraction-free recurrence construction for every `u=4,...,14` and both reflection parities; constrained-form identities (hard gates that survive `python3 -O`); polynomial gcd removal; leading-form mesh and derivative bounds; lower-term domination thresholds with the manuscript bound `M0 <= 153` asserted; resultants, integer-root candidates, and specialized gcd checks for the reduced pairs of BOTH pinnings (an identically vanishing specialized gcd is a failure); in-script heredity-reduced census `D < 442` feeding the sector bound `M >= 425`; per-parity numeric spot cells with reported counts (a vacuous spot run fails); threshold census from `D = 4` with the manuscript values `(4587, 3, 15)` asserted. |
+| Proposition 4.3 | `scripts/small-argument-cases.py` | `certificates/small-argument-cases.txt` | Exact binomial-ratio rational forms for `Q=0,1,2`; denominator orientation with square-factor nonvanishing on `u <= D-10`; paired domination for `S_2`; gap-strip containment with every quantified step ray-certified (including `h >= 2 sqrt(E)`); all twelve edge-flow inequalities on the ray `D >= 24`; direct-cell smallness asserted in the E2E gate. |
+| Lemma 4.4, Theorem 4.5, and Corollary 4.6 | `scripts/fixed-argument-strips.py` | `certificates/fixed-argument-strips.txt` | Exact construction of every `S_Q`, `3 <= Q <= 12`; complete coefficient-pair list asserted against the manuscript's partner pattern; integer Sturm chains for coefficient signs and paired bounds at the common onset `D0 = 2Q+6` (no silent fallback); denominator orientation with square-factor nonvanishing on the strip; top-edge flow onset; threshold census from `D = 4` with the manuscript values `(14827, 13, 15)` asserted. |
+
+The finite-offset source constructs the relevant polynomials recursively
+rather than trusting hard-coded expansions. For each factor it recomputes
+the exact mesh minimum, derivative bound, lower-degree coefficient bounds,
+and resultant candidates. The committed log records the factor degrees,
+multiplicities, domination onset, resultant degrees, and candidate counts.
+
+The fixed-argument source constructs
+
+`T/binom(M,s)^2 = R_0^2 + R_0 R_2 - R_1^2 - R_{-1} R_1`
+
+from the finite product formula printed in the manuscript. It then computes
+the coefficient polynomials and their signed Sturm chains; the complete
+pairing indices and certified onsets are written to the log.
+
+## Infinite residual regions
+
+| Manuscript result | Generator | Exact log | Obligations |
+|---|---|---|---|
+| Theorem 5.1 | `scripts/even-minimum-gap.py` | `certificates/even-minimum-gap.txt` | Turán-step identity; positive-definite Turán form; the `(p,d)` system (the script's variable name is `h`); Riccati/tangent comparison identities; exact angular budget including the manuscript's 9/16 chain and its u >= 15 ray facts. This verifier is float-free: the orbit tan-bound comparison is exact, because tangent values along the orbit are rational multiples of `sqrt(Lambda)` and tan-addition preserves that form. |
+| Lemma 6.1 and Theorem 6.2 | `scripts/odd-minimum-gap.py` | `certificates/odd-minimum-gap.txt` | Projective Möbius map; positivity-window discriminant and roots; both parity anchors; base inequalities; cleared successor-window identity; `K`-positivity and monotonicity; endpoint concavity; coefficient-positive endpoint substitutions; transition through infinity; the manuscript's exact region-bound chain. This verifier is float-free: every check, including its end-to-end recurrence walk, is exact. |
+
+For the odd-minimum endpoint step, the generator constructs `P_1`, `R_1`,
+`X_min2`, and `X_max` from the cleared transition identity before checking
+the four endpoint polynomials `O_1,...,O_4`. It records their term counts and
+least coefficients and fails if any coefficient is negative.
+
+## Exploratory artifacts (not part of the proof)
+
+`scripts/finite-offset-limit.py` / `certificates/finite-offset-limit.txt`
+and `scripts/uniform-limit-formula.py` /
+`certificates/uniform-limit-formula.txt` study the joint central limit of
+the reflection-collapse forms `M R_u^eps(M, tM)` (a Fejér-type positive
+kernel; related to Question 1 of the manuscript's final section).  They
+are **not** inputs to any theorem: no manuscript statement cites them,
+and they are excluded from `PAYLOAD.sha256` (the proof-payload
+identifier).  They are bound by `MANIFEST.sha256` only for snapshot
+integrity.
+
+## Replay
+
+The short exact replays are:
+
+```sh
+python3 scripts/recurrence-and-small-scan.py
+python3 scripts/regime-decomposition.py
+python3 scripts/small-argument-cases.py
+python3 scripts/even-minimum-gap.py
+python3 scripts/odd-minimum-gap.py
+```
+
+The finite-family replays, which can take several hours, are:
+
+```sh
+python3 scripts/finite-gap-offsets.py 14
+python3 scripts/fixed-argument-strips.py 12 14
+```
+
+The exhaustive scan is:
+
+```sh
+g++ -O2 -fopenmp -o /tmp/exhaustive-turan-scan \
+  cpp/exhaustive-turan-scan.cpp -lgmpxx -lgmp
+/tmp/exhaustive-turan-scan 1200
+```
+
+Use `make payload-check` and `make verify` to check the stored hashes. These
+targets do not execute a proof program. Use `make replay-short` for the five
+short exact replays and `make replay-all` for the complete proof replay.
+Use `make toolchain-info` to print the active dependency versions and
+`make audit-fast` for a short manifest/toolchain/integration audit.
+Use `make replay-profile` when producing the machine-specific time and memory
+report for an immutable release.

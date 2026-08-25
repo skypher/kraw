@@ -1,0 +1,35 @@
+== [A] quadratic-form identity ==
+  [PASS] T == A p_s^2 + B p_s p_{s+1} + C p_{s+1}^2 (symbolic)
+  [PASS] identity on grid D <= 36
+== [B] reflection and central identity (u = 0) ==
+  [PASS] reflection p_{D-j} == (-1)^Q p_j on grid D <= 80
+  [PASS] central identities, both parities (symbolic)
+  [PASS] central identities on grid D <= 80
+== [C] bulk band ==
+  [PASS] discriminant identity (symbolic)
+  [PASS] bulk cells all T >= 0 on grid D <= 80 (30334 cells)
+== [D] tail flow ==
+  [PASS] (a) (D+1)^2 - (u+1)^2 == 4(s+1)(D-s)
+  [PASS] (b) w(s)^2 - w(s-1)^2 == 4u
+  [PASS] (c) (x+w)(x-w1) - (x^2-w^2) == (w-w1)(x+w)
+  [PASS] (d) Q1 == x(D-k+2)/2
+  [PASS] (d) P1 closed form
+  [PASS] (d) P1 boundary == k(D+2)(u+1)
+  [PASS] (e) Q2 == x(u+1)/2
+  [PASS] (e) P2 closed form
+  [PASS] (e) P2 boundary == 2k(k+1)
+  [PASS] (d') form value at r = k/phi, cleared, == I1
+  [PASS] (e') vertex comparison, cleared, == I2
+  [PASS] flow cells: exact conjugacy r = k/y, y >= phi, T >= 0 on grid D <= 120 (5554 cells)
+== [E] coverage ==
+  [PASS] coverage margin at t=D^2 == 7D^2+16D
+  [PASS] coverage margin slope in t == -(4D+9)
+  [PASS] E2E coverage grid D <= 90: {'sD': 1081, 'u0': 551, 'bulk': 21975, 'flow': 1512, 'gap3': 20, 'open': 0}
+== [F] reflection collapse, u <= 3 ==
+  [PASS] collapse FULL closed forms R == num/den (non-vacuous) + denominator sign + PSD rewrites (symbolic)
+  [PASS] u=3 beta-locus outside gap: 176Q^2+416Q-16 form
+  [PASS] first u>=4 gap cell with Q>=3 is (442,3,4): got (442, 3, 4)
+  [PASS] first u>=4 gap cell over ALL Q is (142,0,4) [Q<=2 handled separately]: got (142, 0, 4)
+== [G] real-argument relaxation ==
+  [PASS] D=4, q=8/7, s=2 gives T_2 = -1430/117649
+== THREE-REGIME CLOSURE: ALL CHECKS PASS ==

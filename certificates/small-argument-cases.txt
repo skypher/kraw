@@ -1,0 +1,27 @@
+== [I] exact rational identities ==
+  [PASS] Q=0: numerator == c * closed form, c = 1 > 0
+  [PASS] Q=1: numerator == c * closed form, c = 1 > 0
+  [PASS] T == (num/den) C(M,s)^2 at grid cells (exact rationals)
+== [P] positivity structure ==
+  [PASS] Q=0: den < 0 and squares nonvanishing on u <= D-10 (all factors classified)
+  [PASS] Q=1: den < 0 and squares nonvanishing on u <= D-10 (all factors classified)
+  [PASS] Q=2: den < 0 and squares nonvanishing on u <= D-10 (all factors classified)
+  [PASS] -num2 == D(D-1) S2 exactly (polynomial division)
+  [PASS] Q=2: S2 has degree 5
+  [PASS] c0 == 3D(D+2)
+  [PASS] c1 == (D+2)(3D-4)
+  [PASS] [i]  13 c0 + D c2 == D(33D+70)
+  [PASS] [ii] 13 c1 + D c3 == 37D^2+30D-104
+  [PASS] c4 == 5 and c5 == 1
+  [PASS] c2 == -2(3D+4), c3 == -2(D-2)
+== [G] strip >= gap (Q = 2) ==
+  [PASS] 13(D+3)^2 - D(13D-9) == 87D + 117
+  [PASS] 13(13D-9) - (87D+117) == 82D-234 >= 0 for all D >= 3
+  [PASS] h - sqrt(E) == 13D-9 > 0 for all D >= 1
+  [PASS] h - 2 sqrt(E) == 12D-12 >= 0 for all D >= 1 (rationalization hypothesis)
+  [PASS] 37D^2+30D-104 > 0 for all D >= 2
+  [PASS] edge flow: (D-2Q)^2 >= 4k(D+1-k) for all D >= 24, Q <= 2, k <= 4 (12 ray certificates)
+== [E] E2E grid Q <= 2, D <= 140 ==
+  [PASS] all T >= 0; mechanisms {'id': 13068, 'flow': 1961, 'direct': 86}
+  [PASS] direct-only cells all have D < 24 (scan-covered); max D = 20
+== SMALL ARGUMENT CASES: ALL CHECKS PASS ==

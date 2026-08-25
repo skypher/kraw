@@ -1,0 +1,3 @@
+structural checks: 576719000 exact divisions; 849 convolution coefficients
+Turan scan D <= 1200: 289261901 cells (expected 289261901), negatives 0
+ALL NONNEGATIVE: Turan-step positivity verified for all D <= 1200

@@ -1,0 +1,22 @@
+== (1) Chebyshev chain solution ==
+  [PASS] three-term identity sin(A+th)+sin(A-th) == 2 sinA costh
+== (2) pinned ratio, u symbolic ==
+  [PASS] eps=+1: w == cos((u+2)phi)/cos(u phi)
+  [PASS] eps=-1: w == -sin((u+2)phi)/sin(u phi)
+== (3) quadratic-form limit identity, u symbolic ==
+  [PASS] eps=+1: rho-hat trig^2(u phi) == (u+1)sin^2 2phi + eps sin2phi sin((2u+2)phi)
+  [PASS] eps=-1: rho-hat trig^2(u phi) == (u+1)sin^2 2phi + eps sin2phi sin((2u+2)phi)
+  [PASS] A == 2(u+2)/(D+u+4) at s = (D+u)/2
+== (4) telescoping / Fejer form ==
+  [PASS] summand: sin(A+2phi) - sin(A-2phi) == 2 sin(2phi) cos A
+  [PASS] base u=0: 1/2 == sin(2phi)/(2 sin 2phi)
+  [PASS] base u=1: cos(2phi) == sin(4phi)/(2 sin 2phi)
+  [PASS] Fejer form == margin form, u <= 12 both parities
+== (5) nonnegativity ==
+  [PASS] addition: sin((n+1)x) == sin(nx)cos(x) + cos(nx)sin(x)
+== (6) consistency with the exact collapse ==
+  [PASS] symbolic limit == margin form, u <= 6 both parities
+    u=15 eps=-1: M*R = 20.09971423 vs formula 20.09974307 (rel 1.44e-06)
+    u=20 eps=+1: M*R = 35.08029555 vs formula 35.08033604 (rel 1.15e-06)
+  [PASS] large-M spot checks u = 15, 20 (M = 1e7)
+== UNIFORM LIMIT FORMULA: ALL CHECKS PASS ==

@@ -1,0 +1,88 @@
+# Monotonicity of Turán determinants for binary Krawtchouk polynomials
+
+Source repository: <https://github.com/skypher/kraw>.  The
+`certificates/MANIFEST.sha256` file identifies a reviewed artifact snapshot
+by hashing the manuscript, verifier sources, and deterministic outputs.
+`certificates/PAYLOAD.sha256` is the noncircular proof-payload identifier.
+`certificates/CERTIFICATE_MAP.md` maps the computer-assisted results to their
+generators and exact logs, and `certificates/REVIEW_CHECKLIST.md` gives a
+function-by-function inspection path and the acceptance predicate of each
+verifier. `certificates/REPLAY_PROFILE.md` records the toolchain, wall time,
+peak memory, and exit status of the complete `v1.0.2` replay.
+
+Build the manuscript deterministically in the reference toolchain from the
+repository root with:
+
+    make paper
+
+The Makefile overrides any inherited `SOURCE_DATE_EPOCH` with the reviewed
+snapshot value and enables the TeX source-date controls. The build requires
+the standard AMS LaTeX packages and TikZ/PGF. Repeated builds are
+byte-identical in the reference toolchain; byte identity across different
+TeX distributions or font packages is not claimed.
+
+## Reproducing the verification artifacts
+
+Run these commands from the repository root. Python checks require Python 3
+and SymPy; the exhaustive scan requires a C++17 compiler and GMP/GMPXX.
+The reference environment used Python 3.12.3, SymPy 1.12, g++ 13.3,
+and GMP 6.3.0.  Each verifier exits nonzero on a failed obligation.
+The Python dependency is pinned in `requirements.txt`.
+
+Print the corresponding versions in the active environment with:
+
+    make toolchain-info
+
+Run the manifests, toolchain report, five short exact replays, and a compiled
+GMP scan through `D <= 120` with:
+
+    make audit-fast
+
+This is a fast environment and integration audit, not a substitute for the
+complete replay below.
+
+    python3 scripts/recurrence-and-small-scan.py
+    python3 scripts/regime-decomposition.py
+    python3 scripts/finite-gap-offsets.py 14
+    python3 scripts/small-argument-cases.py
+    python3 scripts/fixed-argument-strips.py 12 14
+    python3 scripts/even-minimum-gap.py
+    python3 scripts/odd-minimum-gap.py
+    g++ -O2 -fopenmp -o /tmp/exhaustive-turan-scan cpp/exhaustive-turan-scan.cpp -lgmpxx -lgmp
+    /tmp/exhaustive-turan-scan 1200
+
+The full finite-gap-offset and fixed-argument-strip runs can take several
+hours. Deterministic committed replay logs are in `certificates/`; elapsed
+times are intentionally omitted so that successful reruns are byte-for-byte
+comparable. Their hashes, together with hashes of the verifier sources, are
+recorded in `certificates/MANIFEST.sha256`.
+
+For a new machine, record actual resource use outside the deterministic logs,
+for example with `/usr/bin/time -v make replay-all`.  Do not copy timing or
+memory figures from another host into a reproducibility report.
+
+The same commands are available as `make replay-short` (the five short exact
+replays) and `make replay-all` (all proof programs). After replaying them,
+check the stored artifact hashes from the repository root with:
+
+    make payload-check
+    make verify
+
+These two targets check snapshot integrity only; they do not execute the
+proof programs.
+
+For the archival resource report, run:
+
+    make toolchain-info
+    make replay-profile
+
+Record the toolchain output, elapsed time, peak resident memory, and exit
+status with the immutable release. The reference run is summarized in
+`certificates/REPLAY_PROFILE.md`, and its path-sanitized transcript is attached
+to the release rather than mixed into the deterministic logs.
+
+The repository also retains two supplementary asymptotic checks, which are
+not used in the proof:
+
+    python3 scripts/finite-offset-limit.py
+    python3 scripts/uniform-limit-formula.py

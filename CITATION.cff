@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this proof or its verification artifact, cite this work."
+title: "Monotonicity of Turán determinants for binary Krawtchouk polynomials"
+type: article
+authors:
+  - family-names: Polzer
+    given-names: "Leslie P."
+    email: "polzer@fastmail.com"
+    affiliation: "Independent Researcher"
+repository-code: "https://github.com/skypher/kraw"
+version: "1.0.2"
+date-released: "2026-08-25"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Polzer
+      given-names: "Leslie P."
+      email: "polzer@fastmail.com"
+      affiliation: "Independent Researcher"
+  title: "Monotonicity of Turán determinants for binary Krawtchouk polynomials"
+  year: 2026

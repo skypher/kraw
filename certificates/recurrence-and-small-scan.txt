@@ -1,0 +1,3 @@
+  [PASS] coefficient recurrence, M,Q <= 30
+  [PASS] T_s >= 0 on 378856 top-half cells, M,Q <= 90
+== RECURRENCE AND SMALL SCAN: ALL CHECKS PASS ==

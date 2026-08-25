@@ -1,0 +1,69 @@
+== [S] sector estimate (per-u): gap(u), Q >= 3 => Q < M/(u+1)^2 ==
+  [PASS] 3/(2U) < 1.4375 for U >= 25
+  [PASS] census: no gap cell with u >= 4, Q >= 3, D < 442 (heredity-reduced exact scan)
+  [PASS] 442*25/26 >= 425 >= 221
+== [G] gap offsets u = 4..14 ==
+    u=4 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=4); M0=4; reduced-pair res deg 4, 3 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=4); M0=4; reduced-pair res deg 9, 5 cands; common-factors res deg 2, 2 cands; spot=2
+    u=4 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),core2(M0=3); M0=3; reduced-pair res deg 1, 1 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core2(M0=3); M0=3; reduced-pair res deg 4, 3 cands; common-factors res deg 6, 4 cands; spot=2
+  [PASS] u=4: both parities certified [maxM0=4]
+    u=5 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=9); M0=9; reduced-pair res deg 4, 3 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=9); M0=9; reduced-pair res deg 9, 5 cands; common-factors res deg 6, 4 cands; spot=2
+    u=5 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=5); M0=5; reduced-pair res deg 4, 3 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=5); M0=5; reduced-pair res deg 9, 5 cands; common-factors res deg 6, 4 cands; spot=2
+  [PASS] u=5: both parities certified [maxM0=9]
+    u=6 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=13); M0=13; reduced-pair res deg 9, 5 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=13); M0=13; reduced-pair res deg 16, 7 cands; common-factors res deg 6, 4 cands; spot=2
+    u=6 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=5); M0=5; reduced-pair res deg 4, 3 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core4(M0=5); M0=5; reduced-pair res deg 9, 5 cands; common-factors res deg 12, 6 cands; spot=2
+  [PASS] u=6: both parities certified [maxM0=13]
+    u=7 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=25); M0=25; reduced-pair res deg 9, 5 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=25); M0=25; reduced-pair res deg 16, 7 cands; common-factors res deg 12, 6 cands; spot=2
+    u=7 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=7); M0=7; reduced-pair res deg 9, 5 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=7); M0=7; reduced-pair res deg 16, 7 cands; common-factors res deg 12, 6 cands; spot=2
+  [PASS] u=7: both parities certified [maxM0=25]
+    u=8 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=33); M0=33; reduced-pair res deg 16, 7 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=33); M0=33; reduced-pair res deg 25, 9 cands; common-factors res deg 12, 6 cands; spot=2
+    u=8 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=10); M0=10; reduced-pair res deg 9, 5 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core6(M0=10); M0=10; reduced-pair res deg 16, 7 cands; common-factors res deg 20, 8 cands; spot=2
+  [PASS] u=8: both parities certified [maxM0=33]
+    u=9 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=50); M0=50; reduced-pair res deg 16, 7 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=50); M0=50; reduced-pair res deg 25, 9 cands; common-factors res deg 20, 8 cands; spot=2
+    u=9 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=13); M0=13; reduced-pair res deg 16, 7 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=13); M0=13; reduced-pair res deg 25, 9 cands; common-factors res deg 20, 8 cands; spot=2
+  [PASS] u=9: both parities certified [maxM0=50]
+    u=10 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=63); M0=63; reduced-pair res deg 25, 9 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=63); M0=63; reduced-pair res deg 36, 11 cands; common-factors res deg 20, 8 cands; spot=2
+    u=10 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=17); M0=17; reduced-pair res deg 16, 7 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core8(M0=17); M0=17; reduced-pair res deg 25, 9 cands; common-factors res deg 30, 10 cands; spot=2
+  [PASS] u=10: both parities certified [maxM0=63]
+    u=11 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=85); M0=85; reduced-pair res deg 25, 9 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=85); M0=85; reduced-pair res deg 36, 11 cands; common-factors res deg 30, 10 cands; spot=2
+    u=11 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=20); M0=20; reduced-pair res deg 25, 9 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=20); M0=20; reduced-pair res deg 36, 11 cands; common-factors res deg 30, 10 cands; spot=2
+  [PASS] u=11: both parities certified [maxM0=85]
+    u=12 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=103); M0=103; reduced-pair res deg 36, 11 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=103); M0=103; reduced-pair res deg 49, 13 cands; common-factors res deg 30, 10 cands; spot=2
+    u=12 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=30); M0=30; reduced-pair res deg 25, 9 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core10(M0=30); M0=30; reduced-pair res deg 36, 11 cands; common-factors res deg 42, 12 cands; spot=2
+  [PASS] u=12: both parities certified [maxM0=103]
+    u=13 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=130); M0=130; reduced-pair res deg 36, 11 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=130); M0=130; reduced-pair res deg 49, 13 cands; common-factors res deg 42, 12 cands; spot=2
+    u=13 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=36); M0=36; reduced-pair res deg 36, 11 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=36); M0=36; reduced-pair res deg 49, 13 cands; common-factors res deg 42, 12 cands; spot=2
+  [PASS] u=13: both parities certified [maxM0=130]
+    u=14 eps=+1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core14(M0=153); M0=153; reduced-pair res deg 49, 13 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core14(M0=153); M0=153; reduced-pair res deg 64, 15 cands; common-factors res deg 42, 12 cands; spot=2
+    u=14 eps=-1 v1: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=49); M0=49; reduced-pair res deg 36, 11 cands; spot=2
+      v2: factors=lin+,lin+,even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),even^2(deg1),core12(M0=49); M0=49; reduced-pair res deg 49, 13 cands; common-factors res deg 56, 14 cands; spot=2
+  [PASS] u=14: both parities certified [maxM0=153]
+  [PASS] max M0 = 153 <= 153 (manuscript table) <= 1145 (scan covers the remainder)
+  [PASS] nondegeneracy range M <= 1145 has D <= 1190 < 1200
+== [T] threshold ==
+  first open gap cell (u > 14, Q >= 3): (4587, 3, 15)
+  [PASS] threshold census matches manuscript: (4587, 3, 15) == (4587, 3, 15); m* = 4586
+== FINITE GAP OFFSETS: ALL CHECKS PASS ==
+  => all offsets u <= 14 are verified for every D,
+     and every cell is verified for D <= 4586
+     (together with the regime, small-argument, and D <= 1200 scan verifiers).
