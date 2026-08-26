@@ -1,8 +1,11 @@
-# Complete replay profile for v1.0.3
+# Complete replay profile retained for v1.0.4
 
 This is the resource report for the complete proof replay prepared for release
-`v1.0.3`. It supplements the deterministic logs in this directory; it is not
-itself a proof certificate.
+`v1.0.3` and retained for `v1.0.4`.  Version `v1.0.4` adds the AI-use
+disclosure and updates the manuscript version, release metadata, and
+deterministic PDF source date; the proof generators, exact logs, dependencies,
+and replay commands are unchanged.  This report supplements the deterministic
+logs in this directory; it is not itself a proof certificate.
 
 ## Result
 
@@ -54,7 +57,7 @@ host activity are intentionally omitted from the public profile.
 The complete combined stdout/stderr and `/usr/bin/time -v` output prepared for
 attachment to the versioned release has its working-directory path replaced
 by `<repository-root>`.  The resulting file is named
-`kraw-v1.0.3-replay-profile.sanitized.txt`; its SHA-256 digest is
+`kraw-v1.0.4-replay-profile.sanitized.txt`; its SHA-256 digest is
 
 ```text
 adf42bc7787846a2aad5217c6b1724eda5b4c86355840b67420a510f8213a8a8

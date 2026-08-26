@@ -51,8 +51,8 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 1.0.3}
-\newcommand{\paperdate}{August 25, 2026}
+\newcommand{\paperversion}{Version 1.0.4}
+\newcommand{\paperdate}{August 26, 2026}
 
 \medmuskip=4mu
 \thickmuskip=8mu
@@ -1713,8 +1713,8 @@ not hard-coded, by the odd-minimum verifier.
 \subsection{Availability and trust boundary}\label{subsec:availability}
 
 Development source is maintained at \url{https://github.com/skypher/kraw}.
-The exact submission snapshot is designated \texttt{v1.0.3} and distributed
-from \url{https://github.com/skypher/kraw/releases/tag/v1.0.3}.  The release
+The exact submission snapshot is designated \texttt{v1.0.4} and distributed
+from \url{https://github.com/skypher/kraw/releases/tag/v1.0.4}.  The release
 page records the corresponding Git commit.  The snapshot carries
 \texttt{certificates/\allowbreak MANIFEST.sha256}, which binds the manuscript,
 programs,
@@ -1734,7 +1734,7 @@ To avoid a circular identifier (the full manifest includes the manuscript),
 generators, exact logs, dependency locks, license, certificate map, and
 referee checklist.  Its own SHA-256 digest is
 \begin{center}
-\small\nolinkurl{cef4ab11ed2905f7d71a8140290808f215771bd32f6b8d29fb89b4e086a94c0b}
+\small\nolinkurl{b8d918147e24d23461f492805c56ebbd4ab388f8ce2620514d4fb4fac7865c2f}
 \end{center}
 This digest identifies the proof payload printed with this submission; the full
 manifest additionally binds the article and the PDF built in the reference
@@ -1946,6 +1946,18 @@ $(M,Q)$, equivalently the ordered rectangular character values in
   track equality through every certificate branch.  Are there any
   noncentral cells with $T_s=0$?
 \end{enumerate}
+
+\noindent\begin{minipage}{\textwidth}
+\section*{AI-use disclosure}
+
+The proof architecture was developed with assistance from GPT-5.6 Sol
+(\texttt{gpt-5.6-sol}) at max reasoning effort.  The system was used as an
+interactive research assistant to develop and stress-test the argument, audit
+citations and calculations, prepare exact verification code, and revise the
+manuscript.  The author directed the research, selected and checked the final
+arguments, and takes responsibility for all mathematical claims, citations,
+computations, and wording.
+\end{minipage}
 
 \bibliographystyle{amsalpha}
 \bibliography{krawtchouk_turan_positivity}
