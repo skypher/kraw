@@ -51,7 +51,7 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 1.0.4}
+\newcommand{\paperversion}{Version 1.0.5}
 \newcommand{\paperdate}{August 26, 2026}
 
 \medmuskip=4mu
@@ -400,12 +400,14 @@ finite polynomial obligations.  Third, Proposition~\ref{prop:finite-scan} is
 an exhaustive exact-integer computation over a declared finite set.
 
 Every proof decision in the programs uses integer or rational arithmetic.
-The trusted high-level operations are polynomial factorization, gcd,
-resultants, and Sturm root counting in SymPy, together with GMP integer
-arithmetic.  Hash files identify the reviewed source and output snapshot but
-do not themselves prove that a program was run.  Section~\ref{sec:machine}
-gives the certificate rules, trust boundary, and theorem-by-theorem
-inventory.
+The primary generators use polynomial factorization, gcd, resultants, and
+Sturm root counting in SymPy, together with GMP integer arithmetic.  A second
+C++ implementation checks the decisive exported polynomial witnesses without
+SymPy or GMP, and repeats the finite scan with Boost integers and a different
+coefficient construction.  Hash files identify the reviewed source and
+output snapshot but do not themselves prove that a program was run.
+Section~\ref{sec:machine} gives the certificate rules, trust boundary, and
+theorem-by-theorem inventory.
 
 \section{Notation and recurrence}\label{sec:reduction}
 
@@ -1563,6 +1565,17 @@ verification patterns are:
     \sum_{D=0}^{1200}(D+1)\bigl(\lfloor D/2\rfloor+1\bigr)
       =289{,}261{,}901;
   \]
+\item \emph{independent exact replays}: a standalone C++ checker implements
+  rational and sparse-polynomial arithmetic, Euclidean division, Sturm
+  chains, modular no-root tests, and Sylvester determinants over Boost
+  integers.  It checks the exported fixed-argument fractions on
+  degree-complete grids, reconstructs the finite-offset quadratic forms from
+  the fraction-free recurrence, multiplies their factorizations, repeats the
+  sector bounds, enforces each resultant's degree bound, and verifies it at
+  one more integer point than that bound.  A second finite scanner constructs
+  each row from
+  both Pascal parents $(1+w)p(M-1,Q)$ and $(1-w)p(M,Q-1)$ rather than from the
+  three-term recurrence, and repeats all $289{,}261{,}901$ cells;
 \item \emph{end-to-end consistency checks} confirming that the declared regions
   cover all cells with $D\le 90$ and that each argument's output
   matches direct evaluation at explicit cells.
@@ -1585,13 +1598,12 @@ odd-minimum verifier checks the fully cleared transition identity
 
 Thus the human-readable text is logically complete only together with the
 certificate-generating sources.  The trusted base consists of the language
-runtimes and exact-arithmetic libraries listed in
-Section~\ref{subsec:availability}.  In particular, the proof trusts SymPy's
-implementations of polynomial factorization, gcd, resultant, and Sturm root
-counting.  The elementary rules below explain why the outputs requested from
-those implementations imply the required signs and nondegeneracy statements;
-the present logs do not constitute low-level certificates for the
-implementations themselves.
+runtimes, compiler, and exact-arithmetic libraries listed in
+Section~\ref{subsec:availability}.  The primary path uses SymPy's
+factorization, gcd, resultant, and Sturm implementations.  The independent
+C++ path checks their decisive outputs by separately implemented arithmetic;
+it reduces the shared software path but does not remove the compiler, Boost
+integer primitives, or the independent checker source from the trust base.
 The file
 \texttt{certificates/\allowbreak CERTIFICATE\_\allowbreak MAP.md}
 maps every
@@ -1603,6 +1615,10 @@ inspection route: it identifies the constructor, sign test,
 nondegeneracy test, threshold census, and final acceptance predicate used by
 each verifier.  This separates review of the mathematical implication from
 the diagnostic examples printed by the programs.
+The additional
+\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak CHECKS.md}
+specifies the second implementation and its mutation tests.  Its separate
+human replay form remains unsigned until completed by another person.
 
 \subsection{Certificate specifications}\label{subsec:certificate-spec}
 
@@ -1713,16 +1729,18 @@ not hard-coded, by the odd-minimum verifier.
 \subsection{Availability and trust boundary}\label{subsec:availability}
 
 Development source is maintained at \url{https://github.com/skypher/kraw}.
-The exact submission snapshot is designated \texttt{v1.0.4} and distributed
-from \url{https://github.com/skypher/kraw/releases/tag/v1.0.4}.  The release
-page records the corresponding Git commit.  The snapshot carries
+The exact submission snapshot is \texttt{v1.0.5}, distributed from
+\url{https://github.com/skypher/kraw/releases/tag/v1.0.5}.  This version adds
+the independent verification layer described below.  The tagged snapshot
+carries
 \texttt{certificates/\allowbreak MANIFEST.sha256}, which binds the manuscript,
 programs,
 and deterministic outputs byte-for-byte; no claim is made that an untagged
 development branch reproduces that snapshot or that GitHub releases are
 immutable.  GitHub serves as a distribution mirror.  Its release assets
-include the source archive, manuscript PDF, hash records, and path-sanitized
-profiled replay transcript.  Before publication, the exact accepted snapshot
+include the source archive, manuscript PDF, hash records, and local
+independent-assurance profile; the separate human replay record remains
+unsigned.  Before publication, the exact accepted snapshot
 must also be deposited in a persistent archival repository and its DOI added
 to the final bibliographic record.  Because the source
 programs are part of the proof, this deposit is an acceptance condition, not
@@ -1734,7 +1752,7 @@ To avoid a circular identifier (the full manifest includes the manuscript),
 generators, exact logs, dependency locks, license, certificate map, and
 referee checklist.  Its own SHA-256 digest is
 \begin{center}
-\small\nolinkurl{b8d918147e24d23461f492805c56ebbd4ab388f8ce2620514d4fb4fac7865c2f}
+\small\nolinkurl{8659c3004354cc7dbf95a8509bb3e4ed7787c352ed4ff69586c3e92f7fcbdbaa}
 \end{center}
 This digest identifies the proof payload printed with this submission; the full
 manifest additionally binds the article and the PDF built in the reference
@@ -1748,17 +1766,19 @@ manuscript and explanatory documentation are available under the Creative
 Commons Attribution 4.0 International License; the repository's
 \texttt{LICENSE} file states the component boundaries.
 
-The trusted base is Python~3, SymPy~1.12, a C++17 compiler, and GMP; the
-programs themselves remain subject to inspection.  Specifically, exact
-arithmetic does not remove reliance on SymPy's factorization, gcd,
-resultant, and Sturm algorithms.  The proof programs contain no
-floating-point computation: every acceptance predicate, including the
-end-to-end orbit checks, is integer or rational arithmetic.
+The primary trusted base is Python~3, SymPy~1.12, a C++17 compiler, and GMP.
+The independent path uses the same compiler but replaces the decisive SymPy
+operations and GMP scan with repository-local polynomial algorithms and
+Boost multiprecision integers.  The programs themselves remain subject to
+inspection.  They contain no floating-point proof computation: every
+acceptance predicate, including the end-to-end orbit checks, is integer or
+rational arithmetic.
 
 The command \texttt{make toolchain-info} prints the Python, SymPy, compiler,
-GMP, pdf\TeX, and platform versions of a replay environment.
+Boost, GMP, pdf\TeX, and platform versions of a replay environment.
 \texttt{make audit-fast} combines the manifest checks, all five short exact
-replays, and a compiled GMP scan through $D=120$.  These commands do not
+replays, the standalone independent checker, both mutation suites, and
+compiled GMP and Pascal scans through $D=120$.  These commands do not
 replace the complete replay, but they expose environment drift and exercise
 every short proof mechanism before the longer symbolic stages are attempted.
 The command \texttt{make replay-profile} runs the complete replay under
@@ -1771,14 +1791,16 @@ The Make targets \texttt{payload-check} and \texttt{verify} check stored
 hashes only; they do not execute a proof program.  The target
 \texttt{replay-short} runs the five short exact verifiers, while
 \texttt{replay-all} additionally runs the two longer symbolic certificates and
-the exhaustive GMP scan.  Reference software versions and the individual
-commands are recorded in \texttt{paper/README.md}.
+both exhaustive scans.  The target \texttt{audit-independent} runs the
+standalone witness checker, the full Pascal scan, and all twelve mutation
+tests.  Reference software versions and the individual commands are recorded
+in \texttt{paper/README.md}.
 
 \subsection{Verification inventory}
 
-Each row names both a program in \texttt{scripts/} (with suffix
-\texttt{.py}) and its committed output in \texttt{certificates/} (with
-suffix \texttt{.txt}); the exhaustive scan program is in \texttt{cpp/}.
+Each row names a program and its committed output in
+\texttt{certificates/}; the C++ scanners and independent checker are in
+\texttt{cpp/}.
 The accompanying \texttt{certificates/\allowbreak MANIFEST.sha256} records the
 exact artifact hashes, and \texttt{certificates/\allowbreak README.md} states the
 artifact
@@ -1798,6 +1820,10 @@ Artifact & Verifies \\
   Exhaustive exact scan of $289{,}261{,}901$ cells with zero negatives for
   all $D\le 1200$, including per-step divisibility tests and deterministic
   convolution audits (Proposition~\ref{prop:finite-scan}). \\
+\texttt{independent-scan-D1200} &
+  The same finite set through an independent Boost/Pascal construction,
+  including coefficientwise agreement of both parents, reflection, and
+  endpoint checks. \\
 \texttt{regime-decomposition} &
   Theorems~\ref{thm:bulk}--\ref{thm:flow}, Corollary~\ref{cor:coverage},
   Proposition~\ref{prop:collapse} (symbolic identities, grids, end-to-end
@@ -1817,6 +1843,10 @@ Artifact & Verifies \\
   Theorem~\ref{thm:oddmin}: odd-minimum gap cells (symbolic interval
   algebra, endpoint and finite-strip coefficient positivity,
   end-to-end recurrence checks near $D=14828$). \\
+\texttt{independent-certificate-check} &
+  Separate exact replay of the fixed-argument ratios and Sturm chains,
+  finite-offset factors, sector bounds and resultants, and odd-minimum
+  endpoint signs; all twelve injected mutations are rejected. \\
 \bottomrule
 \end{tabular}
 \medskip

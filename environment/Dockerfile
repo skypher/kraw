@@ -14,6 +14,7 @@ RUN apt-get update \
        ca-certificates \
        g++=4:13.2.0-7ubuntu1 \
        g++-13=13.3.0-6ubuntu2~24.04.1 \
+       libboost1.83-dev=1.83.0-2.1ubuntu3.2 \
        libgmp-dev=2:6.3.0+dfsg-2ubuntu6.1 \
        lmodern=2.005-1 \
        make=4.3-4.1build2 \
@@ -29,7 +30,7 @@ RUN apt-get update \
 
 WORKDIR /workspace
 COPY requirements.txt /workspace/requirements.txt
-RUN python3 -m pip install --break-system-packages --require-hashes \
+RUN python3 -u -m pip install --break-system-packages --require-hashes \
     -r requirements.txt
 
 COPY . /workspace

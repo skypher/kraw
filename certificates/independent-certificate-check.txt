@@ -1,0 +1,18 @@
+== independent exact-arithmetic self-tests ==
+== independent odd-minimum witnesses ==
+  [PASS] 2 base rays (numerator/denominator) and 4 region obligations
+== independent fixed-argument witnesses ==
+  [PASS] fixed Q=3
+  [PASS] fixed Q=4
+  [PASS] fixed Q=5
+  [PASS] fixed Q=6
+  [PASS] fixed Q=7
+  [PASS] fixed Q=8
+  [PASS] fixed Q=9
+  [PASS] fixed Q=10
+  [PASS] fixed Q=11
+  [PASS] fixed Q=12
+== independent finite-offset witnesses ==
+  [PASS] 44 finite cases and 66 resultants
+independent certificate checks: 537; failures: 0
+INDEPENDENT CERTIFICATE PASS

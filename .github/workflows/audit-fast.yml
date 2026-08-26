@@ -26,8 +26,8 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install exact Python dependencies
-        run: python -m pip install --require-hashes -r requirements.txt
-      - name: Install GMP development files
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgmp-dev
+        run: python3 -u -m pip install --require-hashes -r requirements.txt
+      - name: Install exact C++ arithmetic development files
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libboost-dev libgmp-dev
       - name: Run the fast artifact audit
         run: make audit-fast

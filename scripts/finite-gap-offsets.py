@@ -78,17 +78,25 @@ CHECKS:
 Usage: finite-gap-offsets.py [UMAX=14]
 """
 import sys
+import os
 from fractions import Fraction as F
 from math import comb
 from math import isqrt
 
 import sympy as sp
 
+from witness_io import WitnessWriter
+
 OK = True
 def check(name, cond):
     global OK
     print(f"  [{'PASS' if cond else 'FAIL'}] {name}", flush=True)
     OK = OK and cond
+
+
+def progress_detail(message):
+    """Emit replay progress without changing the deterministic stdout log."""
+    print(f"  [detail] {message}", file=sys.stderr, flush=True)
 
 
 def require(cond, msg):
@@ -159,9 +167,12 @@ def build_G(u, eps, version):
     idok = (sp.expand(lhs_mu - G*v1**2) == 0
             and sp.expand(lhs_lam - G*v2**2) == 0)
     GMQ = sp.expand(G.subs({Dv: M_+Q_, xv: M_-Q_}))
+    AMQ = sp.expand(A.subs({Dv: M_+Q_, xv: M_-Q_}))
+    BMQ = sp.expand(B.subs({Dv: M_+Q_, xv: M_-Q_}))
+    CMQ = sp.expand(C.subs({Dv: M_+Q_, xv: M_-Q_}))
     lamMQ = sp.expand(lam.subs({Dv: M_+Q_, xv: M_-Q_}))
     muMQ = sp.expand(mu.subs({Dv: M_+Q_, xv: M_-Q_}))
-    return GMQ, idok, lamMQ, muMQ
+    return GMQ, idok, lamMQ, muMQ, AMQ, BMQ, CMQ
 
 
 def cert_factor(f, tmax, Mmax=1145):
@@ -253,17 +264,110 @@ def int_roots(poly_expr, var):
     return out
 
 
-def no_common_sector_zeros(f1, f2):
+def no_root_prime(poly_expr, var):
+    """Return a prime at which a nonlinear rational polynomial has no root.
+
+    Such a prime is a compact, independently replayable witness that the
+    factor has no integer root.  Denominators and the leading coefficient
+    are required to remain nonzero modulo the selected prime.
+    """
+    poly = sp.Poly(poly_expr, var, domain=sp.QQ)
+    require(poly.degree() >= 2, "no-root prime requested for nonlinear factor")
+    coeffs = [sp.Rational(value) for value in poly.all_coeffs()]
+    for prime in sp.primerange(2, 200000):
+        if any(int(value.q) % prime == 0 for value in coeffs):
+            continue
+        modular = [int(value.p) * pow(int(value.q), -1, prime) % prime
+                   for value in coeffs]
+        if modular[0] == 0:
+            continue
+        has_root = False
+        for residue in range(prime):
+            value = 0
+            for coefficient in modular:
+                value = (value*residue + coefficient) % prime
+            if value == 0:
+                has_root = True
+                break
+        if not has_root:
+            return int(prime)
+    raise RuntimeError(f"no modular no-root witness found for {poly_expr}")
+
+
+def export_factorization(witness, label, expr, variables, kind,
+                         modular_root_witnesses=False):
+    const, factors = sp.factor_list(expr)
+    const = sp.Rational(const)
+    witness.meta(f"{kind}_CONST", label, int(const.p), int(const.q))
+    for index, (factor, multiplicity) in enumerate(factors):
+        name = f"{label}_factor_{index}"
+        witness.poly(name, factor, variables)
+        prime = 0
+        if modular_root_witnesses:
+            univariate = sp.Poly(factor, *variables)
+            if len(variables) == 1 and univariate.degree() >= 2:
+                prime = no_root_prime(factor, variables[0])
+        witness.meta(f"{kind}_FACTOR", label, name, multiplicity, prime)
+
+
+def export_finite_case(witness, label, u, eps, version,
+                       G, lam, mu, A, B, C,
+                       Gr, lamr, mur, common, tmax, M0):
+    names = {}
+    for suffix, expression in (
+            ("G", G), ("lam", lam), ("mu", mu),
+            ("A", A), ("B", B), ("C", C),
+            ("Gr", Gr), ("lamr", lamr), ("mur", mur),
+            ("common", common)):
+        name = f"{label}_{suffix}"
+        witness.poly(name, expression, (M_, Q_))
+        names[suffix] = name
+    witness.meta("FINITE_CASE", label, u, eps, version,
+                 names["G"], names["lam"], names["mu"],
+                 names["A"], names["B"], names["C"],
+                 names["Gr"], names["lamr"], names["mur"],
+                 names["common"], tmax.numerator, tmax.denominator,
+                 M0 or 0)
+    export_factorization(witness, label, Gr, (M_, Q_), "FINITE_G")
+
+
+def export_resultant(witness, label, f1, f2, resultant):
+    names = []
+    for suffix, expression in (("f", f1), ("h", f2), ("R", resultant)):
+        name = f"{label}_{suffix}"
+        variables = (M_, Q_) if suffix != "R" else (M_,)
+        witness.poly(name, expression, variables)
+        names.append(name)
+    witness.meta("RESULTANT", label, names[0], names[1], names[2], 1145, 24)
+    export_factorization(witness, label, resultant, (M_,), "RESULTANT",
+                         modular_root_witnesses=True)
+
+
+def no_common_sector_zeros(f1, f2, witness=None, label=None):
     """Certify that {f1 = f2 = 0} has no integer point with M > 1145
     in the deliberately enlarged sector 3 <= Q <= M/24.  This contains
     the manuscript sector Q < M/(u+1)^2 <= M/25.  Use a resultant in Q,
     integer M-candidates, and exact specialized gcd checks.
     """
+    phase = label or "unlabelled-pair"
+    progress_detail(
+        f"{phase}: resultant start; "
+        f"degrees_Q=({sp.degree(f1, Q_)},{sp.degree(f2, Q_)})")
     R = sp.resultant(f1, f2, Q_)
+    progress_detail(
+        f"{phase}: resultant complete; degree_M={sp.degree(R, M_)}")
     if R == 0:
         return False, "resultant zero (common factor)"
+    if witness:
+        require(label is not None, "resultant witness label is present")
+        progress_detail(f"{phase}: witness factorization start")
+        export_resultant(witness, label, f1, f2, R)
+        progress_detail(f"{phase}: witness factorization complete")
     Rp = sp.Poly(R, M_)
+    progress_detail(f"{phase}: integer-root census start")
     cands = int_roots(R, M_) if Rp.degree() > 0 else set()
+    progress_detail(
+        f"{phase}: integer-root census complete; candidates={len(cands)}")
     for Mc in cands:
         if Mc <= 1145:
             continue
@@ -416,6 +520,9 @@ def numeric_spot(u, eps, GMQ, version):
 
 def main():
     UMAX = int(sys.argv[1]) if len(sys.argv) > 1 else 14
+    witness_path = os.environ.get("KRAW_EXPORT_WITNESS")
+    witness = (WitnessWriter(witness_path, "finite-offset")
+               if witness_path else None)
 
     print("== [S] sector estimate (per-u): gap(u), Q >= 3 => Q < M/(u+1)^2 ==")
     # (i) analytic step:
@@ -451,15 +558,23 @@ def main():
         row = []
         rowM0 = 0
         for eps in (1, -1):
+            parity_name = "p" if eps == 1 else "m"
             print(f"  [progress] offset {u}/{UMAX}, parity {eps:+d}, "
                   "primary pinning", flush=True)
             # V1 reduced: covers all cells with g1 != 0
-            G1, id1, lam1, mu1 = build_G(u, eps, 1)
+            progress_detail(f"u={u} eps={eps:+d} v1: recurrence build start")
+            G1, id1, lam1, mu1, A1, B1, C1 = build_G(u, eps, 1)
+            progress_detail(f"u={u} eps={eps:+d} v1: recurrence build complete")
             n1, ncells1 = numeric_spot(u, eps, G1, 1)
             G1r, lam1r, mu1r, g1 = reduce_version(G1, lam1, mu1)
+            progress_detail(f"u={u} eps={eps:+d} v1: reduction complete")
             tmax = F(1, (u+1)**2)
+            progress_detail(f"u={u} eps={eps:+d} v1: sector factor check start")
             ok1, M01, note1 = cert_positive(G1r, tmax)
-            cz1, czn1 = no_common_sector_zeros(lam1r, mu1r)
+            progress_detail(f"u={u} eps={eps:+d} v1: sector factor check complete")
+            label1 = f"finite_u{u}_e{parity_name}_v1"
+            cz1, czn1 = no_common_sector_zeros(
+                lam1r, mu1r, witness, f"{label1}_reduced_pair")
             v1ok = id1 and n1 and ok1 and cz1 and ncells1 >= 1
             if not v1ok:
                 print(f"    v1 fails u={u} eps={eps}: ident={id1} "
@@ -467,6 +582,11 @@ def main():
                       f"czf={cz1} ({czn1})")
                 row.append(False); continue
             rowM0 = max(rowM0, M01 or 0)
+            if witness:
+                export_finite_case(
+                    witness, label1, u, eps, 1,
+                    G1, lam1, mu1, A1, B1, C1,
+                    G1r, lam1r, mu1r, g1, tmax, M01)
             print(f"    u={u} eps={eps:+d} v1: factors={note1}; "
                   f"M0={M01}; reduced-pair {czn1}; spot={ncells1}")
             if sp.Poly(g1, M_, Q_).total_degree() == 0:
@@ -476,19 +596,32 @@ def main():
             # g1 nonconstant: cover {g1 = 0} cells by V2 reduced
             print(f"  [progress] offset {u}/{UMAX}, parity {eps:+d}, "
                   "alternate pinning", flush=True)
-            G2, id2, lam2, mu2 = build_G(u, eps, 2)
+            progress_detail(f"u={u} eps={eps:+d} v2: recurrence build start")
+            G2, id2, lam2, mu2, A2, B2, C2 = build_G(u, eps, 2)
+            progress_detail(f"u={u} eps={eps:+d} v2: recurrence build complete")
             n2, ncells2 = numeric_spot(u, eps, G2, 2)
             G2r, lam2r, mu2r, g2 = reduce_version(G2, lam2, mu2)
+            progress_detail(f"u={u} eps={eps:+d} v2: reduction complete")
+            progress_detail(f"u={u} eps={eps:+d} v2: sector factor check start")
             ok2, M02, note2 = cert_positive(G2r, tmax)
-            cz2, czn2 = no_common_sector_zeros(lam2r, mu2r)
+            progress_detail(f"u={u} eps={eps:+d} v2: sector factor check complete")
+            label2 = f"finite_u{u}_e{parity_name}_v2"
+            cz2, czn2 = no_common_sector_zeros(
+                lam2r, mu2r, witness, f"{label2}_reduced_pair")
             # v2 usable at g1=0 cells iff g2 != 0 there:
-            cg, cgn = no_common_sector_zeros(g1, g2)
+            cg, cgn = no_common_sector_zeros(
+                g1, g2, witness, f"{label2}_common_factors")
             v2ok = id2 and n2 and ok2 and cz2 and cg and ncells2 >= 1
             if not v2ok:
                 print(f"    v2 fails u={u} eps={eps}: ident={id2} "
                       f"num={n2}({ncells2} cells) pos={ok2} ({note2}) "
                       f"czf={cz2} ({czn2}) g1g2={cg} ({cgn})")
             else:
+                if witness:
+                    export_finite_case(
+                        witness, label2, u, eps, 2,
+                        G2, lam2, mu2, A2, B2, C2,
+                        G2r, lam2r, mu2r, g2, tmax, M02)
                 print(f"      v2: factors={note2}; M0={M02}; "
                       f"reduced-pair {czn2}; common-factors {cgn}; "
                       f"spot={ncells2}")
@@ -496,6 +629,8 @@ def main():
             row.append(v2ok)
         allM0 = max(allM0, rowM0)
         check(f"u={u}: both parities certified [maxM0={rowM0}]", all(row))
+        if witness and all(row):
+            witness.checkpoint(f"u{u}")
 
     check(f"max M0 = {allM0} <= 153 (manuscript table) "
           f"<= 1145 (scan covers the remainder)",
@@ -509,19 +644,19 @@ def main():
     print("== [T] threshold ==")
     # smallest D with a gap cell u > UMAX, Q >= 3 -- exact scan from D=4,
     # no external premise about small D
-    witness = first_open_gap(3, UMAX, 4, 40000)
-    print(f"  first open gap cell (u > {UMAX}, Q >= 3): {witness}")
-    if witness is None:
+    threshold_witness = first_open_gap(3, UMAX, 4, 40000)
+    print(f"  first open gap cell (u > {UMAX}, Q >= 3): {threshold_witness}")
+    if threshold_witness is None:
         check("threshold census found a first open cell", False)
         thr = None
     else:
-        thr = witness[0]
+        thr = threshold_witness[0]
         if UMAX == 14:
             # the manuscript's census values are asserted, not just
             # printed:
-            check(f"threshold census matches manuscript: {witness} == "
+            check(f"threshold census matches manuscript: {threshold_witness} == "
                   f"(4587, 3, 15); m* = {thr-1}",
-                  witness == (4587, 3, 15))
+                  threshold_witness == (4587, 3, 15))
         else:
             check(f"threshold census is nonempty; m* = {thr-1}", True)
 
@@ -531,6 +666,11 @@ def main():
         print(f"     and every cell is verified for D <= {thr-1}")
         print(f"     (together with the regime, small-argument, and "
               f"D <= 1200 scan verifiers).")
+        if witness:
+            witness.meta("THRESHOLD", 3, UMAX,
+                         threshold_witness[0], threshold_witness[1],
+                         threshold_witness[2])
+            witness.finish()
     raise SystemExit(0 if OK else 1)
 
 

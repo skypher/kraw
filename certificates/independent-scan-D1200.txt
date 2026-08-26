@@ -1,0 +1,3 @@
+independent structural checks: 576719000 alternate-parent coefficients; 578162601 reflections; 1443602 endpoints
+independent Turan scan D <= 1200: 289261901 cells (expected 289261901), negatives 0
+INDEPENDENT PASS: all cells nonnegative for D <= 1200

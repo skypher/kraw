@@ -11,25 +11,26 @@ each verifier, see `certificates/REVIEW_CHECKLIST.md`.
 No floating-point diagnostic discharges a proof obligation. All accepted
 symbolic identities, coefficient signs, Sturm counts, resultants, recurrence
 values, and coverage censuses use exact integer or rational arithmetic.
-This exactness does not remove the software trust boundary: the generators
-trust the declared SymPy implementations of polynomial factorization, gcd,
-resultant, and Sturm root counting.
+The primary generators trust the declared SymPy implementations of polynomial
+factorization, gcd, resultant, and Sturm root counting.  The independently
+implemented checks in `INDEPENDENT_CHECKS.md` replay the decisive outputs
+without those operations or GMP.
 
 ## Core identities and finite scan
 
 | Manuscript result | Generator | Exact log | Obligations |
 |---|---|---|---|
 | Recurrence and Lemma 2.1 | `scripts/recurrence-and-small-scan.py` | `certificates/recurrence-and-small-scan.txt` | Coefficient recurrence against the binomial definition; direct exact scan for `M,Q <= 90`. |
-| Proposition 2.2 | `cpp/exhaustive-turan-scan.cpp` | `certificates/exhaustive-scan-D1200.txt` | GMP recurrence evaluation for all `D <= 1200`; divisibility before every exact division; endpoint anchor; complete binomial cross-check for `D <= 12`; deterministic larger-row audits through `D = 1200`; all 289,261,901 top-half cells, with the count asserted in-program against the closed-form sum (a mismatch is a distinct failing exit code). |
+| Proposition 2.2 | `cpp/exhaustive-turan-scan.cpp`; `cpp/independent-pascal-scan.cpp` | `certificates/exhaustive-scan-D1200.txt`; `certificates/independent-scan-D1200.txt` | The primary GMP recurrence scan performs all prior structural checks. The second scan independently constructs every row from both Pascal parents with Boost integers, checks their coefficientwise agreement, reflection and endpoints, and repeats all 289,261,901 cells. |
 | Theorems 3.1–3.3, Corollary 3.4, Proposition 4.1 | `scripts/regime-decomposition.py` | `certificates/regime-decomposition.txt` | Quadratic-form and discriminant identities; reflection identity on a grid; central identities; Riccati comparison algebra including the I1/I2 link identities; exact flow conjugacy `r_s = k/y_s` and the phi-comparison invariant on a grid; coverage margin; reflection-collapse formulas; exact small-grid coverage and gap census. |
 
 ## Finite-offset and fixed-argument certificates
 
 | Manuscript result | Generator | Exact log | Obligations |
 |---|---|---|---|
-| Theorem 4.2 | `scripts/finite-gap-offsets.py` | `certificates/finite-gap-offsets.txt` | Fraction-free recurrence construction for every `u=4,...,14` and both reflection parities; constrained-form identities (hard gates that survive `python3 -O`); polynomial gcd removal; leading-form mesh and derivative bounds; lower-term domination thresholds with the manuscript bound `M0 <= 153` asserted; resultants, integer-root candidates, and specialized gcd checks for the reduced pairs of BOTH pinnings (an identically vanishing specialized gcd is a failure); in-script heredity-reduced census `D < 442` feeding the sector bound `M >= 425`; per-parity numeric spot cells with reported counts (a vacuous spot run fails); threshold census from `D = 4` with the manuscript values `(4587, 3, 15)` asserted. |
+| Theorem 4.2 | `scripts/finite-gap-offsets.py`; `cpp/independent-certificate-check.cpp` | `certificates/finite-gap-offsets.txt`; `certificates/independent-finite-offset.txt` | The primary construction performs the stated fraction-free, gcd, factor, resultant, and census checks. The C++ checker reconstructs the recurrence forms, multiplies every exported factorization, repeats the sector-domination estimates, binds each resultant to its declared constraint pair, and verifies it by Sylvester determinants at one more point than its enforced degree bound. |
 | Proposition 4.3 | `scripts/small-argument-cases.py` | `certificates/small-argument-cases.txt` | Exact binomial-ratio rational forms for `Q=0,1,2`; denominator orientation with square-factor nonvanishing on `u <= D-10`; paired domination for `S_2`; gap-strip containment with every quantified step ray-certified (including `h >= 2 sqrt(E)`); all twelve edge-flow inequalities on the ray `D >= 24`; direct-cell smallness asserted in the E2E gate. |
-| Lemma 4.4, Theorem 4.5, and Corollary 4.6 | `scripts/fixed-argument-strips.py` | `certificates/fixed-argument-strips.txt` | Exact construction of every `S_Q`, `3 <= Q <= 12`; complete coefficient-pair list asserted against the manuscript's partner pattern; integer Sturm chains for coefficient signs and paired bounds at the common onset `D0 = 2Q+6` (no silent fallback); denominator orientation with square-factor nonvanishing on the strip; top-edge flow onset; threshold census from `D = 4` with the manuscript values `(14827, 13, 15)` asserted. |
+| Lemma 4.4, Theorem 4.5, and Corollary 4.6 | `scripts/fixed-argument-strips.py`; `cpp/independent-certificate-check.cpp` | `certificates/fixed-argument-strips.txt`; `certificates/independent-fixed-argument.txt` | The primary construction performs the stated strip and Sturm checks. The C++ checker reconstructs all four defining binomial-ratio sums on degree-complete exact grids, combines them symbolically, proves every denominator factor nonzero with fixed sign on an enlarged exact wedge, and repeats every ray/pairing Sturm certificate. |
 
 The finite-offset source constructs the relevant polynomials recursively
 rather than trusting hard-coded expansions. For each factor it recomputes
@@ -50,7 +51,7 @@ pairing indices and certified onsets are written to the log.
 | Manuscript result | Generator | Exact log | Obligations |
 |---|---|---|---|
 | Theorem 5.1 | `scripts/even-minimum-gap.py` | `certificates/even-minimum-gap.txt` | Turán-step identity; positive-definite Turán form; the `(p,d)` system (the script's variable name is `h`); Riccati/tangent comparison identities; exact angular budget including the manuscript's 9/16 chain and its u >= 15 ray facts. This verifier is float-free: the orbit tan-bound comparison is exact, because tangent values along the orbit are rational multiples of `sqrt(Lambda)` and tan-addition preserves that form. |
-| Lemma 6.1 and Theorem 6.2 | `scripts/odd-minimum-gap.py` | `certificates/odd-minimum-gap.txt` | Projective Möbius map; positivity-window discriminant and roots; both parity anchors; base inequalities; cleared successor-window identity; `K`-positivity and monotonicity; endpoint concavity; coefficient-positive endpoint substitutions; transition through infinity; the manuscript's exact region-bound chain. This verifier is float-free: every check, including its end-to-end recurrence walk, is exact. |
+| Lemma 6.1 and Theorem 6.2 | `scripts/odd-minimum-gap.py`; `cpp/independent-certificate-check.cpp` | `certificates/odd-minimum-gap.txt`; `certificates/independent-odd-minimum.txt` | The primary verifier performs the stated projective and endpoint checks. The C++ checker independently repeats both base-ray tests and all four substituted infinite-region sign certificates. |
 
 For the odd-minimum endpoint step, the generator constructs `P_1`, `R_1`,
 `X_min2`, and `X_max` from the cleared transition identity before checking
@@ -103,3 +104,5 @@ Use `make toolchain-info` to print the active dependency versions and
 `make audit-fast` for a short manifest/toolchain/integration audit.
 Use `make replay-profile` when producing the machine-specific time and memory
 report for a versioned release and persistent archival deposit.
+Use `make audit-independent` for the second symbolic implementation, complete
+Pascal scan, and mutation suite.

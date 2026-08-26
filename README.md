@@ -19,13 +19,16 @@ The stable proof payload is listed separately in
 machine-assisted theorem to its exact generator and replay log, and
 `certificates/REVIEW_CHECKLIST.md` gives a function-by-function referee
 inspection path. `certificates/REPLAY_PROFILE.md` records the measured
-complete replay for the submission snapshot.
+complete replay retained for v1.0.4;
+`certificates/INDEPENDENT_REPLAY_PROFILE.md` records the local v1.0.5
+assurance runs and their limits.
 
 ## Layout
 
 - `paper/` — LaTeX manuscript, bibliography, and PDF.
 - `scripts/` — SymPy exact-arithmetic verification programs.
-- `cpp/` — GMP exhaustive scanner.
+- `cpp/` — GMP scanner plus the independent Boost/Pascal scan and symbolic
+  checker.
 - `certificates/` — committed verification outputs and their hash manifest.
 
 ## Licensing
@@ -59,12 +62,12 @@ make verify
 
 These targets check snapshot integrity; they do not execute the proof
 programs. Run the short exact replays with `make replay-short`, or all proof
-programs, including the longer symbolic certificates and exhaustive GMP scan,
-with `make replay-all`. Use `make replay-profile` to run that complete replay
+programs and independent checks, including the longer symbolic certificates
+and both exhaustive scans, with `make replay-all`. Use `make replay-profile` to run that complete replay
 under `/usr/bin/time -v` and capture a machine-specific resource report for
-an archival release. The reference run is summarized in
-`certificates/REPLAY_PROFILE.md`; its path-sanitized transcript is a release
-asset.
+an archival release. The v1.0.4 reference run is summarized in
+`certificates/REPLAY_PROFILE.md`; the Version 1.0.5 independent component
+runs are in `certificates/INDEPENDENT_REPLAY_PROFILE.md`.
 
 Before a replay, print the active dependency versions with:
 
@@ -73,8 +76,17 @@ make toolchain-info
 ```
 
 For a practical first audit, `make audit-fast` checks both manifests, prints
-the toolchain, runs all short exact verifiers, compiles the GMP scanner, and
-scans through `D <= 120`. It does not replace `make replay-all`.
+the toolchain, runs all short exact verifiers and the independent checker,
+executes all mutation tests, and runs both compiled scanners through
+`D <= 120`. It does not replace `make replay-all`.
+
+The separate software-assurance layer is described in
+`certificates/INDEPENDENT_CHECKS.md`.  Run `make audit-independent` to replay
+the exported witnesses with the standalone C++ polynomial/Sturm/resultant
+checker, repeat all 289,261,901 finite cells through an independent
+Boost/Pascal construction, and verify that all injected mutations are
+rejected.  Independent human replay remains a separately signed step; the
+blank form is `certificates/INDEPENDENT_REPLAY_SIGNOFF.md`.
 
 The paper needs standard AMS LaTeX packages and TikZ/PGF.  The exact
 verification commands and requirements are documented in `paper/README.md`;

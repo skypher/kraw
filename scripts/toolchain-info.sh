@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-python3 - <<'PY'
+python3 -u - <<'PY'
 import platform
 import sys
 import sympy
@@ -13,5 +13,6 @@ print(f"platform: {platform.platform()}")
 PY
 
 g++ --version | sed -n '1p'
+dpkg-query -W -f='boost headers: ${Version}\n' libboost1.83-dev
 pkg-config --modversion gmp | sed 's/^/gmp: /'
 pdflatex --version | sed -n '1p'

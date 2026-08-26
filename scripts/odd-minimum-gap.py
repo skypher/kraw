@@ -75,8 +75,11 @@ p-values.  This verifier is float-free: every check is exact.
 """
 from fractions import Fraction as F
 from math import comb
+import os
 
 import sympy as sp
+
+from witness_io import WitnessWriter
 
 OK = True
 def check(name, cond):
@@ -130,6 +133,9 @@ def poly_nonneg_region(T, name, ulo=1):
 
 
 def main():
+    witness_path = os.environ.get("KRAW_EXPORT_WITNESS")
+    witness = (WitnessWriter(witness_path, "odd-minimum")
+               if witness_path else None)
     jv, y = sp.symbols('j y')
     pj, pj1 = sp.symbols('pj pj1')
 
@@ -203,7 +209,7 @@ def main():
     check("D odd base: x^2-coeff == -4(D+1)(D+5) < 0",
           sp.expand(pS.nth(2) + 4*(D+1)*(D+5)) == 0)
     okoddbase = True
-    for xe in (16*(D+3)/17, D-26):
+    for endpoint_index, xe in enumerate((16*(D+3)/17, D-26)):
         Te = sp.together(Sodd.subs(x, xe))
         num, den = sp.fraction(sp.cancel(Te))
         # the denominator must be CERTIFIED positive (a positive
@@ -218,6 +224,13 @@ def main():
                or (pb.LC() > 0 and pb.count_roots(0, sp.oo) == 0
                    and pb.eval(0) > 0))
         okoddbase &= okx
+        if witness:
+            nname = f"odd_base_num_{endpoint_index}"
+            dname = f"odd_base_den_{endpoint_index}"
+            witness.poly(nname, sp.expand(num), (D,))
+            witness.poly(dname, sp.expand(den), (D,))
+            witness.meta("RAY_POS", nname, 14827, 1)
+            witness.meta("RAY_POS", dname, 14827, 1)
     check("D odd base: nonneg at both x-endpoints (D >= 14827)",
           okoddbase)
 
@@ -286,8 +299,13 @@ def main():
           sp.expand(O3X.nth(1) - 4*(u-D)*(D+u+6)) == 0)
     obligations["O3' O3(Xmax)"] = sp.expand(
         O3X.as_expr().subs(X, Xmax))
-    for name, T in obligations.items():
-        poly_nonneg_region(sp.expand(sp.nsimplify(T)), name, ulo=1)
+    for obligation_index, (name, T) in enumerate(obligations.items(), 1):
+        exact_T = sp.expand(sp.nsimplify(T))
+        poly_nonneg_region(exact_T, name, ulo=1)
+        if witness:
+            pname = f"odd_region_O{obligation_index}"
+            witness.poly(pname, exact_T, (D, u))
+            witness.meta("REGION_POS", pname, 1, 24, 25, 14827)
 
     print("== [R] region facts ==")
     check("(u+1)^2 <= (7/6)(D+3)/29 => 24u^2 <= D+3  (168 <= 174)",
@@ -358,6 +376,8 @@ def main():
           "FAILURES ==")
     if OK:
         print("  => every odd-minimum gap cell is verified.")
+        if witness:
+            witness.finish()
     raise SystemExit(0 if OK else 1)
 
 

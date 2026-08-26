@@ -9,7 +9,7 @@ authors:
     affiliation: "Independent Researcher"
 repository-code: "https://github.com/skypher/kraw"
 license: BSD-3-Clause
-version: "1.0.4"
+version: "1.0.5"
 date-released: "2026-08-26"
 preferred-citation:
   type: article

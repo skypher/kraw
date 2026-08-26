@@ -6,11 +6,12 @@ the constructors, the acceptance predicates, and the finite data that a
 reviewer should inspect or replay. The deterministic `.txt` files remain
 execution records, not stand-alone proof objects.
 
-All proof decisions use integer or rational arithmetic. The trusted
-high-level operations are SymPy's polynomial factorization, polynomial gcd,
-resultant, and Sturm root counting, plus GMP integer arithmetic. The proof
-programs are float-free: every check that feeds an acceptance predicate,
-including the end-to-end orbit walks, is exact.
+All proof decisions use integer or rational arithmetic. The primary
+generators use SymPy's polynomial factorization, polynomial gcd, resultant,
+and Sturm root counting, plus GMP integer arithmetic. The second
+implementation described in `INDEPENDENT_CHECKS.md` checks the decisive
+exported witnesses with Boost integers and repository-local polynomial,
+Sturm, and Sylvester code. Both paths are float-free.
 
 ## Global recurrence and finite scan
 
@@ -38,6 +39,17 @@ including the end-to-end orbit walks, is exact.
   mismatch), and absence of negative Turán steps are required for
   acceptance.  The structural counters are printed to stdout, so the
   committed log records them.
+
+### `cpp/independent-pascal-scan.cpp`
+
+- Coefficients are Boost `cpp_int` values, not GMP values.
+- The row is built across degree diagonals by multiplication with `1+w`.
+- Every interior row is reconstructed independently from its `1-w` parent;
+  all coefficients must agree.
+- Reflection and both endpoint coefficients are checked before any cell is
+  accepted.
+- The same closed-form count of 289,261,901 cells is a failing assertion.
+- Five compiled mutation modes must all be rejected.
 
 ## Regime decomposition and small offsets
 
@@ -171,6 +183,32 @@ partner pattern, the denominator orientation with square nonvanishing,
 the exact edge-flow onset, and the asserted threshold census.
 The complete partner list and each onset are printed in the log.
 
+## Independent symbolic checker
+
+### `cpp/independent-certificate-check.cpp`
+
+- The parser rejects incomplete witness files and duplicate polynomials.
+- Fixed-argument ratios are reconstructed from their defining finite sums on
+  a square grid with one more point in each variable than a proved total-degree
+  bound; the four exported fractions are then combined symbolically.
+- The denominator factorizations and all coefficient/content identities are
+  multiplied out.  Every affine denominator factor is proved nonzero with a
+  fixed sign on both boundary rays of the enlarged exact wedge before the
+  repository-local Sturm implementation checks the complete rays and pairing
+  pattern.
+- The fraction-free recurrence independently reconstructs `lambda`, `mu`, and
+  `A,B,C`; every identity `G=A*mu^2-B*lambda*mu+C*lambda^2`, common-factor
+  division, and reduced factorization is then multiplied out.  The 513-point
+  leading-form bound and lower-layer domination threshold are recomputed.
+- Every resultant is linked to its exact reduced constraint pair (or exact
+  alternate-pinning common factors), is required not to exceed its derived
+  degree bound, and is checked as a Sylvester determinant at one more integer
+  point than that bound.  Exported factors are multiplied out; any nonlinear
+  factor must include a verified prime and modular no-root witness.
+- The odd-minimum base rays and all four substituted endpoint polynomials are
+  checked independently.
+- Seven symbolic mutations must all be rejected.
+
 ## Infinite residual regions
 
 ### `scripts/even-minimum-gap.py`
@@ -228,6 +266,7 @@ make payload-check
 make verify
 make toolchain-info
 make replay-all
+make audit-independent
 ```
 
 The first two commands verify identity of the reviewed snapshot. Only

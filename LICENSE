@@ -7,8 +7,8 @@ Copyright (c) 2026 Leslie P. Polzer
 -----------
 
 The files in `scripts/` and `cpp/`, together with `Makefile`,
-`requirements.txt`, `environment/`, and `.github/workflows/`, are licensed
-under the BSD 3-Clause License:
+`requirements.txt`, `environment/`, `.github/workflows/`, `.gitignore`, and
+`.dockerignore`, are licensed under the BSD 3-Clause License:
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

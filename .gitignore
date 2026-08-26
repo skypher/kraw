@@ -5,3 +5,5 @@ paper/*.log
 paper/*.out
 __pycache__/
 *.pyc
+certificates/*.partial
+certificates/*.tmp

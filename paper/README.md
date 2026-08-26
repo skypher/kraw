@@ -7,8 +7,11 @@ by hashing the manuscript, verifier sources, and deterministic outputs.
 `certificates/CERTIFICATE_MAP.md` maps the computer-assisted results to their
 generators and exact logs, and `certificates/REVIEW_CHECKLIST.md` gives a
 function-by-function inspection path and the acceptance predicate of each
-verifier. `certificates/REPLAY_PROFILE.md` records the toolchain, wall time,
-peak memory, and exit status of the complete submission replay.
+verifier. `certificates/REPLAY_PROFILE.md` records the complete replay retained
+for v1.0.4, while `certificates/INDEPENDENT_REPLAY_PROFILE.md` records the
+local v1.0.5 assurance runs and their limits.
+`certificates/INDEPENDENT_CHECKS.md` specifies the separate C++ checker,
+Pascal scan, and mutation tests.
 
 Build the manuscript deterministically in the reference toolchain from the
 repository root with:
@@ -25,6 +28,8 @@ TeX distributions or font packages is not claimed.
 
 Run these commands from the repository root. Python checks require Python 3
 and SymPy; the exhaustive scan requires a C++17 compiler and GMP/GMPXX.
+The independent checker and second scan require the Boost multiprecision
+headers.
 The reference environment used Python 3.12.3, SymPy 1.12, g++ 13.3,
 and GMP 6.3.0.  Each verifier exits nonzero on a failed obligation.
 The Python dependencies and wheel hashes are pinned in `requirements.txt`.
@@ -35,8 +40,8 @@ Print the corresponding versions in the active environment with:
 
     make toolchain-info
 
-Run the manifests, toolchain report, five short exact replays, and a compiled
-GMP scan through `D <= 120` with:
+Run the manifests, toolchain report, five short exact replays, mutation tests,
+and compiled GMP and Pascal scans through `D <= 120` with:
 
     make audit-fast
 
@@ -45,13 +50,14 @@ complete replay below.
 
     python3 -u scripts/recurrence-and-small-scan.py
     python3 -u scripts/regime-decomposition.py
-    python3 -u scripts/finite-gap-offsets.py 14
+    KRAW_EXPORT_WITNESS=certificates/independent-finite-offset.txt python3 -u scripts/finite-gap-offsets.py 14
     python3 -u scripts/small-argument-cases.py
-    python3 -u scripts/fixed-argument-strips.py 12 14
+    KRAW_EXPORT_WITNESS=certificates/independent-fixed-argument.txt python3 -u scripts/fixed-argument-strips.py 12 14
     python3 -u scripts/even-minimum-gap.py
-    python3 -u scripts/odd-minimum-gap.py
+    KRAW_EXPORT_WITNESS=certificates/independent-odd-minimum.txt python3 -u scripts/odd-minimum-gap.py
     g++ -O2 -fopenmp -o /tmp/exhaustive-turan-scan cpp/exhaustive-turan-scan.cpp -lgmpxx -lgmp
     /tmp/exhaustive-turan-scan 1200
+    make audit-independent
 
 The finite-gap-offset and fixed-argument-strip runs are the longer symbolic
 stages. Deterministic committed replay logs are in `certificates/`; elapsed
@@ -64,7 +70,9 @@ for example with `/usr/bin/time -v make replay-all`.  Do not copy timing or
 memory figures from another host into a reproducibility report.
 
 The same commands are available as `make replay-short` (the five short exact
-replays) and `make replay-all` (all proof programs). After replaying them,
+replays) and `make replay-all` (all proof programs, witness regeneration, and
+independent checks).  The witness-export stage alone is available as
+`make export-independent-witnesses`. After replaying them,
 check the stored artifact hashes from the repository root with:
 
     make payload-check
@@ -79,9 +87,10 @@ For the archival resource report, run:
     make replay-profile
 
 Record the toolchain output, elapsed time, peak resident memory, and exit
-status with the versioned release. The reference run is summarized in
-`certificates/REPLAY_PROFILE.md`, and its path-sanitized transcript is attached
-to the release rather than mixed into the deterministic logs.
+status with the versioned release. The v1.0.4 reference run is summarized in
+`certificates/REPLAY_PROFILE.md`; local v1.0.5 assurance timings are in
+`certificates/INDEPENDENT_REPLAY_PROFILE.md`. Path-sanitized transcripts belong
+with the corresponding release rather than in the deterministic logs.
 
 The repository also retains two supplementary asymptotic checks, which are
 not used in the proof:

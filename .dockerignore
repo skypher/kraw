@@ -4,3 +4,7 @@ paper/*.bbl
 paper/*.blg
 paper/*.log
 paper/*.out
+certificates/*.partial
+certificates/*.tmp
+__pycache__
+*.pyc

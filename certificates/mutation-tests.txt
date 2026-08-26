@@ -1,0 +1,14 @@
+mutation rejected: plus-parent
+mutation rejected: minus-parent
+mutation rejected: endpoint
+mutation rejected: turan-gate
+mutation rejected: cell-count
+MUTATION PASS: 5/5 independent-scan corruptions rejected
+mutation rejected: odd-sign
+mutation rejected: fixed-content
+mutation rejected: fixed-ratio
+mutation rejected: finite-recurrence
+mutation rejected: finite-factor
+mutation rejected: resultant
+mutation rejected: resultant-link
+MUTATION PASS: 7/7 symbolic-certificate corruptions rejected
