@@ -14,6 +14,7 @@ nonnegative integers \(M,Q\).
 The canonical repository is <https://github.com/skypher/kraw>.  Reviewed
 artifact snapshots are identified by `certificates/MANIFEST.sha256`, which
 hashes the manuscript, verifier sources, and deterministic outputs.
+The manuscript on `main` is Version 1.0.6 (September 4, 2026).
 The stable proof payload is listed separately in
 `certificates/PAYLOAD.sha256`; `certificates/CERTIFICATE_MAP.md` maps each
 machine-assisted theorem to its exact generator and replay log, and

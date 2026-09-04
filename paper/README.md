@@ -3,6 +3,7 @@
 Source repository: <https://github.com/skypher/kraw>.  The
 `certificates/MANIFEST.sha256` file identifies a reviewed artifact snapshot
 by hashing the manuscript, verifier sources, and deterministic outputs.
+The manuscript on `main` is Version 1.0.6 (September 4, 2026).
 `certificates/PAYLOAD.sha256` is the noncircular proof-payload identifier.
 `certificates/CERTIFICATE_MAP.md` maps the computer-assisted results to their
 generators and exact logs, and `certificates/REVIEW_CHECKLIST.md` gives a

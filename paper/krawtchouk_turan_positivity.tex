@@ -6,6 +6,7 @@
 \usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{float}
 \usepackage{tikz}
 \usepackage[letterpaper,total={5.5in,8in},vmarginratio=1:1,
   hmarginratio=1:1,headsep=21pt]{geometry}
@@ -51,8 +52,8 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 1.0.5}
-\newcommand{\paperdate}{August 26, 2026}
+\newcommand{\paperversion}{Version 1.0.6}
+\newcommand{\paperdate}{September 4, 2026}
 
 \medmuskip=4mu
 \thickmuskip=8mu
@@ -154,15 +155,15 @@ $K_s(Q;D)$ in its generating-function normalization.  We prove
   \qquad (\lceil D/2\rceil\le s\le D).
 \]
 Thus the Tur\'an determinants are symmetric and weakly unimodal in the coefficient
-index, and they are at least $1$ at every index.  Equivalently, these
+index, and satisfy $\Tur(s)\ge 1$ for every $0\le s\le D$.  Equivalently, these
 determinants are the rectangular Schur values
 $s_{(2^s)}(1^M,(-1)^Q)$, so the theorem gives positivity and unimodality
 for a family of $\mathrm{GL}_D$-character values at involutions.  The proof
 combines recurrence comparisons in infinite regions, exact symbolic
 certificates for finitely many parameter families, and an exhaustive
-exact-integer computation for the remaining finite cases.  The
-certificate-generating programs and exact replay logs accompany the
-manuscript.
+computation in integer arithmetic for the remaining finite cases.  The
+source programs and deterministic replay logs are included in the
+accompanying repository artifact.
 \vskip5pt
 \noindent\textbf{Keywords.}\enspace\paperkeywords
 \vskip5pt
@@ -206,8 +207,8 @@ $p_{D-s}=(-1)^Qp_s$, the sequence $\Tur(s)$ is symmetric about $D/2$ and
 therefore weakly unimodal.
 \end{theorem}
 
-Two immediate corollaries, both obtained by telescoping from the top end
-($p_D=(-1)^Q$, $p_{D+1}=0$, so $\Tur(D)=1$):
+The following two corollaries are immediate by telescoping from the top end
+($p_D=(-1)^Q$, $p_{D+1}=0$, so $\Tur(D)=1$).
 
 \begin{corollary}\label{cor:positivity}
 For all $M,Q\ge 0$:
@@ -319,7 +320,7 @@ the binary Krawtchouk matrix.  The quantity
 \]
 is its adjacent $2\times2$ Toeplitz minor.  The theorem therefore orders all
 such adjacent minors along half of a Krawtchouk row; reflection orders the
-other half.  In particular, every one of these signed-row minors is a
+other half.  In particular, every adjacent minor in this orientation is a
 positive integer at least $1$, even though the row itself
 oscillates and may contain zeros.  Corollary~\ref{cor:lattice} gives an
 equivalent arithmetic interpretation: the minors are the indices of the
@@ -397,7 +398,7 @@ families, and one polynomial-sign lemma in the odd-minimum region are
 computer-assisted results: the text states their exact inputs, domains, and
 acceptance conditions, while the source programs construct and check the
 finite polynomial obligations.  Third, Proposition~\ref{prop:finite-scan} is
-an exhaustive exact-integer computation over a declared finite set.
+an exhaustive computation in integer arithmetic over a declared finite set.
 
 Every proof decision in the programs uses integer or rational arithmetic.
 The primary generators use polynomial factorization, gcd, resultants, and
@@ -644,7 +645,7 @@ $y_{s-1}=x-(s+1)(D-s)/y_s$, $y_{D-1}=x$.  Then:
 \end{enumerate}
 \end{proof}
 
-\subsection{Coverage, and the gap}
+\subsection{Coverage and the gap}
 
 \begin{corollary}[coverage]\label{cor:coverage}
 For $D=0$ the only cell is $s=0$ and $T_0=1$.  For $D\ge1$, every
@@ -791,7 +792,7 @@ finite-offset nondegeneracy remainder $D<1191$; the fixed-$Q$ edge-flow
 onsets are smaller still (at most $93$).  In the final residual region,
 $x\le D-26$ is simply $x=D-2Q$ with $Q\ge13$.
 
-\begin{table}[tb]
+\begin{table}[H]
 \centering
 \small
 \begin{tabular}{@{}ll@{}}
@@ -819,9 +820,10 @@ all cells with $D\le 1200$ & Proposition~\ref{prop:finite-scan} \\
 
 \section{Reflection collapse and finite families}\label{sec:collapse}
 
-The finite part of the gap is treated in two ways: by fixed-offset families
-(Proposition~\ref{prop:collapse} and Theorem~\ref{thm:offsets}) and by
-fixed-$Q$ strips (Proposition~\ref{prop:qle2} and Theorem~\ref{thm:strips}).
+The gap is next treated through two finite collections of parameter families:
+fixed-offset families (Proposition~\ref{prop:collapse} and
+Theorem~\ref{thm:offsets}) and fixed-$Q$ strips
+(Proposition~\ref{prop:qle2} and Theorem~\ref{thm:strips}).
 
 \subsection{Reflection collapse: gap offsets \texorpdfstring{$u\le 3$}{u <= 3}}
 
@@ -1180,7 +1182,7 @@ $1<(u+1)^2<U_-$.  Thus, for each index $j$ used,
 \[
  (2j-D)^2<(2j-D+1)^2<(D+1)^2-x^2,
 \]
-Call the region $(2j-D)^2<(D+1)^2-x^2$ the \emph{oscillatory zone}.  The
+We call the region $(2j-D)^2<(D+1)^2-x^2$ the \emph{oscillatory zone}.  The
 display shows that all pointwise estimates for this zone used below hold
 along the entire induction path.
 We use five steps.
@@ -1398,7 +1400,7 @@ replayed as described in Section~\ref{subsec:certificate-spec}.
 
 \begin{theorem}[odd-minimum gap cells]\label{thm:oddmin}
 After relabeling so that $Q\le M$, every gap cell with $Q$ odd
-(either $D$ parity) has
+has, for either parity of $D$,
 $T_s\ge 0$.
 \end{theorem}
 
@@ -1454,12 +1456,13 @@ Lemma~\ref{lem:no-consecutive-zeros}.  On finite states the recurrence induces
   increasing in $y$ on $y>0$.
 
 In $y$-coordinates the quadratic form
-  \eqref{eq:qform} of Theorem~\ref{thm:bulk} reads, exactly,
+  \eqref{eq:qform} of Theorem~\ref{thm:bulk} takes the exact form
   $G(y_s)\,p_s^2=(s+2)(D+1-s)(D+2)^2\,T_s$.  Thus, when $p_s\ne0$,
   $T_s\ge 0$ iff $y_s$ avoids the open window
   $(y_-(u),y_+(u))$ of the upward parabola
   \begin{equation}\label{eq:window}
-    G(y) \;=\; u(s+2)\,y^2 - x(u+1)(D+2)\,y + (u+2)(D+1-s)(D+2)^2
+    G(y) \;=\; u(s+2)\,y^2 - x(u+1)(D+2)\,y
+      + (u+2)(D+1-s)(D+2)^2 .
   \end{equation}
   Cells with $p_s=0$ are immediate, since then
   $T_s=u\,p_{s+1}^2/(D+1-s)\ge 0$.  On gap cells $G$ has real roots
@@ -1486,7 +1489,7 @@ The base inequality $y_{c+1}\ge y_+(\text{first window})$ holds: for $D$
 At each subsequent offset, Lemma~\ref{lem:odd-transition} maps both the
 finite and infinite parts of $\mathcal C_r$ into $\mathcal C_{r+2}$.
 Induction therefore gives
-$(p_j,p_{j+1})\in\mathcal C_{2j-D}$ along the whole strip.  At the target,
+$(p_j,p_{j+1})\in\mathcal C_{2j-D}$ along the induction path.  At the target,
 either $p_s=0$ and the displayed formula for $T_s$ is immediate, or
 $y_s\ge y_+(u)$ and hence $G(y_s)\ge0$.  Thus $T_s\ge0$.  Cells with
 $D\le14826$, or $Q\le12$, or $u\le14$ were already covered by
@@ -1533,7 +1536,8 @@ Sections~\ref{sec:reduction}--\ref{sec:oddmin} have exact-arithmetic
 replays: rational arithmetic (SymPy) for symbolic identities, integer Sturm
 chains for univariate positivity claims, and GMP integers for the exhaustive
 scan.  No floating-point comparison or unquantified asymptotic estimate is
-used to prove the Main Theorem; the proof programs are float-free.  In
+used to prove the Main Theorem; the proof programs use no floating-point
+arithmetic.  In
 particular the orbit tan-bound comparison in the even-minimum verifier is
 exact: every orbit angle is a nonnegative multiple of $\theta^*$ (plus
 $\theta^*/2$ for odd $D$), where the tangent is a rational multiple of
@@ -1617,8 +1621,9 @@ each verifier.  This separates review of the mathematical implication from
 the diagnostic examples printed by the programs.
 The additional
 \texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak CHECKS.md}
-specifies the second implementation and its mutation tests.  Its separate
-human replay form remains unsigned until completed by another person.
+specifies the second implementation and its mutation tests, while
+\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak REPLAY\_\allowbreak SIGNOFF.md}
+provides a form for external replay attestation.
 
 \subsection{Certificate specifications}\label{subsec:certificate-spec}
 
@@ -1728,38 +1733,29 @@ not hard-coded, by the odd-minimum verifier.
 
 \subsection{Availability and trust boundary}\label{subsec:availability}
 
-Development source is maintained at \url{https://github.com/skypher/kraw}.
-The exact submission snapshot is \texttt{v1.0.5}, distributed from
-\url{https://github.com/skypher/kraw/releases/tag/v1.0.5}.  This version adds
-the independent verification layer described below.  The tagged snapshot
-carries
-\texttt{certificates/\allowbreak MANIFEST.sha256}, which binds the manuscript,
-programs,
-and deterministic outputs byte-for-byte; no claim is made that an untagged
-development branch reproduces that snapshot or that GitHub releases are
-immutable.  GitHub serves as a distribution mirror.  Its release assets
-include the source archive, manuscript PDF, hash records, and local
-independent-assurance profile; the separate human replay record remains
-unsigned.  Before publication, the exact accepted snapshot
-must also be deposited in a persistent archival repository and its DOI added
-to the final bibliographic record.  Because the source
-programs are part of the proof, this deposit is an acceptance condition, not
-an optional post-publication convenience; an accepted version should not
-refer only to a moving development branch.
+Development source is maintained in the
+\href{https://github.com/skypher/kraw}{project repository}.
+This manuscript is Version~1.0.6.  Its source, verification programs, and
+deterministic outputs are identified byte-for-byte by
+\texttt{certificates/\allowbreak MANIFEST.\allowbreak sha256} in the repository.
+Versioned artifacts are distributed from its
+\href{https://github.com/skypher/kraw/releases}{releases page}; GitHub serves
+as a distribution mirror rather than an immutable archive.  A release includes the source
+archive, manuscript PDF, hash records, and replay profiles.  No external
+human replay attestation is claimed for this version.  The accepted journal
+snapshot will be deposited in a DOI-bearing archive, and the bibliographic
+record will be updated accordingly.
 
 To avoid a circular identifier (the full manifest includes the manuscript),
-\texttt{certificates/\allowbreak PAYLOAD.sha256} separately hashes only the proof
+\texttt{certificates/\allowbreak PAYLOAD.\allowbreak sha256} separately hashes only the proof
 generators, exact logs, dependency locks, license, certificate map, and
 referee checklist.  Its own SHA-256 digest is
 \begin{center}
-\small\nolinkurl{8659c3004354cc7dbf95a8509bb3e4ed7787c352ed4ff69586c3e92f7fcbdbaa}
+\small\nolinkurl{0856e33af616ca7883835a449e2e1ee2b9a28c91bdc946ed5a2e752b47e02681}
 \end{center}
 This digest identifies the proof payload printed with this submission; the full
 manifest additionally binds the article and the PDF built in the reference
-toolchain.  The
-repository contains \texttt{CITATION.cff} and release metadata ready for an
-archival deposit.  The archival DOI will be inserted after deposit of the
-accepted snapshot.
+toolchain.
 
 The verification code is available under the BSD 3-Clause License.  The
 manuscript and explanatory documentation are available under the Creative
@@ -1774,27 +1770,20 @@ inspection.  They contain no floating-point proof computation: every
 acceptance predicate, including the end-to-end orbit checks, is integer or
 rational arithmetic.
 
-The command \texttt{make toolchain-info} prints the Python, SymPy, compiler,
-Boost, GMP, pdf\TeX, and platform versions of a replay environment.
-\texttt{make audit-fast} combines the manifest checks, all five short exact
-replays, the standalone independent checker, both mutation suites, and
-compiled GMP and Pascal scans through $D=120$.  These commands do not
-replace the complete replay, but they expose environment drift and exercise
-every short proof mechanism before the longer symbolic stages are attempted.
-The command \texttt{make replay-profile} runs the complete replay under
-\texttt{/usr/bin/time -v}; the archival release should include the resulting
-wall time and peak resident memory together with the toolchain report.
-Resource values are machine-dependent and are therefore not
-embedded in the deterministic proof logs.
+Reference software versions and individual commands are recorded in
+\texttt{paper/README.md}.  The command \texttt{make toolchain-info} prints the
+Python, SymPy, compiler, Boost, GMP, pdf\TeX, and platform versions.
+The targets \texttt{payload-check} and \texttt{verify} check stored hashes
+only; they do not execute a proof program.  The target \texttt{audit-fast}
+runs the short exact replays, the standalone checker, both mutation suites,
+and compiled GMP and Pascal scans through $D=120$.
 
-The Make targets \texttt{payload-check} and \texttt{verify} check stored
-hashes only; they do not execute a proof program.  The target
-\texttt{replay-short} runs the five short exact verifiers, while
-\texttt{replay-all} additionally runs the two longer symbolic certificates and
-both exhaustive scans.  The target \texttt{audit-independent} runs the
+The target \texttt{replay-all} additionally runs the two longer symbolic
+certificates and both exhaustive scans; \texttt{audit-independent} runs the
 standalone witness checker, the full Pascal scan, and all twelve mutation
-tests.  Reference software versions and the individual commands are recorded
-in \texttt{paper/README.md}.
+tests.  The command \texttt{make replay-profile} measures the complete replay
+under \texttt{/usr/bin/time -v}.  Resource values are machine-dependent and
+are therefore excluded from the deterministic proof logs.
 
 \subsection{Verification inventory}
 
@@ -1806,7 +1795,7 @@ exact artifact hashes, and \texttt{certificates/\allowbreak README.md} states th
 artifact
 trust boundary and replay convention.
 
-\begin{table}[tb]
+\begin{table}[H]
 \centering
 \footnotesize
 \begin{tabular}{@{}p{0.35\textwidth}p{0.58\textwidth}@{}}
@@ -1856,8 +1845,8 @@ Artifact & Verifies \\
 
 \section{Related work}\label{sec:related}
 
-The classical Tur\'an inequality (Szeg\H{o} \cite{szego48}, for Legendre
-polynomials, answering P.~Tur\'an) asserts
+Szeg\H{o} \cite{szego48}, answering a question of P.~Tur\'an, proved for
+Legendre polynomials that
 $P_n(x)^2-P_{n-1}(x)P_{n+1}(x)\ge 0$ on the orthogonality interval; its
 descendants form a large literature on the \emph{positivity} of Tur\'an
 determinants as functions of the argument $x$, with the degree window fixed,
@@ -1892,27 +1881,25 @@ developed Tur\'an-type and Laguerre-type inequalities for discrete
 orthogonal polynomials and used them for sharp, parameter-uniform bounds on
 binary Krawtchouk polynomials, their extreme zeros, and
 Christoffel--Darboux kernels
-\cite{krasikov-laguerre,krasikov-turan,krasikovlitsyn96,krasikov-cd}.
-Most directly, \cite[Theorem~5 and (17)]{krasikov-turan} includes binary
-Krawtchouk polynomials in a Laguerre--P\'olya generating-function framework
-and gives a fourth-degree refinement coupling two adjacent Tur\'an
+\cite{krasikovlitsyn96,krasikov-cd,krasikov-laguerre,krasikov-turan}.
+Most directly, Theorem~5 and equation~(17) of \cite{krasikov-turan} treat
+binary Krawtchouk polynomials in a Laguerre--P\'olya generating-function
+framework and give a fourth-degree refinement coupling two adjacent Tur\'an
 determinants.  That framework is written for exponential coefficients
 $\sum_k u_kz^k/k!$; converting it to the ordinary generating coefficients
 in \eqref{eq:pdef} introduces a degree-dependent factorial normalization.
 Moreover, its conclusion controls positivity and a product of adjacent
 determinants, not the ordered difference
 $\Tur(s)-\Tur(s+1)$ in the present coefficient normalization.  Thus it does
-not imply Theorem~\ref{thm:main}, but it is the closest explicit antecedent
-within the Krawtchouk literature and should not be conflated merely with an
-envelope estimate.  The proof
-here instead uses the exact arguments of
-Sections~\ref{sec:evenflow}--\ref{sec:oddmin}.
+not imply Theorem~\ref{thm:main}.  It is the closest explicit antecedent
+within the Krawtchouk literature, while differing in both normalization and
+conclusion.
 
 \emph{Specialized Schur functions and character values.}
 Proposition~\ref{prop:schur} identifies $\Tur(s)$ with the rectangular
 character value at the order-two element $\operatorname{diag}(I_M,-I_Q)$.
-Ayyer and Kumari \cite[Theorem~2.5]{ayyerkumari22} factor general-linear
-characters under balanced root-of-unity specializations.  Karmakar
+Ayyer and Kumari \cite[Theorem~2.5]{ayyerkumari22} factor characters of
+general linear groups under balanced root-of-unity specializations.  Karmakar
 \cite[Theorem~4.1]{karmakar25} gives formulas at arbitrary order-two
 conjugacy classes, including the present involutions; outside the factorized
 cases these formulas are alternating sums of products of dimensions.  They
@@ -1989,7 +1976,10 @@ arguments, and takes responsibility for all mathematical claims, citations,
 computations, and wording.
 \end{minipage}
 
+\begingroup
+\small
 \bibliographystyle{amsalpha}
 \bibliography{krawtchouk_turan_positivity}
+\endgroup
 
 \end{document}
