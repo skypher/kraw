@@ -43,6 +43,8 @@
 \DeclareMathOperator{\disc}{disc}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\coeff}[1]{[#1]\,}
+\newcommand{\loglink}[1]{%
+  \href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/#1.txt}{\texttt{#1}}}
 
 \newcommand{\shorttitle}{MONOTONICITY OF KRAWTCHOUK TUR\'AN DETERMINANTS}
 \newcommand{\shortauthors}{LESLIE P. POLZER}
@@ -52,7 +54,7 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 1.0.6}
+\newcommand{\paperversion}{Version 1.0.7}
 \newcommand{\paperdate}{September 4, 2026}
 
 \medmuskip=4mu
@@ -64,9 +66,9 @@
   linkcolor=purple,
   urlcolor=purple,
   citecolor=blue!80!black,
-  pdftitle={Monotonicity of Turan determinants for binary Krawtchouk polynomials},
+  pdftitle={Monotonicity of Tur\'an determinants for binary Krawtchouk polynomials},
   pdfauthor={Leslie P. Polzer},
-  pdfkeywords={Krawtchouk polynomials, Turan determinant, unimodality}
+  pdfkeywords={Krawtchouk polynomials, Tur\'an determinant, unimodality}
 }
 
 \makeatletter
@@ -114,7 +116,7 @@
 \renewcommand{\maketitle}{%
   \begin{center}
     {\large\bfseries\@title}\\
-    \vskip36pt
+    \vskip24pt
     \ifx\@author\@empty
       \mbox{}\par
     \else
@@ -126,7 +128,7 @@
       \smallskip
       {\small\@date}\par
     \fi
-    \vskip36pt
+    \vskip24pt
   \end{center}}
 
 \renewenvironment{abstract}
@@ -136,8 +138,8 @@
 
 \begin{document}
 
-\title{Monotonicity of
-Tur\'an determinants for binary Krawtchouk polynomials}
+\title{Monotonicity of Tur\'an determinants\\
+for binary Krawtchouk polynomials}
 
 \author{Leslie P. Polzer}
 
@@ -146,24 +148,25 @@ Tur\'an determinants for binary Krawtchouk polynomials}
 \maketitle
 
 \begin{abstract}
-Let $M,Q\ge 0$ be integers, $D=M+Q$, and let
-$p_s=\coeff{w^s}(1+w)^M(1-w)^Q$, equivalently the binary Krawtchouk value
-$K_s(Q;D)$ in its generating-function normalization.  We prove
+Let $M,Q\ge0$ be integers, set $D=M+Q$, and define
+$p_s=\coeff{w^s}(1+w)^M(1-w)^Q$, with $p_s=0$ outside $0\le s\le D$.
+These are the binary Krawtchouk values $K_s(Q;D)$ in the generating-function
+normalization.  We prove that the Tur\'an determinants
+$\Tur(s)=p_s^2-p_{s-1}p_{s+1}$ satisfy
 \[
-  p_s^2-p_{s-1}p_{s+1}\ \ge\
-  p_{s+1}^2-p_sp_{s+2}
+  \Tur(s)\ge\Tur(s+1)
   \qquad (\lceil D/2\rceil\le s\le D).
 \]
-Thus the Tur\'an determinants are symmetric and weakly unimodal in the coefficient
-index, and satisfy $\Tur(s)\ge 1$ for every $0\le s\le D$.  Equivalently, these
-determinants are the rectangular Schur values
-$s_{(2^s)}(1^M,(-1)^Q)$, so the theorem gives positivity and unimodality
-for a family of $\mathrm{GL}_D$-character values at involutions.  The proof
+Consequently, the determinants form a symmetric weakly unimodal sequence
+and satisfy $\Tur(s)\ge1$ for every $0\le s\le D$.  By the dual
+Jacobi--Trudi identity, they are the rectangular Schur values
+$s_{(2^s)}(1^M,(-1)^Q)$; for $D\ge1$, this gives positivity and unimodality
+for a family of general linear character values at involutions.  The proof
 combines recurrence comparisons in infinite regions, exact symbolic
 certificates for finitely many parameter families, and an exhaustive
-computation in integer arithmetic for the remaining finite cases.  The
-source programs and deterministic replay logs are included in the
-accompanying repository artifact.
+integer-arithmetic computation for the remaining finite cases.  Source
+programs and deterministic replay logs are available in the accompanying
+repository.
 \vskip5pt
 \noindent\textbf{Keywords.}\enspace\paperkeywords
 \vskip5pt
@@ -171,7 +174,7 @@ accompanying repository artifact.
 \paperclassification
 \end{abstract}
 
-\vskip50pt
+\vskip24pt
 \baselineskip=13.5pt
 
 \section{Introduction and main theorem}\label{sec:intro}
@@ -237,6 +240,15 @@ Corollary~\ref{cor:positivity}.  The asserted ordering is the Main Theorem and
 reflection.
 \end{proof}
 
+A small row illustrates the statement.  For $(M,Q)=(5,2)$,
+\[
+ (p_s)_{s=0}^7=(1,3,1,-5,-5,1,3,1),
+\qquad
+ \bigl(\Tur(s)\bigr)_{s=0}^7=(1,8,16,30,30,16,8,1).
+\]
+The coefficients oscillate, while their Tur\'an determinants remain positive,
+symmetric, and ordered toward the center.
+
 Classical Tur\'an inequalities concern the sign of
 $P_n(x)^2-P_{n-1}(x)P_{n+1}(x)$ for a fixed degree window and an argument
 $x$ in the orthogonality interval \cite{szego48}.  Theorem~\ref{thm:main}
@@ -250,8 +262,18 @@ generating series
  [w^s](1+w)^{D-q}(1-w)^q,
 \]
 then at $(D,q,s)=(4,\frac87,2)$ one obtains
-$T_2=-1430/117649<0$.  Section~\ref{sec:related} gives a more detailed
-comparison with the literature.
+$T_2=-1430/117649<0$.
+
+Closely related inequalities for binary Krawtchouk polynomials, their zeros,
+and their Christoffel--Darboux kernels were studied by Krasikov and Litsyn
+\cite{krasikovlitsyn96} and Krasikov
+\cite{krasikov-cd,krasikov-laguerre,krasikov-turan}.
+In particular, \cite[Theorem~5 and (17)]{krasikov-turan} couples adjacent
+Tur\'an determinants in an exponential-coefficient normalization.
+Theorem~\ref{thm:main} orders the determinants in the ordinary coefficient
+normalization at a fixed integer argument.  Section~\ref{subsec:normalization}
+explains the role of normalization, and Section~\ref{sec:related} gives a
+detailed comparison with these results and the character literature.
 
 \subsection{Schur-character interpretation}\label{subsec:schur}
 
@@ -280,7 +302,8 @@ $s_{(2^s)}(z)=s_{(2^{D-s})}(z)$ independently of the Main Theorem.
 \begin{proof}
 The generating function in \eqref{eq:pdef} is
 $\prod_{i=1}^D(1+z_iw)$, so $p_r=e_r(z)$.  Since the conjugate of
-$(2^s)$ is $(s,s)$, the dual Jacobi--Trudi identity gives
+$(2^s)$ is $(s,s)$, the dual Jacobi--Trudi identity
+\cite[Chapter~I, (3.5), p.~41]{macdonald95} gives
 \[
  s_{(2^s)}(z)
  =\det\begin{pmatrix}e_s(z)&e_{s+1}(z)\\
@@ -289,7 +312,9 @@ $(2^s)$ is $(s,s)$, the dual Jacobi--Trudi identity gives
  =p_s^2-p_{s-1}p_{s+1}.
 \]
 Schur polynomials are the irreducible polynomial characters of the general
-linear group; see \cite[Chapter~I, Section~3]{macdonald95}.  Finally, for a
+linear group; see
+\cite[Chapter~I, Appendix~A, (8.2) and (8.4), pp.~162--163]{macdonald95}.
+Finally, for a
 partition $\lambda$ inside the $2\times D$ rectangle, with rectangle
 complement $\lambda^c$,
 \[
@@ -310,7 +335,7 @@ canonical representation-theoretic object and suggests seeking a
 cancellation-free branching or restriction interpretation of the ordered
 differences $T_s$.
 
-\subsection{Why this minor sequence is natural}
+\subsection{Adjacent minors and lattice indices}
 
 For a fixed integer argument $Q$, the values $(p_s)_{s=0}^D$ form a row of
 the binary Krawtchouk matrix.  The quantity
@@ -318,38 +343,12 @@ the binary Krawtchouk matrix.  The quantity
  \Tur(s)=
  \det\begin{pmatrix}p_s&p_{s+1}\\p_{s-1}&p_s\end{pmatrix}
 \]
-is its adjacent $2\times2$ Toeplitz minor.  The theorem therefore orders all
-such adjacent minors along half of a Krawtchouk row; reflection orders the
-other half.  In particular, every adjacent minor in this orientation is a
-positive integer at least $1$, even though the row itself
-oscillates and may contain zeros.  Corollary~\ref{cor:lattice} gives an
-equivalent arithmetic interpretation: the minors are the indices of the
-lattices generated by successive coefficient vectors.  This makes the
-statement stronger than a pointwise Tur\'an sign inequality and places it
-naturally beside minor and kernel inequalities used in Hamming-scheme
-spectral analysis.  The exact
-generating function, standard recurrences, and normalizations for
-Krawtchouk polynomials may be found in
-\cite[Section~9.11]{koekoek-lesky-swarttouw}.
-
-The endpoint pairs are unimodular: $\Tur(0)=\Tur(D)=1$.  The Main Theorem
-therefore gives an exact endpoint minimum and a global ordering for every
-row, not just nonvanishing of its adjacent minors: the covolume is smallest,
-and equal to one, at both endpoints and never decreases while moving toward
-the center.
-We do not claim that this observation alone improves a coding bound; its
-role here is to identify the arithmetic content of the ordered-minor
-statement and the normalization in which the sharp endpoint value is
-meaningful.
-
-A small row illustrates all features at once.  For $(M,Q)=(5,2)$,
-\[
- (p_s)_{s=0}^7=(1,3,1,-5,-5,1,3,1),
-\qquad
- \bigl(\Tur(s)\bigr)_{s=0}^7=(1,8,16,30,30,16,8,1).
-\]
-Thus the coefficients oscillate, while the adjacent minors remain positive,
-symmetric, and ordered toward the center.
+is its adjacent $2\times2$ Toeplitz minor.  Corollary~\ref{cor:lattice}
+identifies these minors with the indices of the lattices generated by
+successive coefficient vectors.  This connects the theorem with minor and
+kernel inequalities in Hamming-scheme spectral analysis.  The generating
+function, standard recurrences, and normalizations for Krawtchouk polynomials
+may be found in \cite[Section~9.11]{koekoek-lesky-swarttouw}.
 
 \subsection{Normalization}\label{subsec:normalization}
 
@@ -388,7 +387,7 @@ We assume $x=M-Q\ge 0$ without loss of generality.  Indeed, $T_s$ is
 invariant under $M\leftrightarrow Q$: the substitution $w\mapsto-w$ sends
 $p_s$ to $(-1)^sp_s$, and every product in $T_s$ has even index sum.
 
-\subsection{Proof status and computer assistance}\label{subsec:proof-status}
+\subsection{Computer-assisted components}\label{subsec:proof-status}
 
 Three kinds of argument occur below.  First, the bulk, center, flow, and
 even-minimum regions have proofs in the text; their accompanying programs
@@ -401,14 +400,10 @@ finite polynomial obligations.  Third, Proposition~\ref{prop:finite-scan} is
 an exhaustive computation in integer arithmetic over a declared finite set.
 
 Every proof decision in the programs uses integer or rational arithmetic.
-The primary generators use polynomial factorization, gcd, resultants, and
-Sturm root counting in SymPy, together with GMP integer arithmetic.  A second
-C++ implementation checks the decisive exported polynomial witnesses without
-SymPy or GMP, and repeats the finite scan with Boost integers and a different
-coefficient construction.  Hash files identify the reviewed source and
-output snapshot but do not themselves prove that a program was run.
-Section~\ref{sec:machine} gives the certificate rules, trust boundary, and
-theorem-by-theorem inventory.
+A second C++ implementation checks the decisive exported polynomial
+witnesses and repeats the finite scan using a different coefficient
+construction.  Section~\ref{sec:machine} specifies the certificate rules,
+software dependencies, and theorem-by-theorem inventory.
 
 \section{Notation and recurrence}\label{sec:reduction}
 
@@ -447,6 +442,11 @@ the exponents when necessary so that $0\le Q\le M$; thus $Q$ denotes the
 smaller exponent.
 
 \subsection{Finite verification}\label{subsec:scans}
+
+A \emph{cell} is an integer triple $(M,Q,s)$ with $M,Q\ge0$ and
+$\lceil(M+Q)/2\rceil\le s\le M+Q$.  We also express cells in the
+coordinates $(D,x,u)$ defined above; these satisfy
+$u\equiv x\equiv D\pmod2$.
 
 \begin{proposition}[finite verification]\label{prop:finite-scan}
 The inequality $T_s\ge0$ holds for every $M,Q\ge0$ with $D\le1200$ and
@@ -663,7 +663,7 @@ At the flow boundary $U_0=(D+1)^2-x^2$ the bulk margin is
 \[
   (U_0-1)(4D+8)-x^2 \;=\; (D^2+2D-x^2)(4D+8)-x^2 \;>\; 0
 \]
-for $0\le x\le D$ (linear decreasing in $x^2$, with value $7D^2+16D$ at
+for $0\le x\le D$ (decreasing linearly with $x^2$, with value $7D^2+16D$ at
 $x^2=D^2$).  Hence $U_-\le U_0\le U_+$, and every top-half cell is covered
 by $\{s=D\}$ ($T_D=1$), $\{u=0\}$ (Theorem~\ref{thm:center}), the bulk
 ($U_-\le U\le U_0$), and the flow ($U\ge U_0$), except for
@@ -722,7 +722,7 @@ $6/(3+\sqrt5)\le7/6$.  Hence $U_-\le(7/6)E/h$.
 Finally $h\ge(2Q+3)(D+3)$ because $2M+3\ge D+3$ when $Q\le M$.
 \end{proof}
 
-\begin{figure}[tb]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=0.92]
   % flow boundary: the circle (u+1)^2 + x^2 = (D+1)^2, center (-1,0),
@@ -767,7 +767,8 @@ Finally $h\ge(2Q+3)(D+3)$ because $2M+3\ge D+3$ when $Q\le M$.
 \end{tikzpicture}
 \caption{Coverage of the top half $\{2s\ge D\}$ in the $(u,x)$-plane for
 fixed $D$ (schematic; lattice cells satisfy $u\equiv x\equiv D\pmod 2$).
-The bulk and flow regions are separated by the displayed circle.  The
+For this schematic, the overlap of the bulk and flow regions is assigned
+to the flow region, beyond the displayed circle.  The
 dark gap is removed from the light bulk shading: it is the part of the
 non-flow region where the bulk quadratic form is indefinite,
 $\{u\ge1:U<U_-\}$.  It is treated in
@@ -779,8 +780,9 @@ Sections~\ref{sec:collapse}--\ref{sec:oddmin}.}
 \label{subsec:coverage}
 
 Table~\ref{tab:coverage} records which statement covers each region.
-Theorems~\ref{thm:bulk}--\ref{thm:offsets}
-and Propositions~\ref{prop:collapse}--\ref{prop:qle2} cover every cell with
+Theorems~\ref{thm:bulk}, \ref{thm:center}, \ref{thm:flow}, and
+\ref{thm:offsets}, together with
+Propositions~\ref{prop:collapse} and~\ref{prop:qle2}, cover every cell with
 $D\le4586$; the first cell not covered by those results is
 $(D,Q,u)=(4587,3,15)$.  Corollary~\ref{cor:finite-coverage} extends the
 threshold to $D\le14826$, and Theorems~\ref{thm:evenflow}
@@ -806,7 +808,7 @@ flow region $U\ge(D+1)^2-x^2$ & Theorem~\ref{thm:flow} \\
 coverage: everything else $=$ gap & Corollary~\ref{cor:coverage} \\
 gap, $u\le 3$ & Proposition~\ref{prop:collapse} \\
 gap, $Q\ge3$, $4\le u\le 14$ & Theorem~\ref{thm:offsets} \\
-gap, $Q\le 2$ \ ($Q=\min$) & Proposition~\ref{prop:qle2} \\
+gap, $Q\le 2$ & Proposition~\ref{prop:qle2} \\
 gap, $3\le Q\le 12$ & Theorem~\ref{thm:strips} \\
 gap, $u\ge 15$, $Q\ge 13$, $Q$ even & Theorem~\ref{thm:evenflow} \\
 gap, $u\ge 15$, $Q\ge 13$, $Q$ odd & Theorem~\ref{thm:oddmin} \\
@@ -814,7 +816,7 @@ all cells with $D\le 1200$ & Proposition~\ref{prop:finite-scan} \\
 \bottomrule
 \end{tabular}
 \medskip
-\caption{Coverage of the proof.}
+\caption{Coverage of the proof.  Throughout the table, $Q\le M$.}
 \label{tab:coverage}
 \end{table}
 
@@ -850,7 +852,7 @@ recurrence gives
   R_3^+ = \frac{64\,(M+2)(Q+1)\bigl[(M-Q)^2+4Q^2+12Q-1\bigr]}
                {(M-3Q-1)^2(D+5)^2(D+7)}, \\[4pt]
   R_3^- = \frac{64\,(M+1)(Q+2)\bigl[(M-Q)^2+4M^2+12M-1\bigr]}
-               {(3M-Q+1)^2(D+5)^2(D+7)}
+               {(3M-Q+1)^2(D+5)^2(D+7)}.
 \end{gather*}
 These expressions are nonnegative in the stated range: the two terms
 containing $-1$ are nonnegative for $Q\ge1$ and $M\ge1$, respectively,
@@ -914,8 +916,10 @@ computer-assisted certificate for each $(u,\eps)$:
   $M>\tfrac{25}{26}D\ge\tfrac{25}{26}\cdot442=425$.
   Since $M$ is integral, this gives $M\ge426$; all subsequent bounds require
   only $M\ge425$.
-\item \emph{(two reduced constraints)}  For the primary pinning let
-  $g_1=\gcd(\lambda_1,\mu_1)$ and strip
+\item \emph{(two reduced constraints)}  We call a chosen reflection
+  constraint a \emph{pinning}.  For the primary pinning
+  $p_s=\eps p_{k_0}$, let $g_1=\gcd(\lambda_1,\mu_1)$ and factor out the
+  greatest common divisor by writing
   $(\lambda_1,\mu_1)=g_1(\lambda'_1,\mu'_1)$, so
   $G_1=g_1^2G'_1$.  The same construction for the alternate pinning
   $p_{s+1}=\eps p_{k_0-1}$ gives
@@ -1004,7 +1008,7 @@ Put $v:=D-u=2(D-s)$.  For fixed $Q$, exact cancellation gives
 \]
 where $\Delta_Q>0$: after factorization it is a positive constant times
 squares, positive factors $D+u+c$, and the positive factor $D+2-u$.
-(Equivalently, the unreoriented symbolic denominator has the single negative
+(Equivalently, the denominator before this sign adjustment has the single negative
 factor $u-D-2$.)  The edge $v<10$ is covered by the trivial top cell when
 $s=D$, and by Theorem~\ref{thm:flow} for $D\ge24$ when $s<D$.
 The oriented numerators $N_Q$ are:
@@ -1115,7 +1119,7 @@ once
 \[
  (D-2Q-5)^2\ge(2Q+1)(2D-2Q+1).
 \]
-For $Q=3,\ldots,12$, the exact respective onsets are
+For $Q=3,\ldots,12$, the corresponding threshold values are
 \[
  31,\ 38,\ 45,\ 52,\ 59,\ 66,\ 73,\ 80,\ 86,\ 93.
 \]
@@ -1158,7 +1162,7 @@ this census; the generic census rule is specified in
 Section~\ref{sec:machine}.
 \end{proof}
 
-\section{Even-minimum gap cells}\label{sec:evenflow}
+\section{Gap cells with even \texorpdfstring{$Q$}{Q}}\label{sec:evenflow}
 
 \begin{theorem}[even-minimum gap cells]\label{thm:evenflow}
 After relabeling so that $Q\le M$, every gap cell with $Q$ even and
@@ -1206,7 +1210,7 @@ We use five steps.
   $\Tur(j)>0$ there unless $(p_j,p_{j+1})=(0,0)$, which is impossible by
   Lemma~\ref{lem:no-consecutive-zeros}.  The leading coefficient
   $D+1-j$ is positive because $j\le D$.
-\item \emph{($(p,d)$ system)}  First order, polynomial coefficients:
+\item \emph{($(p,d)$ system)}  The first-order recurrence for $(p_j,d_j)$ is
   \[
     p_{j+1} \;=\; \frac{x\,p_j+d_j}{D+2}, \qquad
     d_{j+1} \;=\; \frac{D-j}{(j+2)(D+2)}\,\bigl(x\,d_j-\Lambda\,p_j\bigr).
@@ -1217,7 +1221,7 @@ We use five steps.
     \qquad \kappa_j=\frac{D-j}{j+2}\ (\le 1\ \text{above the center});
   \]
   the map is increasing in $\zeta$ on $[0,x)$ and in $\kappa$, and the
-  $\kappa=1$ map is exactly tan-addition:
+  $\kappa=1$ map is exactly the tangent addition formula:
   \[
     F\bigl(\sqrt\Lambda\,\tan a\bigr) \;=\; \sqrt\Lambda\,\tan(a+\theta^*),
     \qquad \tan\theta^* \;=\; \frac{\sqrt\Lambda}{x} .
@@ -1233,7 +1237,7 @@ We use five steps.
     \;=\; \kappa_c\,\sqrt\Lambda\,\tan(\theta^*/2)
   \]
   where $\tan(\theta^*/2)=\sqrt\Lambda/(D+2+x)$.  Comparison with the
-  tan-addition majorant then gives
+  majorant from the tangent addition formula then gives
   \[
     \zeta_{c+\ell} \;\le\;
     \sqrt\Lambda\,\tan\bigl((\ell-\delta/2)\,\theta^*\bigr),
@@ -1291,16 +1295,22 @@ We use five steps.
 \end{enumerate}
 \end{proof}
 
-\section{Odd-minimum gap cells and proof assembly}\label{sec:oddmin}
+\section{Gap cells with odd \texorpdfstring{$Q$}{Q} and proof assembly}\label{sec:oddmin}
 
-\subsection{Odd-minimum gap cells}
+\subsection{Gap cells with odd \texorpdfstring{$Q$}{Q}}
+
+The argument follows the scaled ratio $(D+2)p_{j+1}/p_j$ above the upper
+root of the quadratic in \eqref{eq:window}.  We call the open interval
+between its real roots the \emph{gap window}.  The next lemma gives the
+comparison used to propagate this bound; the projective formulation in the
+proof of Theorem~\ref{thm:oddmin} also includes zero coefficients.
 
 \begin{lemma}[odd-transition certificate]\label{lem:odd-transition}
 Let $D\ge14827$, $Q\ge13$, $u\ge1$, $x=D-2Q$, and suppose
 \[
  \frac{16(D+3)}{17}\le x\le D-26,\qquad 24u^2\le D+3.
 \]
-For each offset $r$ whose gap window is real, put
+For each offset $r$ for which the following square root is real, put
 \[
 \begin{gathered}
  g_r=\sqrt{x^2(r+1)^2-r(r+2)\bigl(E-(r+1)^2\bigr)},\\
@@ -1386,9 +1396,9 @@ $Kx(u+1)-B_0C_0$ is $4u(D+3)(u+2)^2/(u+1)$; equivalently, after
 multiplication by the positive factor $(u+1)(D+u+4)/(u(u+2))$, it is
 exactly $4(D+3)(u+2)(D+u+4)$.  The strict gap inequality therefore
 gives $Kx(u+1)-B_0C_0>0$, so the squared inequality has the
-correct unsquared sign and proves the finite-state implication.  Finally,
+correct unsquared sign and proves the implication for finite $y$.  Finally,
 after multiplication by the positive factor in $O_4$,
-$K^2-\disc_2$ is linear decreasing in $X$, with coefficient
+$K^2-\disc_2$ decreases linearly with $X$, with coefficient
 $4(u-D)(D+u+6)<0$.  Thus $O_4$ and $K>0$ prove the state at infinity.
 
 For the odd-$D$ base, clearing the radical makes the claimed inequality a
@@ -1526,28 +1536,28 @@ from $\Tur(D)=1$ and by the reflection
 symmetry of $\Tur$ (Section~\ref{subsec:krawtchouk-form}).
 \end{proof}
 
-\section{Machine verification}\label{sec:machine}
+\section{Computer-assisted verification}\label{sec:machine}
 
 \subsection{Methodology}
 
 The proof is computer-assisted in the following precise sense.  The
 symbolic identities and finite positivity claims used in
 Sections~\ref{sec:reduction}--\ref{sec:oddmin} have exact-arithmetic
-replays: rational arithmetic (SymPy) for symbolic identities, integer Sturm
+replays: rational arithmetic (SymPy \cite{meurer2017sympy}) for symbolic identities, integer Sturm
 chains for univariate positivity claims, and GMP integers for the exhaustive
 scan.  No floating-point comparison or unquantified asymptotic estimate is
-used to prove the Main Theorem; the proof programs use no floating-point
-arithmetic.  In
-particular the orbit tan-bound comparison in the even-minimum verifier is
+used to prove the Main Theorem.  In particular, the orbit tangent-bound
+comparison in the even-minimum verifier is
 exact: every orbit angle is a nonnegative multiple of $\theta^*$ (plus
 $\theta^*/2$ for odd $D$), where the tangent is a rational multiple of
-$\sqrt\Lambda$, and tan-addition preserves that form.  The
+$\sqrt\Lambda$, and the tangent addition formula preserves that form.  The
 verification patterns are:
 \begin{itemize}
 \item \emph{coefficient-positive polynomials}: after explicit integer
   substitutions (e.g.\ $D=24u^2-3+\rho$, $u=z+25$ in
   Lemma~\ref{lem:odd-transition}) the certified polynomials have all
-  coefficients nonnegative, so positivity is inspection;
+  coefficients nonnegative, so nonnegativity follows by inspecting the
+  coefficients;
 \item \emph{Sturm counts} on explicitly given intervals for the univariate
   cases (per-$Q$ pairing thresholds, interval base case, finite strips);
 \item \emph{threshold censuses}: because the gap is $U<U_-$, only the first
@@ -1562,8 +1572,8 @@ verification patterns are:
 \item \emph{exhaustive exact scans} for the remaining finite regions ($M,Q\le 90$;
   $D\le 1200$, $289{,}261{,}901$ cells), through the certified recurrence,
   with divisibility checked before every GMP exact division.  The resulting
-  values are cross-checked against every binomial coefficient
-  for $D\le12$ and against deterministic coefficients in six larger rows up
+  values are checked against the defining binomial convolution for every
+  coefficient with $D\le12$ and at deterministic indices in six larger rows up
   to $D=1200$.  The cell count is asserted in-program against
   \[
     \sum_{D=0}^{1200}(D+1)\bigl(\lfloor D/2\rfloor+1\bigr)
@@ -1585,14 +1595,12 @@ verification patterns are:
   matches direct evaluation at explicit cells.
 \end{itemize}
 \noindent
-The committed text files are deterministic replay logs, not separate
-proof objects: the proof obligations and their exact checks are specified in
-the corresponding source programs.  In particular, elapsed wall-clock times
-are excluded from the logs.  The manifest hashes bind each log to the source
-program declared to have produced it; a hash establishes snapshot integrity,
-not that the program was executed.  Acceptance of a computer-assisted step requires
-inspection or replay of that program, not merely inspection of a
-\texttt{PASS} line.  The finite-offset log additionally records, for every
+The source programs specify the proof obligations and their exact checks;
+the committed text files record deterministic replay results, with elapsed
+times excluded.  The manifest identifies the corresponding source and log
+files.  Hashes check snapshot integrity; assessing a computer-assisted step
+also entails inspecting or replaying the program that produces its
+\texttt{PASS} line.  The finite-offset log records, for every
 offset and parity, the factor-degree pattern, domination threshold,
 resultant degree and integer-candidate count, and the number of exact
 spot cells tested in each reflection parity.  The fixed-argument log records
@@ -1600,29 +1608,24 @@ every paired coefficient index and its certified onset.  The
 odd-minimum verifier checks the fully cleared transition identity
 \eqref{eq:cleared-transition} before any endpoint positivity test.
 
-Thus the human-readable text is logically complete only together with the
-certificate-generating sources.  The trusted base consists of the language
-runtimes, compiler, and exact-arithmetic libraries listed in
-Section~\ref{subsec:availability}.  The primary path uses SymPy's
-factorization, gcd, resultant, and Sturm implementations.  The independent
-C++ path checks their decisive outputs by separately implemented arithmetic;
-it reduces the shared software path but does not remove the compiler, Boost
-integer primitives, or the independent checker source from the trust base.
+The certificate-generating sources form part of the argument.  Their
+software dependencies and the scope of the independent implementation are
+described in Section~\ref{subsec:availability}.
 The file
-\texttt{certificates/\allowbreak CERTIFICATE\_\allowbreak MAP.md}
+\href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/CERTIFICATE_MAP.md}{\texttt{certificates/\allowbreak CERTIFICATE\_\allowbreak MAP.md}}
 maps every
 machine-dependent theorem to its generator, exact log, proof obligations,
 and replay command.  The companion
-\texttt{certificates/\allowbreak REVIEW\_\allowbreak CHECKLIST.md}
+\href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/REVIEW_CHECKLIST.md}{\texttt{certificates/\allowbreak REVIEW\_\allowbreak CHECKLIST.md}}
 gives a function-by-function
 inspection route: it identifies the constructor, sign test,
 nondegeneracy test, threshold census, and final acceptance predicate used by
 each verifier.  This separates review of the mathematical implication from
 the diagnostic examples printed by the programs.
 The additional
-\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak CHECKS.md}
+\href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/INDEPENDENT_CHECKS.md}{\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak CHECKS.md}}
 specifies the second implementation and its mutation tests, while
-\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak REPLAY\_\allowbreak SIGNOFF.md}
+\href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/INDEPENDENT_REPLAY_SIGNOFF.md}{\texttt{certificates/\allowbreak INDEPENDENT\_\allowbreak REPLAY\_\allowbreak SIGNOFF.md}}
 provides a form for external replay attestation.
 
 \subsection{Certificate specifications}\label{subsec:certificate-spec}
@@ -1638,8 +1641,8 @@ The following are valid exact certificates.
   \[
     M^{-d}f(M,Mt)=L(t)+\sum_{\nu\ge1}M^{-\nu}L_\nu(t).
   \]
-  On $0\le t\le t_0$, suppose a mesh of width $t_0/N$ has minimum
-  $m_L$ for $L$, and $|L'|\le B$.  Then
+  On $0\le t\le t_0$, let $m_L$ be the minimum of $L$ over the points
+  of a mesh of width $t_0/N$, and suppose $|L'|\le B$.  Then
   $L(t)\ge m_L-Bt_0/(2N)=:\ell$.  If
   $|L_\nu(t)|\le S_\nu$ and
   $\sum_{\nu\ge1}S_\nu M^{-\nu}<\ell$, then $f(M,Q)>0$.
@@ -1731,20 +1734,17 @@ $1\le u\le24$, substituting $D=14827+\rho$ gives nonnegative coefficients
 directly; no Sturm fallback is used.  These counts and minima are recomputed,
 not hard-coded, by the odd-minimum verifier.
 
-\subsection{Availability and trust boundary}\label{subsec:availability}
+\subsection{Code availability and software dependencies}\label{subsec:availability}
 
-Development source is maintained in the
-\href{https://github.com/skypher/kraw}{project repository}.
-This manuscript is Version~1.0.6.  Its source, verification programs, and
-deterministic outputs are identified byte-for-byte by
-\texttt{certificates/\allowbreak MANIFEST.\allowbreak sha256} in the repository.
-Versioned artifacts are distributed from its
-\href{https://github.com/skypher/kraw/releases}{releases page}; GitHub serves
-as a distribution mirror rather than an immutable archive.  A release includes the source
-archive, manuscript PDF, hash records, and replay profiles.  No external
-human replay attestation is claimed for this version.  The accepted journal
-snapshot will be deposited in a DOI-bearing archive, and the bibliographic
-record will be updated accordingly.
+This manuscript is Version~1.0.7.  Its source and PDF are maintained in the
+\href{https://github.com/skypher/kraw}{project repository}, where
+\texttt{certificates/\allowbreak MANIFEST.\allowbreak sha256} identifies the
+manuscript, verification programs, and deterministic outputs byte-for-byte.
+The verification programs and logs are unchanged from the
+\href{https://github.com/skypher/kraw/releases/tag/v1.0.6}{version~1.0.6 release}
+\cite{polzer2026artifact}, which includes the source archive, hash records,
+and replay profiles.  GitHub is the distribution site.  No external human
+replay attestation is claimed for this version.
 
 To avoid a circular identifier (the full manifest includes the manuscript),
 \texttt{certificates/\allowbreak PAYLOAD.\allowbreak sha256} separately hashes only the proof
@@ -1762,16 +1762,17 @@ manuscript and explanatory documentation are available under the Creative
 Commons Attribution 4.0 International License; the repository's
 \texttt{LICENSE} file states the component boundaries.
 
-The primary trusted base is Python~3, SymPy~1.12, a C++17 compiler, and GMP.
-The independent path uses the same compiler but replaces the decisive SymPy
-operations and GMP scan with repository-local polynomial algorithms and
-Boost multiprecision integers.  The programs themselves remain subject to
-inspection.  They contain no floating-point proof computation: every
-acceptance predicate, including the end-to-end orbit checks, is integer or
-rational arithmetic.
+The primary implementation uses Python~3, SymPy~1.12, a C++17 compiler, and
+GMP; its symbolic operations include factorization, gcd, resultants, and
+Sturm root counting.  The independent implementation uses the same compiler
+and checks the decisive outputs with repository-local polynomial algorithms
+and Boost multiprecision integers.  Both implementations depend on their
+source code, compiler or runtime, and integer primitives.  Independence
+here refers to the implementation, not to replication by another researcher.
 
 Reference software versions and individual commands are recorded in
-\texttt{paper/README.md}.  The command \texttt{make toolchain-info} prints the
+\href{https://github.com/skypher/kraw/blob/v1.0.6/paper/README.md}{\texttt{paper/README.md}}.
+The command \texttt{make toolchain-info} prints the
 Python, SymPy, compiler, Boost, GMP, pdf\TeX, and platform versions.
 The targets \texttt{payload-check} and \texttt{verify} check stored hashes
 only; they do not execute a proof program.  The target \texttt{audit-fast}
@@ -1787,55 +1788,63 @@ are therefore excluded from the deterministic proof logs.
 
 \subsection{Verification inventory}
 
-Each row names a program and its committed output in
-\texttt{certificates/}; the C++ scanners and independent checker are in
-\texttt{cpp/}.
-The accompanying \texttt{certificates/\allowbreak MANIFEST.sha256} records the
-exact artifact hashes, and \texttt{certificates/\allowbreak README.md} states the
-artifact
-trust boundary and replay convention.
+The first column gives a verification task or log stem; each link opens
+the corresponding committed log in \texttt{certificates/}.
+The exact program paths, outputs, and replay commands are listed in
+\href{https://github.com/skypher/kraw/blob/v1.0.6/certificates/CERTIFICATE_MAP.md}{\texttt{CERTIFICATE\_MAP.md}}.
+In particular, the two scan logs come from
+\href{https://github.com/skypher/kraw/blob/v1.0.6/cpp/exhaustive-turan-scan.cpp}{\texttt{cpp/exhaustive-turan-scan.cpp}}
+and
+\href{https://github.com/skypher/kraw/blob/v1.0.6/cpp/independent-pascal-scan.cpp}{\texttt{cpp/independent-pascal-scan.cpp}}.
 
 \begin{table}[H]
 \centering
-\footnotesize
-\begin{tabular}{@{}p{0.35\textwidth}p{0.58\textwidth}@{}}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.35\textwidth}>{\raggedright\arraybackslash}p{0.60\textwidth}@{}}
 \toprule
-Artifact & Verifies \\
+Verification task / log & Checks \\
 \midrule
-\texttt{recurrence-and-small-scan} &
+\loglink{recurrence-and-small-scan} &
   Recurrence identity ($M,Q\le30$) and $T_s\ge0$ exhaustively for
   $M,Q\le90$. \\
-\texttt{exhaustive-scan-D1200} &
-  Exhaustive exact scan of $289{,}261{,}901$ cells with zero negatives for
-  all $D\le 1200$, including per-step divisibility tests and deterministic
-  convolution audits (Proposition~\ref{prop:finite-scan}). \\
-\texttt{independent-scan-D1200} &
-  The same finite set through an independent Boost/Pascal construction,
-  including coefficientwise agreement of both parents, reflection, and
-  endpoint checks. \\
-\texttt{regime-decomposition} &
+\addlinespace[3pt]
+\loglink{exhaustive-scan-D1200} &
+  Exact scan of all $289{,}261{,}901$ cells with $D\le1200$; divisibility
+  tests and convolution audits (Proposition~\ref{prop:finite-scan}). \\
+\addlinespace[3pt]
+\loglink{independent-scan-D1200} &
+  The same finite set by Boost/Pascal construction; agreement of both
+  parents, reflection, and endpoint checks. \\
+\addlinespace[3pt]
+\loglink{regime-decomposition} &
   Theorems~\ref{thm:bulk}--\ref{thm:flow}, Corollary~\ref{cor:coverage},
-  Proposition~\ref{prop:collapse} (symbolic identities, grids, end-to-end
-  coverage $D\le 90$, gap census). \\
-\texttt{finite-gap-offsets} &
-  Theorem~\ref{thm:offsets}: offsets $u=4,\dots,14$, both parities;
-  sector estimate; threshold $D=4586$. \\
-\texttt{small-argument-cases} &
+  Proposition~\ref{prop:collapse}: identities, grids, coverage for $D\le90$,
+  and gap census. \\
+\addlinespace[3pt]
+\loglink{finite-gap-offsets} &
+  Theorem~\ref{thm:offsets}: $4\le u\le14$, both parities; sector
+  estimate and threshold $D=4586$. \\
+\addlinespace[3pt]
+\loglink{small-argument-cases} &
   Proposition~\ref{prop:qle2}: $Q\le 2$ for all $D$. \\
-\texttt{fixed-argument-strips} &
+\addlinespace[3pt]
+\loglink{fixed-argument-strips} &
   Theorem~\ref{thm:strips} and Corollary~\ref{cor:finite-coverage}:
-  per-$Q$ strips $Q=3,\dots,12$; threshold census $D=14826$. \\
-\texttt{even-minimum-gap} &
-  Theorem~\ref{thm:evenflow}: even-minimum gap cells, all $D$ (symbolic
-  identities, angular bound, end-to-end checks for both $D$ parities). \\
-\texttt{odd-minimum-gap} &
-  Theorem~\ref{thm:oddmin}: odd-minimum gap cells (symbolic interval
-  algebra, endpoint and finite-strip coefficient positivity,
-  end-to-end recurrence checks near $D=14828$). \\
-\texttt{independent-certificate-check} &
-  Separate exact replay of the fixed-argument ratios and Sturm chains,
-  finite-offset factors, sector bounds and resultants, and odd-minimum
-  endpoint signs; all twelve injected mutations are rejected. \\
+  $3\le Q\le12$; threshold census $D=14826$. \\
+\addlinespace[3pt]
+\loglink{even-minimum-gap} &
+  Theorem~\ref{thm:evenflow}: identities, angular bound, and end-to-end
+  checks for even $Q$ and both parities of $D$. \\
+\addlinespace[3pt]
+\loglink{odd-minimum-gap} &
+  Theorem~\ref{thm:oddmin}: interval algebra, coefficient signs, and
+  recurrence checks near $D=14828$. \\
+\addlinespace[3pt]
+\loglink{independent-certificate-check} &
+  Separate replay of ratios, Sturm chains, factors, sector bounds,
+  resultants, and endpoint signs.  The accompanying
+  \loglink{mutation-tests} log records rejection of all twelve mutations. \\
 \bottomrule
 \end{tabular}
 \medskip
@@ -1845,8 +1854,8 @@ Artifact & Verifies \\
 
 \section{Related work}\label{sec:related}
 
-Szeg\H{o} \cite{szego48}, answering a question of P.~Tur\'an, proved for
-Legendre polynomials that
+The classical Tur\'an inequality for Legendre polynomials, discussed by
+Szeg\H{o} \cite{szego48}, is
 $P_n(x)^2-P_{n-1}(x)P_{n+1}(x)\ge 0$ on the orthogonality interval; its
 descendants form a large literature on the \emph{positivity} of Tur\'an
 determinants as functions of the argument $x$, with the degree window fixed,
@@ -1890,16 +1899,16 @@ $\sum_k u_kz^k/k!$; converting it to the ordinary generating coefficients
 in \eqref{eq:pdef} introduces a degree-dependent factorial normalization.
 Moreover, its conclusion controls positivity and a product of adjacent
 determinants, not the ordered difference
-$\Tur(s)-\Tur(s+1)$ in the present coefficient normalization.  Thus it does
-not imply Theorem~\ref{thm:main}.  It is the closest explicit antecedent
-within the Krawtchouk literature, while differing in both normalization and
-conclusion.
+$\Tur(s)-\Tur(s+1)$ in the present coefficient normalization.  Its
+normalization and conclusion therefore differ from those of
+Theorem~\ref{thm:main}.
 
 \emph{Specialized Schur functions and character values.}
 Proposition~\ref{prop:schur} identifies $\Tur(s)$ with the rectangular
 character value at the order-two element $\operatorname{diag}(I_M,-I_Q)$.
-Ayyer and Kumari \cite[Theorem~2.5]{ayyerkumari22} factor characters of
-general linear groups under balanced root-of-unity specializations.  Karmakar
+The factorization theorem of Littlewood and Prasad, presented in
+\cite[Theorem~2.5]{ayyerkumari22}, treats general linear characters under
+balanced root-of-unity specializations.  Karmakar
 \cite[Theorem~4.1]{karmakar25} gives formulas at arbitrary order-two
 conjugacy classes, including the present involutions; outside the factorized
 cases these formulas are alternating sums of products of dimensions.  They
@@ -1909,30 +1918,27 @@ specialization.  Reiner and Stanton \cite{reinerstanton98} prove symmetry and
 unimodality for certain differences of \emph{principally} specialized Schur
 functions $s_\lambda(1,q,\dots,q^n)$.  Their specialization and varying
 shapes differ from the fixed $\{1,-1\}$ alphabet and rectangle-height
-sequence here, so neither result implies the other.  These works nevertheless
-place the Main Theorem alongside character specialization and Schur
-unimodality, rather than only classical Tur\'an inequalities.
+sequence here.  These works place the Main Theorem in the context of
+character specialization and Schur unimodality as well as classical
+Tur\'an inequalities.
 
 \emph{Coefficient and asymptotic inequalities.}  Tur\'an inequalities for
 coefficient sequences and Jensen polynomials have a separate classical
 theory, for example Craven--Csordas \cite{cravencsordas89}.  Uniform
 asymptotics for Krawtchouk polynomials in the oscillatory regime are also
-available \cite{liwong00}.  Neither line of work treats monotonicity of the
-degree-index Tur\'an determinant at a fixed Krawtchouk argument.
+available \cite{liwong00}.  The cited results address coefficient
+inequalities and asymptotic expansions; the present theorem concerns
+degree-index monotonicity at a fixed integer Krawtchouk argument.
 
 \emph{Coding-theoretic Krawtchouk analysis.}  Binary Krawtchouk polynomials
 at integer arguments are the spectral kernel of the Hamming scheme
 \cite{delsarte73,levenshtein95,macwilliamssloane77}; positivity of
 Krawtchouk quadratic expressions at integer points is central to
-linear-programming bounds.  We are not aware of the specific quantity
-$\Tur(s)=p_s^2-p_{s-1}p_{s+1}$ (in the coefficient/degree index, at a fixed
-integer argument) having been studied there.
+linear-programming bounds.
 
-We did not find the monotonicity statement of Theorem~\ref{thm:main} in the
-orthogonal-polynomial, coding-theoretic, or specialized-character literature.
-Our novelty claim is limited to that precise statement for the coefficient
-normalization of the two-parameter family $(1+w)^M(1-w)^Q$ at integer
-$(M,Q)$, equivalently the ordered rectangular character values in
+To our knowledge, Theorem~\ref{thm:main} has not previously been stated for
+the coefficient normalization of $(1+w)^M(1-w)^Q$ at integer $(M,Q)$,
+equivalently for the ordered rectangular character values in
 \eqref{eq:schur-character}.
 
 \section{Further questions}\label{sec:open}
@@ -1941,10 +1947,11 @@ $(M,Q)$, equivalently the ordered rectangular character values in
 \item \textbf{Uniform-$Q$ pairing structure.}  The per-$Q$ strip
   certificates (Theorem~\ref{thm:strips}) exhibit a recurring pattern: after
   removing positive content, the negative coefficients of $S_Q$ are paired
-  with positive neighbors two degrees below.  A contiguity recursion
-  in $Q$ ($p_s^{(Q+1)}=p_s^{(Q)}-p_{s-1}^{(Q)}$) that provably preserves
-  the paired cone would treat the entire gap uniformly and give a second,
-  asymptotics-free proof of the Main Theorem.
+  with positive neighbors two degrees below.  With $M$ fixed, write
+  $p_s^{(Q)}=\coeff{w^s}(1+w)^M(1-w)^Q$.  If the contiguity recursion
+  $p_s^{(Q+1)}=p_s^{(Q)}-p_{s-1}^{(Q)}$ preserves the paired cone, it would
+  treat the entire gap uniformly in $Q$ and yield another proof of the
+  Main Theorem.
 \item \textbf{Beyond the symmetric weight.}  Does Tur\'an-step monotonicity
   persist for the nonsymmetric two-root coefficient family
   $p_s(a,b)=\coeff{w^s}(1+aw)^M(1-bw)^Q$, with $a,b>0$ and $a\ne b$, or for
@@ -1953,9 +1960,9 @@ $(M,Q)$, equivalently the ordered rectangular character values in
   symmetry used for the central initial values and the finite recurrence
   identities is special to $a=b$; which parts of the argument survive its
   loss?
-\item \textbf{Combinatorial meaning of $\Tur(s)\ge 1$.}  On the top half
-  the Tur\'an determinant is not just nonnegative but $\ge 1$ (integer
-  telescoping).  Is there a lattice-path or coding-theoretic injection
+\item \textbf{Combinatorial meaning of $\Tur(s)\ge 1$.}
+  Corollary~\ref{cor:positivity} gives $\Tur(s)\ge1$ for every $0\le s\le D$.
+  Is there a lattice-path or coding-theoretic injection
   realizing $p_s^2-p_{s-1}p_{s+1}-1$ as a counting quantity at integer
   arguments?
 \item \textbf{Equality away from the center.}  Theorem~\ref{thm:center}
@@ -1965,10 +1972,11 @@ $(M,Q)$, equivalently the ordered rectangular character values in
 \end{enumerate}
 
 \noindent\begin{minipage}{\textwidth}
+\pdfbookmark[1]{AI-use disclosure}{ai-use-disclosure}
 \section*{AI-use disclosure}
 
-The proof architecture was developed with assistance from GPT-5.6 Sol
-(\texttt{gpt-5.6-sol}) at max reasoning effort.  The system was used as an
+The proof architecture was developed with assistance from GPT-5.6 Sol.
+The system was used as an
 interactive research assistant to develop and stress-test the argument, audit
 citations and calculations, prepare exact verification code, and revise the
 manuscript.  The author directed the research, selected and checked the final
@@ -1978,6 +1986,9 @@ computations, and wording.
 
 \begingroup
 \small
+\raggedright
+\urlstyle{same}
+\pdfbookmark[1]{References}{references}
 \bibliographystyle{amsalpha}
 \bibliography{krawtchouk_turan_positivity}
 \endgroup

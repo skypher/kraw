@@ -3,7 +3,9 @@
 Source repository: <https://github.com/skypher/kraw>.  The
 `certificates/MANIFEST.sha256` file identifies a reviewed artifact snapshot
 by hashing the manuscript, verifier sources, and deterministic outputs.
-The manuscript on `main` is Version 1.0.6 (September 4, 2026).
+The manuscript on `main` is Version 1.0.7 (September 4, 2026).
+Its verification programs and deterministic logs are unchanged from the
+[v1.0.6 release](https://github.com/skypher/kraw/releases/tag/v1.0.6).
 `certificates/PAYLOAD.sha256` is the noncircular proof-payload identifier.
 `certificates/CERTIFICATE_MAP.md` maps the computer-assisted results to their
 generators and exact logs, and `certificates/REVIEW_CHECKLIST.md` gives a
@@ -24,6 +26,15 @@ snapshot value and enables the TeX source-date controls. The build requires
 the standard AMS LaTeX packages and TikZ/PGF. Repeated builds are
 byte-identical in the reference toolchain; byte identity across different
 TeX distributions or font packages is not claimed.
+
+For arXiv, upload `krawtchouk_turan_positivity.tex` and its `.bib` file
+together at the root of the submission source. The figure is drawn by TikZ
+within the manuscript. A current `.bbl` can also be included; arXiv uses it
+in preference to running BibTeX, so regenerate it after bibliography edits.
+DOI and arXiv links are included in the bibliography's `note` fields because
+the `amsalpha` style does not render `doi` or `eprint` fields. Keep each DOI
+link consistent with its corresponding `doi` field. See the
+[arXiv TeX instructions](https://info.arxiv.org/help/submit_tex.html).
 
 ## Reproducing the verification artifacts
 
