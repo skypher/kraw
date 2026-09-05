@@ -54,7 +54,7 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 1.0.8}
+\newcommand{\paperversion}{Version 1.0.9}
 \newcommand{\paperdate}{September 5, 2026}
 
 \medmuskip=4mu
@@ -483,7 +483,7 @@ Eliminating $p_{s+2}$ and $p_{s-1}$ from $T_s$ by the step-$1$ recurrence
   C=\frac{u}{D+1-s},
 \end{gathered}
 \end{equation}
-with negative discriminant
+with negated discriminant
 \begin{equation}\label{eq:disc}
   4AC-B^2 \;=\;
   \frac{u(u+2)\bigl((D+3)^2-(u+1)^2\bigr)-x^2(u+1)^2}
@@ -514,9 +514,9 @@ whenever $4AC-B^2\ge0$.
 \end{proof}
 
 \begin{remark}[sharpness]\label{rem:sharpness}
-The \emph{sign} of the negative discriminant is unchanged under the indicated
+The \emph{sign} of the negated discriminant is unchanged under the indicated
 basis changes: expressing $T_s$ in a shifted recurrence basis multiplies the
-negative discriminant by a positive square.  For example, the negative
+negated discriminant by a positive square.  For example, the negated
 discriminant in the $(p_{s-2},p_{s-1})$ basis is the displayed one times
 \[
  \left(\frac{(D+1-s)(D+2-s)}{s(s+1)}\right)^2.
@@ -1300,11 +1300,30 @@ We use five steps.
 
 \subsection{Gap cells with odd \texorpdfstring{$Q$}{Q}}
 
-The argument follows the scaled ratio $(D+2)p_{j+1}/p_j$ above the upper
-root of the quadratic in \eqref{eq:window}.  We call the open interval
-between its real roots the \emph{gap window}.  The next lemma gives the
-comparison used to propagate this bound; the projective formulation in the
-proof of Theorem~\ref{thm:oddmin} also includes zero coefficients.
+For each top-half index $j$ with $p_j\ne0$, define the scaled ratio
+\[
+ y_j:=\frac{(D+2)p_{j+1}}{p_j}.
+\]
+At a gap cell $s$ with $p_s\ne0$, the quadratic-form identity
+\eqref{eq:qform} gives
+\[
+ G(y_s)p_s^2=(s+2)(D+1-s)(D+2)^2T_s,
+\]
+where
+\begin{equation}\label{eq:window}
+ G(y)=u(s+2)y^2-x(u+1)(D+2)y
+       +(u+2)(D+1-s)(D+2)^2.
+\end{equation}
+Since $u\ge1$, this is an upward parabola, and the gap inequality
+\eqref{eq:gap} gives two real roots $y_-(u)<y_+(u)$.  We call the open
+interval between them the \emph{gap window}.  Thus $T_s\ge0$ if and only if
+$y_s$ avoids this interval.
+
+For odd $Q$, the argument keeps the scaled ratio above the upper endpoint
+of the gap window.  The next lemma gives the endpoint formula, obtained by
+the quadratic formula with $s=(D+r)/2$ in \eqref{eq:window}, and the comparison used to
+propagate this bound under the recurrence.  The projective formulation in
+the proof of Theorem~\ref{thm:oddmin} also includes zero coefficients.
 
 \begin{lemma}[odd-transition certificate]\label{lem:odd-transition}
 Let $D\ge14827$, $Q\ge13$, $u\ge1$, $x=D-2Q$, and suppose
@@ -1312,7 +1331,7 @@ Let $D\ge14827$, $Q\ge13$, $u\ge1$, $x=D-2Q$, and suppose
  \frac{16(D+3)}{17}\le x\le D-26,\qquad 24u^2\le D+3.
 \]
 For each offset $r$ for which the following square root is real, put
-\[
+\begin{equation}\label{eq:yplus}
 \begin{gathered}
  g_r=\sqrt{x^2(r+1)^2-r(r+2)\bigl(E-(r+1)^2\bigr)},\\
  y_+(r)=\frac{(D+2)\bigl(x(r+1)+g_r\bigr)}
@@ -1320,7 +1339,7 @@ For each offset $r$ for which the following square root is real, put
  \kappa(r)=\frac{D-r}{D+r+4},\\
  \Phi_r(y)=(1+\kappa(r))x-\kappa(r)\frac{(D+2)^2}{y}.
 \end{gathered}
-\]
+\end{equation}
 If the windows at $u$ and $u+2$ are both real, then
 \[
  y\ge y_+(u)\Longrightarrow \Phi_u(y)\ge y_+(u+2),
@@ -1440,15 +1459,7 @@ where the last inequality is equivalent to $24(D+3)\ge289$.  Hence
  17x>16(D+3).
 \]
 
-For a top-half index $j$, write $r=2j-D$.  When $p_j\ne0$, use
-\[
-  y_j \;:=\; \frac{(D+2)\,p_{j+1}}{p_j},
-\]
-and define
-\[
- g_r^2=x^2(r+1)^2-r(r+2)\bigl(E-(r+1)^2\bigr),\qquad
- y_+(r)=\frac{(D+2)\bigl(x(r+1)+g_r\bigr)}{r(D+r+4)}.
-\]
+For a top-half index $j$, write $r=2j-D$.
 By Lemma~\ref{lem:gap-heredity}, every positive same-parity offset below
 the target has a real gap window, so $g_r$ is real on the induction path.
 To include zeros without division, define the projective state
@@ -1466,23 +1477,7 @@ Lemma~\ref{lem:no-consecutive-zeros}.  On finite states the recurrence induces
   \]
   increasing in $y$ on $y>0$.
 
-In $y$-coordinates the quadratic form
-  \eqref{eq:qform} of Theorem~\ref{thm:bulk} takes the exact form
-  $G(y_s)\,p_s^2=(s+2)(D+1-s)(D+2)^2\,T_s$.  Thus, when $p_s\ne0$,
-  $T_s\ge 0$ if and only if $y_s$ avoids the open window
-  $(y_-(u),y_+(u))$ of the upward parabola
-  \begin{equation}\label{eq:window}
-    G(y) \;=\; u(s+2)\,y^2 - x(u+1)(D+2)\,y
-      + (u+2)(D+1-s)(D+2)^2 .
-  \end{equation}
-  Cells with $p_s=0$ are immediate, since then
-  $T_s=u\,p_{s+1}^2/(D+1-s)\ge 0$.  On gap cells $G$ has real roots
-  $y_-(u)<y_+(u)$, and direct use of $s=(D+u)/2$ gives
-  \begin{equation}\label{eq:yplus}
-    y_+(u)=\frac{(D+2)\bigl(x(u+1)+g_u\bigr)}
-                  {u(D+u+4)} .
-  \end{equation}
-It is therefore enough to prove
+By the window interpretation in \eqref{eq:window}, it is enough to prove
 $(p_j,p_{j+1})\in\mathcal C_{2j-D}$ from the first noncentral cell to $s$.
 
 Reflection for odd $Q$ is
@@ -1501,7 +1496,8 @@ At each subsequent offset, Lemma~\ref{lem:odd-transition} maps both the
 finite and infinite parts of $\mathcal C_r$ into $\mathcal C_{r+2}$.
 Induction therefore gives
 $(p_j,p_{j+1})\in\mathcal C_{2j-D}$ along the induction path.  At the target,
-either $p_s=0$ and the displayed formula for $T_s$ is immediate, or
+either $p_s=0$ and \eqref{eq:qform} gives
+$T_s=u\,p_{s+1}^2/(D+1-s)\ge0$, or
 $y_s\ge y_+(u)$ and hence $G(y_s)\ge0$.  Thus $T_s\ge0$.  Cells with
 $D\le14826$, or $Q\le12$, or $u\le14$ were already covered by
 Corollary~\ref{cor:finite-coverage}.
@@ -1737,7 +1733,7 @@ not hard-coded, by the verifier for odd $Q$.
 
 \subsection{Code availability and software dependencies}\label{subsec:availability}
 
-This manuscript is Version~1.0.8.  Its source and PDF are maintained in the
+This manuscript is Version~1.0.9.  Its source and PDF are maintained in the
 \href{https://github.com/skypher/kraw}{project repository}, where
 \texttt{certificates/\allowbreak MANIFEST.\allowbreak sha256} identifies the
 manuscript, verification programs, and deterministic outputs byte-for-byte.
