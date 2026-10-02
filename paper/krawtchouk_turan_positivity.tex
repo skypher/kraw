@@ -44,7 +44,7 @@
 \newcommand{\eps}{\varepsilon}
 \newcommand{\coeff}[1]{[#1]\,}
 \newcommand{\loglink}[1]{%
-  \href{https://github.com/skypher/kraw/blob/v2.0.0/certificates/#1.txt}{\texttt{#1}}}
+  \href{https://github.com/skypher/kraw/blob/v2.0.1/certificates/#1.txt}{\texttt{#1}}}
 
 \newcommand{\shorttitle}{MONOTONICITY OF KRAWTCHOUK TUR\'AN DETERMINANTS}
 \newcommand{\shortauthors}{LESLIE P. POLZER}
@@ -54,8 +54,8 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 2.0.0}
-\newcommand{\paperdate}{October 2, 2026}
+\newcommand{\paperversion}{Version 2.0.1}
+\newcommand{\paperdate}{October 3, 2026}
 
 \medmuskip=4mu
 \thickmuskip=8mu
@@ -638,7 +638,7 @@ cell with $Q$ odd and $u\ge2$ is $(D,Q,u)=(84,1,2)$.
 \end{tikzpicture}
 \caption{Coverage of the top half $\{2s\ge D\}$ in the $(u,x)$-plane for
 fixed $D$ (schematic; lattice cells satisfy $u\equiv x\equiv D\pmod 2$).
-The overlap of the bulk and flow regions is assigned to the flow region,
+Cells in both the bulk and the flow region are drawn as flow, that is,
 beyond the displayed circle.  The dark gap is the part of the non-flow
 region where the bulk quadratic form is indefinite; it is treated in
 Sections~\ref{sec:evenflow}--\ref{sec:oddmin}.}
@@ -1072,7 +1072,7 @@ the formalization and checks this.
 
 \subsection{Code availability}\label{subsec:availability}
 
-This manuscript is Version~2.0.0.  Its source, the verification programs,
+This manuscript is Version~2.0.1.  Its source, the verification programs,
 and their deterministic logs are maintained in the
 \href{https://github.com/skypher/kraw}{project repository}
 \cite{polzer2026artifact}, where
@@ -1083,12 +1083,12 @@ verification programs, their logs, the Lean sources, and the dependency lock
 without the manuscript; its
 SHA-256 digest is
 \begin{center}
-\small\nolinkurl{67c9cd58de13c817f831087477ee294d88a11e47ef213ddc4607f3b6256e5fa2}
+\small\nolinkurl{909f80f5e8ae066c5a122af9358cb31fcd7704a6005f21a302277fafc8a31946}
 \end{center}
 The programs require Python~3 and SymPy~1.12, and the formalization Lean~4
 and Mathlib at the versions pinned in \texttt{lean/}; the commands are
 listed in
-\href{https://github.com/skypher/kraw/blob/v2.0.0/paper/README.md}{\texttt{paper/README.md}}.
+\href{https://github.com/skypher/kraw/blob/v2.0.1/paper/README.md}{\texttt{paper/README.md}}.
 The verification code is available under the BSD 3-Clause License, and the
 manuscript under the Creative Commons Attribution 4.0 International
 License.

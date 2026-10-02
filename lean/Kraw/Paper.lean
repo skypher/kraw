@@ -10,7 +10,7 @@ import Kraw.CertTable
 /-!
 # Index: every numbered statement and displayed claim of the paper
 
-Paper: *Monotonicity of Turán determinants for binary Krawtchouk polynomials*, Version 2.0.0.
+Paper: *Monotonicity of Turán determinants for binary Krawtchouk polynomials*, Version 2.0.1.
 Each alias below carries the exact statement proved in the file named in its docstring.
 -/
 
@@ -103,6 +103,8 @@ alias normalization_rescale := turan_rescale_iff
 alias normalization_geometric := log_flat_iff_geometric
 alias orthonormal_fails := orthonormal_not_monotone
 alias endpoint_fails := endpoint_not_monotone
+/-- Supporting result, not itself a claim of the paper: orthogonality of the Krawtchouk
+polynomials, which gives the norms used in §1.3. -/
 alias K_orthogonality := krawtchouk_orthogonal
 
 /-! ## §1.4 and §2 -/
@@ -154,7 +156,7 @@ alias lemma_5_2_transition := lemma_5_2
 alias lemma_5_2_odd_base := lemma_5_2_base
 alias theorem_5_3 := T_nonneg_gap_odd
 
-/-! ## §7 -/
+/-! ## Lemma 5.2: coefficient table of `O₁`–`O₄` -/
 alias table_O1 := cO1_table
 alias table_O2 := cO2_table
 alias table_O3 := cO3_table

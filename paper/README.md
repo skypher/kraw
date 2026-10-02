@@ -1,7 +1,7 @@
 # Monotonicity of Turán determinants for binary Krawtchouk polynomials
 
 Source repository: <https://github.com/skypher/kraw>.  The manuscript on
-`main` is Version 2.0.0 (October 2, 2026).
+`main` is Version 2.0.1 (October 3, 2026).
 
 Build the manuscript deterministically in the reference toolchain from the
 repository root with:

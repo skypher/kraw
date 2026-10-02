@@ -133,7 +133,7 @@ theorem p_swap (M Q : ℕ) {s : ℤ} (hs : 0 ≤ s) : p Q M s = (-1) ^ s.toNat *
   simpa [hs'] using h
 
 /-- §2: the top initial value `p_{D-1} = (-1)^Q x`. -/
-theorem p_top_sub_one (M Q : ℕ) (hD : 1 ≤ M + Q) :
+theorem p_top_sub_one (M Q : ℕ) :
     p M Q ((M : ℤ) + Q - 1) = (-1) ^ Q * ((M : ℤ) - Q) := by
   rw [p_refl M Q 1, p_one]
 

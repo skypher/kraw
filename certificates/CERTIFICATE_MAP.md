@@ -1,6 +1,6 @@
 # Certificate map
 
-This file maps each statement of the manuscript (Version 2.0.0) whose
+This file maps each statement of the manuscript (Version 2.0.1) whose
 identities or signs are replayed by computer to its program and committed
 log.  All checks use exact integer or rational arithmetic (SymPy); the
 programs trust SymPy's polynomial expansion, cancellation, and
@@ -15,7 +15,8 @@ simplification.
 
 The Lean 4 formalization in `lean/` proves every numbered statement and
 displayed claim of the paper, including Proposition 1.3 (dual Jacobi–Trudi for
-two columns and the irreducible `GL_D(ℂ)` character) and the §7 table;
+two columns and the irreducible `GL_D(ℂ)` character) and the coefficient table
+of Lemma 5.2;
 `lean/Kraw/Paper.lean` indexes them by number.  `make lean` builds it and
 checks that all 77 indexed declarations use only the standard axioms;
 `lean/ROADMAP.md` maps each Lean file to the paper.
