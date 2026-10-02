@@ -24,12 +24,17 @@
 == [E] coverage ==
   [PASS] coverage margin at t=D^2 == 7D^2+16D
   [PASS] coverage margin slope in t == -(4D+9)
-  [PASS] E2E coverage grid D <= 90: {'sD': 1081, 'u0': 551, 'bulk': 21975, 'flow': 1512, 'gap3': 20, 'open': 0}
-== [F] reflection collapse, u <= 3 ==
-  [PASS] collapse FULL closed forms R == num/den (non-vacuous) + denominator sign + PSD rewrites (symbolic)
-  [PASS] u=3 beta-locus outside gap: 176Q^2+416Q-16 form
-  [PASS] first u>=4 gap cell with Q>=3 is (442,3,4): got (442, 3, 4)
-  [PASS] first u>=4 gap cell over ALL Q is (142,0,4) [Q<=2 handled separately]: got (142, 0, 4)
+  [PASS] E2E coverage grid M,Q <= 45: {'sD': 1081, 'u0': 551, 'bulk': 21975, 'flow': 1512, 'gap_even': 14, 'gap_odd_u1': 6, 'gap_odd_window': 0}
+== [F] odd u = 1 closed form and gap lemmas ==
+  [PASS] Q odd, u = 1: (s+1)^2 (s+2) T_s == 4(M+1)(Q+2) p_s^2
+  [PASS] x^2 U - (U-1)(E-U) == q(U)
+  [PASS] q(U0) == -[(D^2+2D-x^2)(4D+8) - x^2]
+  [PASS] h == (2Q+3)(2M+3) + 1
+  [PASS] h - 3(D+3) == 4MQ + 3M + 3Q + 1
+  [PASS] h - (2Q+3)(D+3) == (2Q+3)x + 1
+  [PASS] q(7E/(6h)) == E(49E - 6h^2)/(36h^2)
+  [PASS] grid D <= 300: gap strip and heredity on 2308 gap cells
+  [PASS] first odd-Q gap cell with u >= 2 is (84, 1, 2): got (84, 1, 2)
 == [G] real-argument relaxation ==
   [PASS] D=4, q=8/7, s=2 gives T_2 = -1430/117649
 == THREE-REGIME CLOSURE: ALL CHECKS PASS ==

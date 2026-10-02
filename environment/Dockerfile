@@ -12,10 +12,6 @@ COPY environment/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ca-certificates \
-       g++=4:13.2.0-7ubuntu1 \
-       g++-13=13.3.0-6ubuntu2~24.04.1 \
-       libboost1.83-dev=1.83.0-2.1ubuntu3.2 \
-       libgmp-dev=2:6.3.0+dfsg-2ubuntu6.1 \
        lmodern=2.005-1 \
        make=4.3-4.1build2 \
        poppler-utils=24.02.0-1ubuntu9.9 \

@@ -27,7 +27,19 @@ jobs:
           cache: pip
       - name: Install exact Python dependencies
         run: python3 -u -m pip install --require-hashes -r requirements.txt
-      - name: Install exact C++ arithmetic development files
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libboost-dev libgmp-dev
       - name: Run the fast artifact audit
         run: make audit-fast
+
+  lean:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the artifact
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Fetch the Mathlib build cache
+        run: cd lean && lake exe cache get
+      - name: Build the formalization and check its axioms
+        run: make lean

@@ -1,8 +1,8 @@
 # Monotonicity of Turán determinants for binary Krawtchouk polynomials
 
-This repository contains the standalone manuscript, exact-arithmetic
-verification outputs, and programs for the theorem that the Turán
-determinant of
+This repository contains the manuscript, its exact-arithmetic verification
+programs and deterministic logs, and a complete Lean 4 formalization of the
+theorem that the Turán determinant of
 
 \[
   [w^s](1+w)^M(1-w)^Q
@@ -11,33 +11,34 @@ determinant of
 is non-increasing on the top half of the coefficient index, for all
 nonnegative integers \(M,Q\).
 
-The canonical repository is <https://github.com/skypher/kraw>.  Reviewed
-artifact snapshots are identified by `certificates/MANIFEST.sha256`, which
-hashes the manuscript, verifier sources, and deterministic outputs.
-The manuscript on `main` is Version 1.0.9 (September 5, 2026).
-The verification programs and deterministic logs are unchanged from the
-[v1.0.6 release](https://github.com/skypher/kraw/releases/tag/v1.0.6),
-which is the versioned verification artifact cited by the manuscript.
-The stable proof payload is listed separately in
-`certificates/PAYLOAD.sha256`; `certificates/CERTIFICATE_MAP.md` maps each
-computer-assisted theorem to its exact generator and replay log, and
-`certificates/REVIEW_CHECKLIST.md` gives a function-by-function referee
-inspection path. `certificates/REPLAY_PROFILE.md` records the measured
-complete replay retained for v1.0.4;
-`certificates/INDEPENDENT_REPLAY_PROFILE.md` records the local v1.0.5
-assurance runs and their limits.
+The canonical repository is <https://github.com/skypher/kraw>.  The manuscript
+on `main` is Version 2.0.0 (October 2, 2026).  Version 2 restructures the
+proof so that no finite enumeration is needed: even smaller exponents are
+handled by a tangent comparison for every gap offset, and odd ones by an
+interval propagation whose four polynomial inequalities are certified by
+coefficient positivity.  The finite-offset, fixed-argument, and exhaustive-scan
+programs of Version 1 are therefore retired; they remain in the git history
+(tag `v1.0.6`).
+
+`certificates/MANIFEST.sha256` hashes every artifact file, and
+`certificates/PAYLOAD.sha256` hashes the verification payload without the
+manuscript, so its digest can be printed in the paper.
+`certificates/CERTIFICATE_MAP.md` maps each computer-checked statement to its
+program and log, and `certificates/REVIEW_CHECKLIST.md` gives an inspection
+path through the programs.
 
 ## Layout
 
 - `paper/` — LaTeX manuscript, bibliography, and PDF.
 - `scripts/` — SymPy exact-arithmetic verification programs.
-- `cpp/` — GMP scanner plus the independent Boost/Pascal scan and symbolic
-  checker.
-- `certificates/` — committed verification outputs and their hash manifest.
+- `certificates/` — committed verification logs and hash manifests.
+- `lean/` — Lean 4 / Mathlib formalization of every numbered statement and
+  displayed claim of the paper; `lean/Kraw/Paper.lean` indexes them by number and
+  `lean/ROADMAP.md` maps each Lean file to the paper.
 
 ## Licensing
 
-The executable proof code (`scripts/`, `cpp/`, the Makefile, the locked
+The executable code (`scripts/`, `lean/`, the Makefile, the locked
 environment, and CI workflow) is licensed under the BSD 3-Clause License.
 The manuscript and explanatory documentation are licensed under the Creative
 Commons Attribution 4.0 International License. See `LICENSE` for the precise
@@ -45,59 +46,19 @@ component boundaries and terms.
 
 ## Reproduction
 
-Build the PDF deterministically in the documented reference toolchain from
-the repository root with:
+From the repository root:
 
 ```sh
-make paper
+make paper          # deterministic PDF build in the reference toolchain
+make payload-check  # hashes of the verification payload
+make verify         # hashes of every artifact file
+make replay         # run all four programs and diff against the committed logs
+make audit-fast     # verify + toolchain-info + replay
+make lean           # build the Lean formalization and check its axioms
+                    # (needs elan; run `cd lean && lake exe cache get` first)
 ```
 
-The Makefile overrides any inherited `SOURCE_DATE_EPOCH` with the reviewed
-snapshot value and enables the TeX source-date controls. Repeated builds are
-byte-identical in the documented reference toolchain; byte identity across
-different TeX distributions or font packages is not claimed.
-
-Check the stored proof-payload and artifact hashes with:
-
-```sh
-make payload-check
-make verify
-```
-
-These targets check snapshot integrity; they do not execute the proof
-programs. Run the short exact replays with `make replay-short`, or all proof
-programs and independent checks, including the longer symbolic certificates
-and both exhaustive scans, with `make replay-all`. Use `make replay-profile` to run that complete replay
-under `/usr/bin/time -v` and capture a machine-specific resource report for
-an archival release. The v1.0.4 reference run is summarized in
-`certificates/REPLAY_PROFILE.md`; the Version 1.0.5 independent component
-runs are in `certificates/INDEPENDENT_REPLAY_PROFILE.md`.
-
-Before a replay, print the active dependency versions with:
-
-```sh
-make toolchain-info
-```
-
-For a practical first audit, `make audit-fast` checks both manifests, prints
-the toolchain, runs all short exact verifiers and the independent checker,
-executes all mutation tests, and runs both compiled scanners through
-`D <= 120`. It does not replace `make replay-all`.
-
-The separate software-assurance layer is described in
-`certificates/INDEPENDENT_CHECKS.md`.  Run `make audit-independent` to replay
-the exported witnesses with the standalone C++ polynomial/Sturm/resultant
-checker, repeat all 289,261,901 finite cells through an independent
-Boost/Pascal construction, and verify that all injected mutations are
-rejected.  Independent human replay remains a separately signed step; the
-blank form is `certificates/INDEPENDENT_REPLAY_SIGNOFF.md`.
-
-The paper needs standard AMS LaTeX packages and TikZ/PGF.  The exact
-verification commands and requirements are documented in `paper/README.md`;
-the Python dependencies and wheel hashes are pinned in `requirements.txt`.
-`environment/Dockerfile` pins the reference Ubuntu image by digest and uses a
-dated Ubuntu package snapshot. Build it from the repository root with
-`docker build -f environment/Dockerfile -t kraw-audit .`; its default command
-runs `make audit-fast`.
-
-The manuscript is the current mathematical statement.
+`make replay` takes about a minute.  The Python dependencies and wheel hashes
+are pinned in `requirements.txt`; `environment/Dockerfile` pins a reference
+Ubuntu image and package snapshot.  The exact commands are documented in
+`paper/README.md`.

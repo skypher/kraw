@@ -6,7 +6,7 @@ Copyright (c) 2026 Leslie P. Polzer
 1. Software
 -----------
 
-The files in `scripts/` and `cpp/`, together with `Makefile`,
+The files in `scripts/` and `lean/`, together with `Makefile`,
 `requirements.txt`, `environment/`, `.github/workflows/`, `.gitignore`, and
 `.dockerignore`, are licensed under the BSD 3-Clause License:
 

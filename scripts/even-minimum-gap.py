@@ -2,7 +2,7 @@
 """Verification of every even-minimum gap cell by exact algebra.
 
 Relabel the exponents so that Q <= M; then x = M-Q >= 0 and eps = (-1)^Q.
-Scope here: Q EVEN (eps = +1), gap cells with u >= 15.  Define
+Scope here: Q EVEN (eps = +1), every gap cell (u >= 1).  Define
 
     h_j   := (D+2) p_{j+1} - x p_j          (deviation),
     Tur(j) := p_j^2 - p_{j-1} p_{j+1}        (Turan),
@@ -35,31 +35,34 @@ Five exact ingredients are checked symbolically below:
       Hence zeta_{c+k} <= sqrt(Lam) tan((k - delta/2) th*),
       delta = D mod 2, as long as the argument stays below pi/2.
  (I5) BUDGET: on the gap, (u+1)^2 sin^2 th* < 7/3
-      [sin^2 th* = Lam/(D+2)^2, (u+1)^2 <= (7/6)(D+3)/(2Q+3),
-      (Q+1)/(2Q+3) <= 1/2, (M+1)(D+3) < (D+2)^2], so with Jordan
-      (th <= (pi/2) sin th on [0, pi/2]) and u >= 15:
-      ((u+2)/(2(u+1)))^2 * 7/3 <= (17/32)^2 * 7/3 < 1,
-      hence ((u+2)/2) th* < pi/2,
+      [sin^2 th* = Lam/(D+2)^2, 6(2Q+3)(u+1)^2 < 7(D+3) (gap strip),
+      (Q+1)/(2Q+3) <= 1/2, (M+1)(D+3) < (D+2)^2].  Then
+      ((u+2)/2) th* < pi/2 for every u >= 1:
+        u = 1: sin^2 th* < 7/12 < 3/4, so th* < pi/3;
+        u = 2: sin^2 th* < 7/27 < 1/2, so th* < pi/4;
+        u >= 3: Jordan (th <= (pi/2) sin th on [0, pi/2]) and
+                (u+2)/(u+1) <= 5/4 give ((u+2)/2) th* < pi/2 because
+                ((u+2)/(2(u+1)))^2 * 7/3 <= (5/8)^2 * 7/3 = 175/192 < 1,
       giving zeta_j in [0, x) and p-sign constancy through j = s,
       hence h_s <= 0, p_s p_{s+1} > 0, and by (I1) + (I2):
       T_s >= 0.   QED
 
-After the finite-offset and fixed-argument checks, only odd-minimum
-gap cells with min(M,Q) >= 13, u >= 15, and D > 14826 remain.
+The remaining gap cells (odd Q) are treated by odd-minimum-gap.py.
+
+Usage: even-minimum-gap.py   (-h/--help prints this text)
 
 CHECKS:
 [A] (I1)-(I4) symbolically in QQ(D, x, j)[p_j, p_j+1] resp. the
     zeta-map algebra (tan-addition as polynomial identity).
 [B] anchors, both D parities, symbolically.
 [C] budget arithmetic chain, exact rationals: the gap budget
-    numerator, the manuscript's constant 9/16 ((u+2)/2 <= (9/16)(u+1)
-    for u >= 15 and (9/16)^2 (7/3) < 1), and the sharper u = 15
-    instance 17/32, each certified on its full ray by coefficient
-    nonnegativity.  Jordan's inequality (th <= (pi/2) sin th on
+    numerator, the u = 1 and u = 2 sine comparisons, and for u >= 3
+    the ray fact (u+2)/(u+1) <= 5/4 with (5/8)^2 (7/3) < 1.  Jordan's inequality (th <= (pi/2) sin th on
     [0, pi/2]) is classical and enters the written proof only as the
     cited reduction step; the pi/2 factors cancel, so no numerical
     value of pi is used anywhere.
-[D] E2E: for a grid of even-Q gap cells (both D parities), verify
+[D] E2E: for every even-Q gap cell with D <= 400 and a grid of larger
+    cells (both D parities), verify
     the full induction: kappa <= 1, zeta in [0, x), p sign constant,
     and the (I1) decomposition of T >= 0 termwise, all in exact
     integer arithmetic.  The tan bound itself is exact as well: every
@@ -85,6 +88,10 @@ def check(name, cond):
 
 
 def main():
+    import sys
+    if any(a in ('-h', '--help') for a in sys.argv[1:]):
+        print(__doc__)
+        return
     Dv, xv, jv = sp.symbols('D x j')
     pj, pj1 = sp.symbols('pj pj1')
 
@@ -169,57 +176,60 @@ def main():
           sp.simplify(Lam/(Dv+2+xv) - (Dv+2-xv)) == 0)
 
     print("== [C] budget ==")
-    # gap => (u+1)^2 <= (7/6)(D+3)/(2Q+3)   [Thm 128 cert, re-check]:
-    check("2/(3+sqrt5) <= 7/18", sp.simplify(21+7*sp.sqrt(5)-36 > 0)
-          == True)
-    # (u+1)^2 sin^2 th* < 7/3:
     Mv, Qv = sp.symbols('M Q', positive=True)
     expr = (sp.Rational(7, 6)*(Mv+Qv+3)/(2*Qv+3)
             * 4*(Qv+1)*(Mv+1)/(Mv+Qv+2)**2)
-    # (Q+1)/(2Q+3) <= 1/2 and (M+1)(D+3) <= (D+2)^2 - 1:
     check("(Q+1)/(2Q+3) <= 1/2:  (2Q+3) - 2(Q+1) == 1 > 0",
           sp.expand((2*Qv+3) - 2*(Qv+1)) == 1)
     check("(M+1)(M+Q+3) <= (M+Q+2)^2 - 1  [M <= D]",
           sp.factor((Mv+Qv+2)**2 - 1 - (Mv+1)*(Mv+Qv+3))
           == Qv*(Mv+Qv+3))
-    # Direct exact form of the gap budget; its numerator has positive
-    # coefficients on M,Q>0.
+    # (u+1)^2 sin^2 th* < (7/6)(D+3)/(2Q+3) * Lam/(D+2)^2 <= 7/3; the
+    # numerator of 7/3 - expr has positive coefficients on M, Q > 0.
     gap_num = sp.Poly(sp.together(sp.Rational(7, 3) - expr).as_numer_denom()[0],
                       Mv, Qv)
     check("(u+1)^2 sin^2 th* < 7/3  (exact gap budget)",
           all(c > 0 for c in gap_num.coeffs()))
-    # Jordan's classical inequality theta <= (pi/2) sin(theta) reduces
-    # the closing condition ((u+2)/2) th* < pi/2 to
-    # ((u+2)/(2(u+1)))^2 * 7/3 < 1: the pi/2 cancels, so the residual
-    # obligation is rational.  Certify the manuscript's chain with the
-    # displayed constant 9/16 AND the sharper u = 15 instance 17/32,
-    # each with its ray fact certified by coefficient nonnegativity
-    # after u = 15 + r:
+    # The closing condition ((u+2)/2) th* < pi/2:
+    check("u = 1: sin^2 th* < (7/3)/4 = 7/12 < 3/4 = sin^2(pi/3)",
+          F(7, 3)/4 < F(3, 4))
+    check("u = 2: sin^2 th* < (7/3)/9 = 7/27 < 1/2 = sin^2(pi/4)",
+          F(7, 3)/9 < F(1, 2))
     uu, rv = sp.symbols('u r', nonnegative=True)
-    def ray_nonneg(expr_u):
-        pe = sp.Poly(sp.expand(expr_u.subs(uu, 15 + rv)), rv)
-        return all(c >= 0 for c in pe.all_coeffs())
-    check("(u+2)/2 <= (9/16)(u+1) for u >= 15: 9(u+1)-8(u+2) >= 0",
-          ray_nonneg(9*(uu+1) - 8*(uu+2)))
-    check("manuscript constant: (9/16)^2 * 7/3 == 567/768 < 1",
-          F(9, 16)**2 * F(7, 3) == F(567, 768) and F(567, 768) < 1)
-    check("(u+2)/(2(u+1)) <= 17/32 for u >= 15: 34(u+1)-32(u+2) >= 0",
-          ray_nonneg(34*(uu+1) - 32*(uu+2)))
-    check("((u+2)/(2(u+1)))^2 * 7/3 < 1 for u >= 15  (exact)",
-          F(17, 32)**2 * F(7, 3) < 1)
+    check("u >= 3: 5(u+1) - 4(u+2) = u - 3 >= 0, i.e. (u+2)/(u+1) <= 5/4",
+          sp.expand(5*(uu+1) - 4*(uu+2) - (uu-3)) == 0)
+    check("u >= 3: Jordan + (5/8)^2 * 7/3 == 175/192 < 1",
+          F(5, 8)**2 * F(7, 3) == F(175, 192) and F(175, 192) < 1)
 
     print("== [D] E2E on even-Q gap cells ==")
     def pcoef(M, Q):
+        """Row p_0..p_D (padded by two zeros) from the binomial
+        convolution of (1+w)^M and (1-w)^Q."""
         D = M + Q
-        p = [0]*(D+1)
-        for i in range(M+1):
-            for jj in range(Q+1):
-                p[i+jj] += comb(M, i)*comb(Q, jj)*(-1)**(Q-jj)
+        row = [comb(M, i) for i in range(M+1)]
+        p = [0]*(D+3)
+        for jj in range(Q+1):
+            c = comb(Q, jj)*(-1)**jj
+            for i, r in enumerate(row):
+                p[i+jj] += c*r
         return p
 
-    okE = True; cells = 0
-    for (M, Q) in [(1986, 14), (1987, 14), (2985, 16), (2986, 16),
-                   (1200, 20), (1201, 20)]:
+    def gap_pairs(Dmax):
+        for D in range(1, Dmax + 1):
+            for Q in range(0, D//2 + 1, 2):
+                M = D - Q; x = M - Q; E = (D+3)**2
+                for u in range(2 - D % 2, D + 1, 2):
+                    U = (u+1)**2
+                    if U >= (D+1)**2 - x*x:
+                        break
+                    if x*x*U > (U-1)*(E-U):
+                        yield (M, Q)
+                        break
+
+    okE = True; cells = 0; small_u = 0
+    for (M, Q) in list(gap_pairs(400)) + [
+            (1986, 14), (1987, 14), (2985, 16), (2986, 16),
+            (1200, 20), (1201, 20)]:
         D = M + Q; x = M - Q
         p = pcoef(M, Q)
         E = (D+3)**2
@@ -234,7 +244,7 @@ def main():
             if (D - u) % 2:
                 continue
             s = (D+u)//2
-            cells += 1
+            cells += 1; small_u += (u < 15)
             ok1 = True
             # exact tan bound: tan(((j-c)-delta/2) th*) = t*sqrt(Lam)
             # with t rational; base t = 0 (D even, angle 0) or
@@ -268,9 +278,10 @@ def main():
             if T*(s+2)*(D+1-s) != term1 + term2: ok1 = False
             if term1 < 0 or term2 < 0 or T < 0: ok1 = False
             okE &= ok1
-    check(f"E2E: {cells} even-Q gap cells, decomposition termwise "
-          f"nonneg and exact tan-bound invariant zeta <= t*Lam < x "
-          f"(all exact rationals)", okE and cells > 10)
+    check(f"E2E: {cells} even-Q gap cells ({small_u} with u < 15), "
+          f"decomposition termwise nonneg and exact tan-bound invariant "
+          f"zeta <= t*Lam < x (all exact rationals)",
+          okE and small_u > 1000)
 
     print("== EVEN-MINIMUM GAP:", "ALL CHECKS PASS ==" if OK else
           "FAILURES ==")

@@ -7,8 +7,12 @@ the program checks
     (s+1)p_{s+1} = x p_s + (s-1-D)p_{s-1}
 on M,Q <= 30 and checks the Turan step
     T_s = p_s^2 + p_s p_{s+2} - p_{s+1}^2 - p_{s-1}p_{s+1}
-for every top-half index on M,Q <= 90.
+for every top-half index on M,Q <= 90.  This is a cross-check; the proof
+does not use it.
+
+Usage: recurrence-and-small-scan.py   (-h/--help prints this text)
 """
+import sys
 from math import comb
 
 
@@ -28,6 +32,9 @@ def turan_step(p, s):
 
 
 def main():
+    if any(a in ("-h", "--help") for a in sys.argv[1:]):
+        print(__doc__)
+        return
     recurrence_ok = True
     for M in range(31):
         for Q in range(31):

@@ -15,14 +15,13 @@
   [PASS] D odd: zeta_{c+1} == kappa_c (D+2-x) <= (D+2-x)
   [PASS] D odd: (D+2-x) == sqrt(Lam) tan(th*/2)
 == [C] budget ==
-  [PASS] 2/(3+sqrt5) <= 7/18
   [PASS] (Q+1)/(2Q+3) <= 1/2:  (2Q+3) - 2(Q+1) == 1 > 0
   [PASS] (M+1)(M+Q+3) <= (M+Q+2)^2 - 1  [M <= D]
   [PASS] (u+1)^2 sin^2 th* < 7/3  (exact gap budget)
-  [PASS] (u+2)/2 <= (9/16)(u+1) for u >= 15: 9(u+1)-8(u+2) >= 0
-  [PASS] manuscript constant: (9/16)^2 * 7/3 == 567/768 < 1
-  [PASS] (u+2)/(2(u+1)) <= 17/32 for u >= 15: 34(u+1)-32(u+2) >= 0
-  [PASS] ((u+2)/(2(u+1)))^2 * 7/3 < 1 for u >= 15  (exact)
+  [PASS] u = 1: sin^2 th* < (7/3)/4 = 7/12 < 3/4 = sin^2(pi/3)
+  [PASS] u = 2: sin^2 th* < (7/3)/9 = 7/27 < 1/2 = sin^2(pi/4)
+  [PASS] u >= 3: 5(u+1) - 4(u+2) = u - 3 >= 0, i.e. (u+2)/(u+1) <= 5/4
+  [PASS] u >= 3: Jordan + (5/8)^2 * 7/3 == 175/192 < 1
 == [D] E2E on even-Q gap cells ==
-  [PASS] E2E: 11 even-Q gap cells, decomposition termwise nonneg and exact tan-bound invariant zeta <= t*Lam < x (all exact rationals)
+  [PASS] E2E: 2464 even-Q gap cells (2464 with u < 15), decomposition termwise nonneg and exact tan-bound invariant zeta <= t*Lam < x (all exact rationals)
 == EVEN-MINIMUM GAP: ALL CHECKS PASS ==

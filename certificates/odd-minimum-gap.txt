@@ -12,8 +12,8 @@
   [PASS] D even base: B^2 - disc == 8D(D+6)((D+4)^2 - x^2)/(D+4)^2
   [PASS] D even base reduction: (yb - yp2)*2(D+6)/(D+2) == B - g
   [PASS] D odd base reduction: (ybo - yp1)*(D+5)/(D+2) == Bo - g
-  [PASS] D odd base: x^2-coeff == -4(D+1)(D+5) < 0
-  [PASS] D odd base: nonneg at both x-endpoints (D >= 14827)
+  [PASS] D odd base: (D+3)^2 (Bo^2 - g1^2) == 4(D+1)(D+5)((D+3)^2-(x-1)^2)
+  [PASS] D odd base: Bo > 0 and (D+3)^2 - (x-1)^2 > 0 for 0 <= x <= D [(D+3)^2-(x-1)^2 = (D+4-x)(D+2+x)]
 == [C1] ==
   [PASS] K > 0 and K x(u+1) increasing in X: N has positive coefficients
   [PASS] C1 == 4(D+3)(u+2)(D+u+4)
@@ -22,19 +22,16 @@
   [PASS] P == 4(u+2) P1 and R == 4x(u+2) R1 exactly
   [PASS] P1 X^2-coeff == 2(u+1)^2(u-D)(D+u+6)  [concave]
   [PASS] R1 X-coeff == 2(u+1)(u-D)(D+u+6)  [decreasing]
-  [PASS] D > u on the remaining region
-  [PASS] O3 X-coeff == 4(u-D)(D+u+6)  [decreasing]
-  [PASS] O1' R1(Xmax): u>=25 all-coeffs>=0 (24 terms, min=2); strip u=1..24 (Sturm fallbacks=[])
-  [PASS] O2a P1(Xmax): u>=25 all-coeffs>=0 (48 terms, min=58); strip u=1..24 (Sturm fallbacks=[])
-  [PASS] O2b P1(Xmin2)(u+3)^4: u>=25 all-coeffs>=0 (77 terms, min=1); strip u=1..24 (Sturm fallbacks=[])
-  [PASS] O3' O3(Xmax): u>=25 all-coeffs>=0 (30 terms, min=1); strip u=1..24 (Sturm fallbacks=[])
+  [PASS] D > u on the region: (30/7)(u+3)^2 - 3 - u > 0 for u >= 1
+  [PASS] O4 X-coeff == 4(u-D)(D+u+6)  [decreasing]
+  [PASS] O1 R1(Xmax): coefficient-nonnegative after substitution (24 terms, min=2)
+  [PASS] O2 P1(Xmax): coefficient-nonnegative after substitution (48 terms, min=10)
+  [PASS] O3 (u+3)^4 P1(Xmin2): coefficient-nonnegative after substitution (77 terms, min=1)
+  [PASS] O4 (D+u+4)^2(K^2-disc2)/(u+2) at Xmax: coefficient-nonnegative after substitution (30 terms, min=1)
 == [R] region facts ==
-  [PASS] (u+1)^2 <= (7/6)(D+3)/29 => 24u^2 <= D+3  (168 <= 174)
-  [PASS] U >= 256 => 1 - 1/U >= 255/256 >= 8/9
-  [PASS] (8/9)(E - (D+3)/24) == E(24(D+3)-1)/(27(D+3))  (identity)
-  [PASS] 289(24(D+3)-1) - 6912(D+3) == 24(D+3)-289  (identity)
-  [PASS] 24(D+3)-289 > 0 for all D >= 14827 (ray certificate)
-== [E] E2E: exact recurrence walk ==
-  [PASS] E2E: 33 odd-min gap cells at D ~ 14828: T >= 0 and orbit above window
+  [PASS] Q >= 1: 6(2Q+3) >= 30, so gap strip gives 30(u+1)^2 < 7(D+3)
+  [PASS] r + 2 <= u  =>  (r+3)^2 <= (u+1)^2 (transition region)
+== [E] E2E: exact window walk ==
+  [PASS] E2E: 2051 odd-Q gap cells with u >= 2, D <= 600: state C_r along the whole path and T >= 0 (exact)
 == ODD-MINIMUM GAP: ALL CHECKS PASS ==
-  => every odd-minimum gap cell is verified.
+  => every odd-minimum gap cell with u >= 2 is verified.

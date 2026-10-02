@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Exact checks for the bulk, center, tail-flow, coverage, and
-small-offset reflection arguments.
+"""Exact checks for the bulk, center, tail-flow, coverage, odd u = 1, and
+gap-lemma arguments.
+
+Usage: regime-decomposition.py   (-h/--help prints this text)
 
 Everything here is about T_s(M,Q) = p_s^2 + p_s p_{s+2} - p_{s+1}^2
 - p_{s-1} p_{s+1} with p_s = [w^s](1+w)^M (1-w)^Q, D = M+Q, x = M-Q,
@@ -48,17 +50,16 @@ Hence every top-half cell is covered by {s=D} u {u=0} u bulk u flow
 EXCEPT the central gap  GAP = { u >= 1 : x^2 (u+1)^2 >
 ((u+1)^2-1)((D+3)^2-(u+1)^2) and (u+1)^2 < (D+1)^2 - x^2 }.
 
-REFLECTION COLLAPSE (gap closed for u <= 3).
-Reflection p_{D-j} = (-1)^Q p_j pins the chain: with s = (D+u)/2,
-a = p_{s-u}, the constraint p_s = (-1)^Q a forces p_{s-u+1}/a, and
-T_s = R_u(M,Q) a^2 with explicit R_u; for u <= 3 the numerators are
-manifestly PSD, the collapse denominators do not vanish on the gap,
-and a != 0 automatically.  So gap cells with u <= 3 are closed.
+ODD Q, u = 1.  For Q odd and 2s = D+1, reflection gives p_{s-1} = -p_s and
+the recurrence gives (s+1)^2 (s+2) T_s = 4(M+1)(Q+2) p_s^2 >= 0.
 
-REMAINING SET: gap cells with u >= 4 and Q >= 3 start at D = 442
-(census below); those cells are closed by the finite-gap-offsets and
-later certificates, which consume this census as the input to their
-sector bound M >= 425.
+GAP LEMMAS (square-root-free).  With U = (u+1)^2, E = (D+3)^2,
+h = E+1-x^2, q(t) = t^2 - h t + E and U0 = (D+1)^2 - x^2:
+x^2 U - (U-1)(E-U) = q(U), so a gap cell has q(U) > 0 and U < U0, while
+q(U0) = -[(D^2+2D-x^2)(4D+8) - x^2] <= 0 for 0 <= x <= D.  Hence U < h/2
+and smaller offsets stay in the gap (heredity).  With D = x+2Q, M = Q+x:
+h - 3(D+3) = 4MQ+3M+3Q+1 > 0, q(7E/(6h)) = E(49E-6h^2)/(36h^2) <= 0 and
+h - (2Q+3)(D+3) = (2Q+3)x + 1 >= 0, whence 6(2Q+3)U < 7(D+3) (gap strip).
 
 CHECKS [all exact: sympy rationals / integers]:
 [A] the quadratic-form identity, symbolically and on a grid.
@@ -71,10 +72,10 @@ CHECKS [all exact: sympy rationals / integers]:
     conjugacy r_s = k/y_s, the comparison invariant y_s >= phi(s),
     and T_s >= 0, all in exact rational arithmetic (phi compared via
     squares).
-[E] coverage margin polynomial > 0; E2E grid D <= 90: every top-half
+[E] coverage margin polynomial > 0; E2E grid M,Q <= 45: every top-half
     cell is covered by a certified mechanism (no fallback).
-[F] collapse identities and PSD numerators for u <= 3; beta != 0 on
-    the gap; first open cell census.
+[F] the odd u = 1 closed form; the gap-lemma identities; grid D <= 300:
+    gap strip and heredity on every gap cell.
 [G] exact counterexample to the real-argument relaxation.
 """
 from fractions import Fraction as F
@@ -112,6 +113,10 @@ def Tval(p, D, Q, s):
 
 
 def main():
+    import sys
+    if any(a_ in ('-h', '--help') for a_ in sys.argv[1:]):
+        print(__doc__)
+        return
     Dv, xv, sv, a, b = sp.symbols('D x s a b')
     uv = 2*sv - Dv
 
@@ -283,7 +288,8 @@ def main():
     check("coverage margin slope in t == -(4D+9)",
           sp.expand(sp.diff(marg, tv) + 4*Dv+9) == 0)
     # E2E: every top-half cell covered by a certified mechanism
-    ok = True; mech = {'sD':0,'u0':0,'bulk':0,'flow':0,'gap3':0,'open':0}
+    ok = True; mech = {'sD':0,'u0':0,'bulk':0,'flow':0,'gap_even':0,
+                       'gap_odd_u1':0,'gap_odd_window':0}
     for M in range(0, 46):
         for Q in range(0, 46):
             if M < Q: continue
@@ -298,101 +304,65 @@ def main():
                     mech['bulk'] += 1; ok &= (T >= 0); continue
                 if U >= (D+1)**2 - x*x:
                     mech['flow'] += 1; ok &= (T >= 0); continue
-                if u <= 3:
-                    mech['gap3'] += 1; ok &= (T >= 0); continue
-                mech['open'] += 1
-    check(f"E2E coverage grid D <= 90: {mech}", ok and mech['open'] == 0)
+                key = ('gap_even' if Q % 2 == 0 else
+                       'gap_odd_u1' if u == 1 else 'gap_odd_window')
+                mech[key] += 1; ok &= (T >= 0)
+    check(f"E2E coverage grid M,Q <= 45: {mech}", ok)
 
-    print("== [F] reflection collapse, u <= 3 ==")
+    print("== [F] odd u = 1 closed form and gap lemmas ==")
     M_, Q_ = sp.symbols('M Q')
-    # Verify the full closed form R = num/den, not a ratio defined to
-    # cancel. Each entry is the exact rational
-    # function; the check is simplify(R - num/den) == 0, and the
-    # denominator's positivity (product of squares and positive
-    # linear factors) is certified structurally.
-    Dp = M_ + Q_
-    hard_full = {
-        (1, 1):  (32*(M_+2)*(Q_+1), (Dp+3)**2*(Dp+5)),
-        (1, -1): (32*(M_+1)*(Q_+2), (Dp+3)**2*(Dp+5)),
-        (2, 1):  (16*(M_+1)*(Q_+1)*(3*M_**2-2*M_*Q_+6*M_+3*Q_**2+6*Q_),
-                  (M_-Q_)**2*(Dp+4)**2*(Dp+6)),
-        (2, -1): (32*(M_+2)*(Q_+2), (Dp+4)**2*(Dp+6)),
-        (3, 1):  (64*(M_+2)*(Q_+1)*(M_**2-2*M_*Q_+5*Q_**2+12*Q_-1),
-                  (M_-3*Q_-1)**2*(Dp+5)**2*(Dp+7)),
-        (3, -1): (64*(M_+1)*(Q_+2)*(5*M_**2-2*M_*Q_+12*M_+Q_**2-1),
-                  (Dp+5)**2*(Dp+7)*(3*M_-Q_+1)**2),
-    }
-    okF = True
-    for u in (1, 2, 3):
-        for eps in (1, -1):
-            pch = {0: a, 1: b}
-            for i in range(1, u+3):
-                j = (Dv+u)/2 - u + i
-                pch[i+1] = sp.cancel((xv*pch[i] + (j-1-Dv)*pch[i-1])/(j+1))
-            bs = sp.solve(sp.expand(pch[u] - eps*a), b)[0]
-            ps1 = sp.cancel(pch[u+1].subs(b, bs))
-            ps2 = sp.cancel(pch[u+2].subs(b, bs))
-            psm = sp.cancel(pch[u-1].subs(b, bs))
-            T = sp.cancel(a**2 + eps*a*ps2 - ps1**2 - psm*ps1)
-            R = sp.cancel(T/a**2).subs({Dv: M_+Q_, xv: M_-Q_})
-            hn, hd = hard_full[(u, eps)]
-            # full-form equality (non-vacuous): R == hn/hd exactly:
-            okF &= sp.simplify(sp.cancel(R - hn/hd)) == 0
-            # denominator sign: hd is (positive constant) x (positive
-            # factors) x squares; its non-square factors are (D+c),
-            # c > 0 => hd > 0 in range (its square factors can vanish
-            # only on the beta-locus, handled below):
-            dconst, dfacs = sp.factor_list(hd)
-            okF &= (dconst.is_number and dconst > 0)
-            for f, mult in dfacs:
-                pf = sp.Poly(f, M_, Q_)
-                deg = pf.total_degree()
-                okF &= (mult % 2 == 0) or (
-                    deg == 1 and pf.nth(1, 0) >= 0 and pf.nth(0, 1) >= 0
-                    and pf.nth(0, 0) > 0)
-            # numerator PSD certificates:
-            if (u, eps) == (2, 1):
-                q = 3*M_**2-2*M_*Q_+6*M_+3*Q_**2+6*Q_
-                okF &= sp.expand(q - ((M_-Q_)**2+2*M_**2+2*Q_**2+6*M_+6*Q_)) == 0
-            if (u, eps) == (3, 1):
-                q = M_**2-2*M_*Q_+5*Q_**2+12*Q_-1
-                okF &= sp.expand(q - ((M_-Q_)**2+4*Q_**2+12*Q_-1)) == 0
-            if (u, eps) == (3, -1):
-                q = 5*M_**2-2*M_*Q_+12*M_+Q_**2-1
-                okF &= sp.expand(q - ((M_-Q_)**2+4*M_**2+12*M_-1)) == 0
-    check("collapse FULL closed forms R == num/den (non-vacuous) + "
-          "denominator sign + PSD rewrites (symbolic)", okF)
-    # beta != 0 on gap for u <= 3: only nontrivial loci are x = 0 (u=2,+)
-    # and M-3Q-1 = 0 (u=3,+).  x = 0 fails the gap inequality trivially;
-    # for M = 3Q+1 (x = 2Q+1, D = 4Q+1) check 16 x^2 <= 15((D+3)^2-16):
-    Qs = sp.Symbol('Qs', nonnegative=True)
-    expr = sp.expand(15*((4*Qs+4)**2-16) - 16*(2*Qs+1)**2)
-    # = 176 Qs^2 + 416 Qs - 16 >= 0 for Qs >= 1; Qs = 0 => M=1,Q=0 => D=1 < 3
-    check("u=3 beta-locus outside gap: 176Q^2+416Q-16 form",
-          sp.expand(expr - (176*Qs**2+416*Qs-16)) == 0)
-    # Census the first gap cell with u >= 4. Report both the Q >= 3
-    # residual range (the Q <= 2 range is handled separately) and the
-    # first cell when all Q are included.
-    def first_gap(Qlo):
-        for D in range(2, 1500):
-            E = (D+3)**2
-            for Q in range(Qlo, D//2+1):
-                x = D-2*Q
-                for u in range(4, D+1):
-                    if (D-u) % 2: continue
-                    U = (u+1)**2
-                    if U >= (D+1)**2 - x*x: break
-                    if x*x*U > (U-1)*(E-U):
-                        return (D, Q, u)
+    Dp, xp = M_ + Q_, M_ - Q_
+    sh = (Dp + 1)/2                       # 2s = D+1
+    ps_, psm1 = a, -a                     # p_{s-1} = -p_s (Q odd)
+    ps1 = (xp*ps_ + (sh - 1 - Dp)*psm1)/(sh + 1)
+    ps2 = (xp*ps1 + (sh - Dp)*ps_)/(sh + 2)
+    T1 = ps_**2 + ps_*ps2 - ps1**2 - psm1*ps1
+    check("Q odd, u = 1: (s+1)^2 (s+2) T_s == 4(M+1)(Q+2) p_s^2",
+          sp.simplify((sh+1)**2*(sh+2)*T1 - 4*(M_+1)*(Q_+2)*a**2) == 0)
+    Uv, tq = sp.symbols('U t')
+    Eq = (Dv + 3)**2
+    hq = Eq + 1 - xv**2
+    qf = lambda t: t**2 - hq*t + Eq
+    check("x^2 U - (U-1)(E-U) == q(U)",
+          sp.expand(xv**2*Uv - (Uv-1)*(Eq-Uv) - qf(Uv)) == 0)
+    U0 = (Dv + 1)**2 - xv**2
+    check("q(U0) == -[(D^2+2D-x^2)(4D+8) - x^2]",
+          sp.expand(qf(U0) + ((Dv**2+2*Dv-xv**2)*(4*Dv+8) - xv**2)) == 0)
+    Qg, xg = sp.symbols('Qg xg', nonnegative=True)
+    Dg, Mg = xg + 2*Qg, Qg + xg
+    hg = (Dg + 3)**2 + 1 - xg**2
+    check("h == (2Q+3)(2M+3) + 1",
+          sp.expand(hg - ((2*Qg+3)*(2*Mg+3) + 1)) == 0)
+    check("h - 3(D+3) == 4MQ + 3M + 3Q + 1",
+          sp.expand(hg - 3*(Dg+3) - (4*Mg*Qg + 3*Mg + 3*Qg + 1)) == 0)
+    check("h - (2Q+3)(D+3) == (2Q+3)x + 1",
+          sp.expand(hg - (2*Qg+3)*(Dg+3) - ((2*Qg+3)*xg + 1)) == 0)
+    Bq = 7*Eq/(6*hq)
+    check("q(7E/(6h)) == E(49E - 6h^2)/(36h^2)",
+          sp.simplify(qf(Bq) - Eq*(49*Eq - 6*hq**2)/(36*hq**2)) == 0)
+    okS = True; ncell = 0; first_odd2 = None
+    for D in range(1, 301):
+        E = (D + 3)**2
+        for Q in range(0, D//2 + 1):
+            x = D - 2*Q
+            gaps = []
+            for u in range(1, D + 1):
+                U = (u + 1)**2
+                if U >= (D + 1)**2 - x*x:
                     break
-        return None
-    firstc = first_gap(3)
-    firstall = first_gap(0)
-    check(f"first u>=4 gap cell with Q>=3 is (442,3,4): got {firstc}",
-          firstc == (442, 3, 4))
-    check(f"first u>=4 gap cell over ALL Q is (142,0,4) "
-          f"[Q<=2 handled separately]: got {firstall}",
-          firstall == (142, 0, 4))
+                gaps.append((u, x*x*U > (U - 1)*(E - U)))
+            for u, g in gaps:
+                if not g or (D - u) % 2:
+                    continue
+                ncell += 1
+                okS &= 6*(2*Q + 3)*(u + 1)**2 < 7*(D + 3)
+                okS &= all(g2 for u2, g2 in gaps if u2 <= u)
+                if Q % 2 and u >= 2 and first_odd2 is None:
+                    first_odd2 = (D, Q, u)
+    check(f"grid D <= 300: gap strip and heredity on {ncell} gap cells",
+          okS and ncell > 100)
+    check(f"first odd-Q gap cell with u >= 2 is (84, 1, 2): got {first_odd2}",
+          first_odd2 == (84, 1, 2))
 
     print("== [G] real-argument relaxation ==")
     # D=4, q=8/7, x=D-2q=12/7.  The same coefficient recurrence defines
