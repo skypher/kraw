@@ -61,7 +61,10 @@ make lean           # build the Lean formalization and check its axioms
                     # (needs elan; run `cd lean && lake exe cache get` first)
 ```
 
-`make replay` takes about a minute.  The Python dependencies and wheel hashes
+`make replay` takes about a minute.  GitHub Actions
+(`.github/workflows/audit-fast.yml`) runs `make audit-fast` and `make lean` on
+every push and pull request; the Lean job uses a pinned, checksum-verified elan
+and takes about six minutes.  The Python dependencies and wheel hashes
 are pinned in `requirements.txt`; `environment/Dockerfile` pins a reference
 Ubuntu image and package snapshot.  The exact commands are documented in
 `paper/README.md`.
