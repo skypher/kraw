@@ -44,7 +44,7 @@
 \newcommand{\eps}{\varepsilon}
 \newcommand{\coeff}[1]{[#1]\,}
 \newcommand{\loglink}[1]{%
-  \href{https://github.com/skypher/kraw/blob/v2.0.2/certificates/#1.txt}{\texttt{#1}}}
+  \href{https://github.com/skypher/kraw/blob/v2.0.3/certificates/#1.txt}{\texttt{#1}}}
 
 \newcommand{\shorttitle}{MONOTONICITY OF KRAWTCHOUK TUR\'AN DETERMINANTS}
 \newcommand{\shortauthors}{LESLIE P. POLZER}
@@ -54,8 +54,9 @@
   exact computation}
 \newcommand{\paperaffiliation}{Independent Researcher}
 \newcommand{\paperemail}{polzer@fastmail.com}
-\newcommand{\paperversion}{Version 2.0.2}
+\newcommand{\paperversion}{Version 2.0.3}
 \newcommand{\paperdate}{October 15, 2026}
+\newcommand{\paperdoi}{10.5281/zenodo.23382986}
 
 \medmuskip=4mu
 \thickmuskip=8mu
@@ -127,6 +128,8 @@
       {\small\texttt{\paperemail}}\par
       \smallskip
       {\small\@date}\par
+      \smallskip
+      {\small\href{https://doi.org/\paperdoi}{\texttt{doi:\paperdoi}}}\par
     \fi
     \vskip24pt
   \end{center}}
@@ -1072,7 +1075,7 @@ the formalization and checks this.
 
 \subsection{Code availability}\label{subsec:availability}
 
-This manuscript is Version~2.0.2.  Its source, the verification programs,
+This manuscript is Version~2.0.3.  Its source, the verification programs,
 and their deterministic logs are maintained in the
 \href{https://github.com/skypher/kraw}{project repository}
 \cite{polzer2026artifact}, where
@@ -1083,12 +1086,12 @@ verification programs, their logs, the Lean sources, and the dependency lock
 without the manuscript; its
 SHA-256 digest is
 \begin{center}
-\small\nolinkurl{9f920594ae5d11ce66e341934883df4773873f65b38b635dda8649b957aba5c8}
+\small\nolinkurl{83eb74b3065bd4c432ae230b5dda24af7ac454b053ef959f7288de61e2f6173b}
 \end{center}
 The programs require Python~3 and SymPy~1.12, and the formalization Lean~4
 and Mathlib at the versions pinned in \texttt{lean/}; the commands are
 listed in
-\href{https://github.com/skypher/kraw/blob/v2.0.2/paper/README.md}{\texttt{paper/README.md}}.
+\href{https://github.com/skypher/kraw/blob/v2.0.3/paper/README.md}{\texttt{paper/README.md}}.
 The verification code is available under the BSD 3-Clause License, and the
 manuscript under the Creative Commons Attribution 4.0 International
 License.

@@ -10,7 +10,7 @@ import Kraw.CertTable
 /-!
 # Index: every numbered statement and displayed claim of the paper
 
-Paper: *Monotonicity of Turán determinants for binary Krawtchouk polynomials*, Version 2.0.2.
+Paper: *Monotonicity of Turán determinants for binary Krawtchouk polynomials*, Version 2.0.3.
 Each alias below carries the exact statement proved in the file named in its docstring.
 -/
 

@@ -12,7 +12,7 @@ is non-increasing on the top half of the coefficient index, for all
 nonnegative integers \(M,Q\).
 
 The canonical repository is <https://github.com/skypher/kraw>.  The manuscript
-on `main` is Version 2.0.2 (October 15, 2026).  Version 2 restructures the
+on `main` is Version 2.0.3 (October 15, 2026).  Version 2 restructures the
 proof so that no finite enumeration is needed: even smaller exponents are
 handled by a tangent comparison for every gap offset, and odd ones by an
 interval propagation whose four polynomial inequalities are certified by
@@ -24,6 +24,7 @@ It drops an unused hypothesis from one Lean statement, rewords the Figure 1
 caption, and fixes documentation.  Version 2.0.2 adds the Zenodo DOI to the
 artifact citation, fixes the sort order used by `scripts/update-manifests.sh`,
 and repairs the locked container build; the mathematics is unchanged.
+Version 2.0.3 prints the DOI on the title page.
 
 `certificates/MANIFEST.sha256` hashes every artifact file, and
 `certificates/PAYLOAD.sha256` hashes the verification payload without the
