@@ -8,9 +8,14 @@ authors:
     email: "polzer@fastmail.com"
     affiliation: "Independent Researcher"
 repository-code: "https://github.com/skypher/kraw"
+doi: "10.5281/zenodo.23382986"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23382986"
+    description: "Concept DOI for all archived versions (Zenodo)"
 license: BSD-3-Clause
-version: "2.0.1"
-date-released: "2026-10-03"
+version: "2.0.2"
+date-released: "2026-10-15"
 preferred-citation:
   type: article
   license: CC-BY-4.0

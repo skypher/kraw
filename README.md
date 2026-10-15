@@ -12,7 +12,7 @@ is non-increasing on the top half of the coefficient index, for all
 nonnegative integers \(M,Q\).
 
 The canonical repository is <https://github.com/skypher/kraw>.  The manuscript
-on `main` is Version 2.0.1 (October 3, 2026).  Version 2 restructures the
+on `main` is Version 2.0.2 (October 15, 2026).  Version 2 restructures the
 proof so that no finite enumeration is needed: even smaller exponents are
 handled by a tangent comparison for every gap offset, and odd ones by an
 interval propagation whose four polynomial inequalities are certified by
@@ -21,7 +21,9 @@ programs of Version 1 are therefore retired; they remain in the git history
 (tag `v1.0.6`).  Version 2.0.1 applies the corrections from a fidelity audit
 of the Lean formalization against the paper (recorded in `lean/ROADMAP.md`).
 It drops an unused hypothesis from one Lean statement, rewords the Figure 1
-caption, and fixes documentation.
+caption, and fixes documentation.  Version 2.0.2 adds the Zenodo DOI to the
+artifact citation, fixes the sort order used by `scripts/update-manifests.sh`,
+and repairs the locked container build; the mathematics is unchanged.
 
 `certificates/MANIFEST.sha256` hashes every artifact file, and
 `certificates/PAYLOAD.sha256` hashes the verification payload without the
@@ -38,6 +40,13 @@ path through the programs.
 - `lean/` — Lean 4 / Mathlib formalization of every numbered statement and
   displayed claim of the paper; `lean/Kraw/Paper.lean` indexes them by number and
   `lean/ROADMAP.md` maps each Lean file to the paper.
+
+## Citation
+
+All released versions are archived on Zenodo under the concept DOI
+[10.5281/zenodo.23382986](https://doi.org/10.5281/zenodo.23382986), which
+always resolves to the latest version.  `CITATION.cff` gives the citation
+metadata.
 
 ## Licensing
 

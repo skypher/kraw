@@ -7,11 +7,16 @@ ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
     TZ=Etc/UTC
 
+# The snapshot is served only over HTTPS, so fetch CA certificates from the
+# image's default archive first.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY environment/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       ca-certificates \
        lmodern=2.005-1 \
        make=4.3-4.1build2 \
        poppler-utils=24.02.0-1ubuntu9.9 \

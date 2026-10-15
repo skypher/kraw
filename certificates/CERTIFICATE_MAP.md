@@ -1,6 +1,6 @@
 # Certificate map
 
-This file maps each statement of the manuscript (Version 2.0.1) whose
+This file maps each statement of the manuscript (Version 2.0.2) whose
 identities or signs are replayed by computer to its program and committed
 log.  All checks use exact integer or rational arithmetic (SymPy); the
 programs trust SymPy's polynomial expansion, cancellation, and

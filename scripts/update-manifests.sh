@@ -5,6 +5,8 @@
 # other changes are staged or committed.
 # Usage: scripts/update-manifests.sh   (-h/--help prints this text)
 set -eu
+# Sort file lists bytewise, independent of the caller's locale.
+export LC_ALL=C
 case "${1:-}" in -h|--help) sed -n '2,6p' "$0"; exit 0;; esac
 
 payload="LICENSE Makefile requirements.txt environment/Dockerfile

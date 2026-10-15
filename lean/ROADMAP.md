@@ -2,7 +2,7 @@
 
 Final-facing theorems: `Kraw.main_theorem` (paper Theorem 1.1),
 `Kraw.Tur_ge_one` and `Kraw.Tur_le_center` (Corollary 1.2) in `Kraw/Main.lean`.
-Source: manuscript Version 2.0.1.  Phase 1 (the spine below) formalized
+Source: manuscript Version 2.0.2.  Phase 1 (the spine below) formalized
 Sections 2–6; Phase 2 extended the formalization to the whole paper, including
 Proposition 1.3, indexed in `Kraw/Paper.lean`.
 
@@ -43,7 +43,7 @@ the whole project built here against the proved dependencies.
 ## Phase 2 (2026-10-02/03): the whole paper — complete
 
 Index: `Kraw/Paper.lean` names every numbered statement and displayed claim of the
-paper (Version 2.0.1), 77 declarations. `CheckAxioms.lean` prints the axioms of each.
+paper (Version 2.0.2), 77 declarations. `CheckAxioms.lean` prints the axioms of each.
 **Status (2026-10-03 03:10): `make lean` passes. No `sorry` in any file. Every index
 declaration depends only on `propext`, `Classical.choice`, `Quot.sound` (two use only
 `propext`, `Quot.sound`).**
